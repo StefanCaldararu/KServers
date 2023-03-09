@@ -2,7 +2,6 @@
 
 #include <cstddef>
 
-//template<std::size_t ArraySize>
 class Mspace
 {
     private:
@@ -10,8 +9,14 @@ class Mspace
     public:
         //The metric space, an adjacency matrix of distances between nodes
         int ** graph;
+        //The default constructor, without a size.
+        Mspace();
         //The constructor
-        Mspace(int ArraySize);
+        Mspace(std::size_t size);
+        //Set the size of this metric space
+        void setSize(std::size_t size);
+        //Returns the number of points in this metric space
+        int getSize();
         //returns the distance between a source and destination
         int getDistance(int source, int destination);
         //sets the distance between a source and destination
