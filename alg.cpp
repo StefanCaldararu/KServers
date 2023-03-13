@@ -2,11 +2,10 @@
 #include "alg.h"
 
 //The Constructor
-Alg::Alg(Mspace& metric_space)
+Alg::Alg(Mspace& metric_space, int servers)
 {
+    k = servers;
     setGraph(metric_space);
-    //The destructor is being called here for some metric space, but one that
-    //nothing allocated....
 }
 
 void Alg::setGraph(Mspace& metric_space)
@@ -18,7 +17,12 @@ void Alg::setGraph(Mspace& metric_space)
             metricSpace.setDistance(i,j,metric_space.getDistance(i,j));
 }
 
-Alg::~Alg()
-{
-    
+//checks if the location is already covered by a server
+bool Alg::checkIfCovered(int i, int config []){
+    for(int j = 0;j<k;j++)
+        if(config[j] == i)
+            return true;
+    return false;
 }
+Alg::~Alg()
+{}
