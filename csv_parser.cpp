@@ -13,6 +13,7 @@
 
 #include "randomAlg.h"
 #include <iostream>
+#include <string.h> 
 
 const int NUM_ALGS = 1;
 //This takes in the argv and parses it for the main function. 
@@ -21,21 +22,21 @@ int parseInput(char* inputFile, char*outputFile, int * runAlgs, int argc, char**
 {
     for(int i = 0; i<argc; i++){
         if(strcmp(argv[i], "-input") == 0 || strcmp(argv[i], "-i") == 0){
-            if(i+1<argc)
-                inputFile = argv[i+1];
+            if(i+1<=argc)
+                strcpy(inputFile, argv[i+1]);
             else
                 return 1;
         }
         if(strcmp(argv[i], "-output") == 0 || strcmp(argv[i], "-o") == 0){
-            if(i+1<argc)
-                outputFile = argv[1];
+            if(i+1<=argc)
+                strcpy(outputFile, argv[i+1]);
             else
                 return 1;
         }
         if(strcmp(argv[i], "-algorithms") == 0 || strcmp(argv[i], "-a") == 0){
-            if(i+1<argc)
+            if(i+1<=argc)
                 for(int j = 0;j<NUM_ALGS; j++)
-                    runAlgs[j] = argv[i+1][j];
+                    runAlgs[j] = std::stoi(std::string(1,argv[i+1][j]));
             else
                 return 1;
         }
@@ -52,7 +53,7 @@ int main(int argc, char ** argv)
     if(parseInput(inputFile, outputFile, runAlgs, argc, argv) == 1)
         return 1;
     
-    std::cout << "the input file is: " << inputFile << "\n";
+    std::cout << "the input file is: " << outputFile << "\n";
     std::cout << "runAlgs[0] is: " << runAlgs[0] << "\n";
 
     return 0;
