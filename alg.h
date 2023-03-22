@@ -16,8 +16,10 @@ class Alg
         Alg(Mspace& metric_space, int servers);
         //change the metric space we are currently using
         //TODO: why do we need to pass with an &?
+        //FIXME: add configuration
         void setGraph(Mspace& metric_space);
         //Run this algorithm on the metric space, with request sequence Simga. Return the cost.
+        //TODO: add n length array with server id so we can just lookup for checkIfCovered
         virtual int runAlg(int Sigma[], int inputLength, int config[]) = 0;
         //The destructor
         ~Alg();
