@@ -22,6 +22,8 @@
 const int NUM_ALGS = 1;
 //This takes in the argv and parses it for the main function. 
 //gives pointer to input file, output file, and there is an array of which algorithms to run.
+//TODO: probably want to create object for this.
+//TODO: move the -algorithms option into the file.
 int parseInput(char* inputFile, char*outputFile, int * runAlgs, int argc, char** argv)
 {
     for(int i = 0; i<argc; i++){
@@ -48,10 +50,13 @@ int parseInput(char* inputFile, char*outputFile, int * runAlgs, int argc, char**
     return 0;
 }
 //Returns the number of mspaces, or if doesn't work returns -1.
+//TODO: create object for this whole function?
 int getInput(char* inputFile, std::vector <std::vector<int>> inputs, std::vector<int> num_inputs, std::vector <Mspace> spaces)
 {
+    //TODO: Create object for file reader
     std::fstream fin;
     fin.open(inputFile, std::ios::in);
+    //TODO: create object for line parser, line, word, row
     std::vector<std::string> row;
     std::string line, word;
     //The first line is the number of mspaces
