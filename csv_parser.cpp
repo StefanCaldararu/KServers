@@ -17,6 +17,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include "RAII_Classes/getInput.cpp"
 
 
 const int NUM_ALGS = 1;
@@ -53,54 +54,26 @@ int parseInput(char* inputFile, char*outputFile, int * runAlgs, int argc, char**
 //TODO: create object for this whole function?
 int getInput(char* inputFile, std::vector <std::vector<int>> inputs, std::vector<int> num_inputs, std::vector <Mspace> spaces)
 {
-    //TODO: Create object for file reader
-    std::fstream fin;
-    fin.open(inputFile, std::ios::in);
-    //TODO: create object for line parser, line, word, row
-    std::vector<std::string> row;
-    std::string line, word;
-    //The first line is the number of mspaces
-    getline(fin, line);
-    int num_mspaces = std::stoi(line);
-    //now we know number of mspaces, can go through each one and add the inputs in.
-    for(int i = 0;i<num_mspaces;i++){
-        //now we need to read in the mspace.
-        //first, size of mspace:
-        getline(fin, line);
-        int size = std::stoi(line);
-        //FIXME: might have problems with destructor inside of for loop...
+    GetInput reader;
+    reader.openFile(inputFile);
+    reader.getLine();
+    int num_mspaces = std::stoi(reader.line);
+
+    for(int i = 0; i<num_mspaces; i++){
+        reader.getLine();
+        int size = std::stoi(reader.line);
         Mspace temp(size);
         spaces.push_back(temp);
-        //fill in the mpsace row by row, each row is on a new line (hopefully)
-        //TODO: make sure that the mspace is in this format, and comment at top reflects this.
+
         for(int j = 0; j<size; j++){
-            getline(fin, line);
-            //Fill in this row
+            reader.getLine();
             std::stringstream str(line);
             int k = 0;
-            while(getline(str, word, ',')){
-                spaces[i].setDistance(j, k, stoi(word));
-                k++;
-            }
+            std::string word;
+            while(getline(str, ))
         }
-        //now the mspace is filled in correctly. we now need to make sure that 
-        //the inputs all get filled in.
-        getline(fin, line);
-        int NI = std::stoi(line);
-        num_inputs.push_back(NI);
-        for(int j = 0; j<NI; j++){
-            std::vector<int> input;
-            getline(fin, line);
-            std::stringstream str(line);
-            while(getline(str, word, ','))
-                input.push_back(stoi(word));
-            inputs.push_back(input);
-        }
-        //Now all of the inputs have been put in the correct places, we can now start again with the
-        //next metric space.
     }
-    
-    return num_mspaces;
+
 }
 
 int main(int argc, char ** argv)
@@ -118,15 +91,15 @@ int main(int argc, char ** argv)
     std::vector<std::vector<int>> inputs;
     std::vector<int> num_inputs;
     std::vector<Mspace> spaces;
-    int num_spaces = getInput(inputFile, inputs, num_inputs,spaces);
-    if(num_spaces!=-1){
-        std::cout << "the distance of first metric space, 0,2 should be 1: " << spaces[0].getDistance(0,2) << "\n";
+    // int num_spaces = getInput(inputFile, inputs, num_inputs,spaces);
+    // if(num_spaces!=-1){
+    //     std::cout << "the distance of first metric space, 0,2 should be 1: " << spaces[0].getDistance(0,2) << "\n";
     
-    }
+    // }
 
+    std::cout << "the input file is: " << inputFile << "\n";
     delete(inputFile);
     delete(outputFile);
-    //std::cout << "the input file is: " << inputFile << "\n";
     //std::cout << "runAlgs[0] is: " << runAlgs[0] << "\n";
     //TODO: need to free mspaces and inputs
     return 0;

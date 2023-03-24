@@ -4,27 +4,34 @@
 #include <vector>
 #include <string.h>
 
-class lineParser
+// class lineParser
+// {
+//     private:
+
+//     public:
+//         std::string line, word;
+//         std::vector<std::string> row;
+// };
+
+class GetInput
 {
     private:
-
+        std::fstream fin;
     public:
         std::string line, word;
         std::vector<std::string> row;
-};
-
-class getInput
-{
-    private:
-
-    public:
-        std::fstream fin;
-        getInput(char* inputFile){
-            fin.open(inputFile, std::ios::in);
+        GetInput(char* inputFile){
 
         }
+        void openFile(char* inputFile){
+            fin.open(inputFile, std::ios::in);
+        }
+        void getLine(){
+            getline(fin, line);
+        }
 
-        ~getInput(){
+
+        ~GetInput(){
             fin.close();
         }
 };
