@@ -1,5 +1,5 @@
-csv: alg.cpp alg.h csv_parser.cpp mspace.cpp randomAlg.cpp mspace.h randomAlg.h
-	g++ -o csv_run -g csv_parser.cpp alg.cpp mspace.cpp randomAlg.cpp
+csv: alg.cpp alg.h csv_parser.cpp mspace.cpp randomAlg.cpp mspace.h randomAlg.h RAII_Classes/getInput.cpp
+	g++ -o csv_run -g csv_parser.cpp alg.cpp mspace.cpp randomAlg.cpp RAII_Classes/getInput.cpp
 
 runcsv:
 	./csv_run -i inputFile.csv -o outputFile.csv -a 1

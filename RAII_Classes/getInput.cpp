@@ -21,7 +21,7 @@ class GetInput
         std::string line, word;
         std::vector<std::string> row;
         GetInput(char* inputFile){
-
+            openFile(inputFile);
         }
         void openFile(char* inputFile){
             fin.open(inputFile, std::ios::in);

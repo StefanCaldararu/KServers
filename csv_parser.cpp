@@ -52,13 +52,15 @@ int parseInput(char* inputFile, char*outputFile, int * runAlgs, int argc, char**
 }
 //Returns the number of mspaces, or if doesn't work returns -1.
 //TODO: create object for this whole function?
-int getInput(char* inputFile, std::vector <std::vector<int>> inputs, std::vector<int> num_inputs, std::vector <Mspace> spaces)
+int getInput(char* inputFile, std::vector <std::vector<int>>& inputs, std::vector<int>& num_inputs, std::vector <Mspace>& spaces)
 {
-    GetInput reader;
-    reader.openFile(inputFile);
+    GetInput reader(inputFile);
+    // reader.openFile(inputFile);
     reader.getLine();
     int num_mspaces = std::stoi(reader.line);
-
+    spaces.reserve(num_mspaces);
+    num_inputs.reserve(num_mspaces);
+    inputs.reserve(num_mspaces);
     for(int i = 0; i<num_mspaces; i++){
         reader.getLine();
         int size = std::stoi(reader.line);
@@ -67,12 +69,31 @@ int getInput(char* inputFile, std::vector <std::vector<int>> inputs, std::vector
 
         for(int j = 0; j<size; j++){
             reader.getLine();
-            std::stringstream str(line);
+            std::stringstream str(reader.line);
             int k = 0;
             std::string word;
-            while(getline(str, ))
+            while(getline(str, word, ',')){
+                spaces[i].setDistance(j, k, stoi(word));
+                k++;
+            }
+        }
+        //now the mspace is filled in correctly. we now need to make sure that 
+        //the inputs all get filled in.
+        reader.getLine();
+        int NI = std::stoi(reader.line);
+        num_inputs.push_back(NI);
+        for(int j = 0; j<NI; j++){
+            std::vector<int> input;
+            input.reserve(NI);
+            reader.getLine();
+            std::string word;
+            std::stringstream str(reader.line);
+            while(getline(str, word, ','))
+                input.push_back(stoi(word));
+            inputs.push_back(input);
         }
     }
+    return num_mspaces;
 
 }
 
@@ -91,11 +112,11 @@ int main(int argc, char ** argv)
     std::vector<std::vector<int>> inputs;
     std::vector<int> num_inputs;
     std::vector<Mspace> spaces;
-    // int num_spaces = getInput(inputFile, inputs, num_inputs,spaces);
-    // if(num_spaces!=-1){
-    //     std::cout << "the distance of first metric space, 0,2 should be 1: " << spaces[0].getDistance(0,2) << "\n";
+    int num_spaces = getInput(inputFile, inputs, num_inputs,spaces);
+    if(num_spaces!=-1){
+        std::cout << "the distance of first metric space, 0,2 should be 1: " << spaces[0].getDistance(0,2) << "\n";
     
-    // }
+    }
 
     std::cout << "the input file is: " << inputFile << "\n";
     delete(inputFile);

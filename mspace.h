@@ -1,6 +1,7 @@
 //author: Stefan Caldararu
 
 #include <cstddef>
+#include <vector>
 
 class Mspace
 {
@@ -8,6 +9,7 @@ class Mspace
         std::size_t m;
     public:
         //The metric space, an adjacency matrix of distances between nodes
+        //FIXME: there is a bug because I want this to be a vector, not a pointer.
         int ** graph;
         //The default constructor, without a size.
         Mspace();
