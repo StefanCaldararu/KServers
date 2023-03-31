@@ -52,7 +52,7 @@ int parseInput(char* inputFile, char*outputFile, int * runAlgs, int argc, char**
 }
 //Returns the number of mspaces, or if doesn't work returns -1.
 //TODO: create object for this whole function?
-int getInput(char* inputFile, std::vector <std::vector<int>>& inputs, std::vector<int>& num_inputs, std::vector <Mspace>& spaces)
+int getInput(char* inputFile, std::vector <std::vector<int> >& inputs, std::vector<int>& num_inputs, std::vector <Mspace>& spaces)
 {
     GetInput reader(inputFile);
     // reader.openFile(inputFile);
@@ -109,7 +109,7 @@ int main(int argc, char ** argv)
     //We now know what algorithms to run, have the input file, and
     //output file, and are ready to start getting the data from the
     //input file.
-    std::vector<std::vector<int>> inputs;
+    std::vector<std::vector<int> > inputs;
     std::vector<int> num_inputs;
     std::vector<Mspace> spaces;
     int num_spaces = getInput(inputFile, inputs, num_inputs,spaces);
@@ -119,8 +119,8 @@ int main(int argc, char ** argv)
     }
 
     std::cout << "the input file is: " << inputFile << "\n";
-    delete(inputFile);
-    delete(outputFile);
+    delete [] inputFile;
+    delete [] outputFile;
     //std::cout << "runAlgs[0] is: " << runAlgs[0] << "\n";
     //TODO: need to free mspaces and inputs
     return 0;

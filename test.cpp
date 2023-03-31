@@ -1,36 +1,36 @@
 //author: Stefan Caldararu
 
-#include "randomAlg.h"
-#include <iostream>
-#include <string.h>
-#include <fstream>
 #include <vector>
-#include <sstream>
+#include <iostream>
+
+class Obj
+{
+    public:
+        int * doesntPersist;
+        int doesPersist;
+        Obj(){
+            doesntPersist = new int;
+        }
+        ~Obj(){
+            delete doesntPersist;
+        }
+};
 
 int main(int argc, char ** argv)
 {
-    char* inputFile = new char[100];
-    strcpy(inputFile, argv[1]);
-
     
-    std::fstream fin;
-    fin.open(inputFile, std::ios::in);
-    std::vector<std::string> row;
-    std::string line, word;
-    //The first line is the number of mspaces
-    getline(fin, line);
-    std::cout << line << "\n";
+    std::vector<Obj> objects;
+    objects.reserve(5);
+    for (int i = 0; i<5 ; i++){
+        Obj temp;
+        temp.doesPersist = 5;
+        *temp.doesntPersist = 5;
+        objects.push_back(temp);
+    }
 
-    delete(inputFile);
-    // Mspace mSpace(2);
-    // mSpace.setDistance(0,0,1);
-    // mSpace.setDistance(0,1,1);
-    // mSpace.setDistance(1,0,1);
-    // mSpace.setDistance(1,1,1);
-    // RandomAlg algorithm(mSpace, 2);
-    // int Sigma [] = {0,1,1,0};
-    // int config[] = {0,0};
-    // std::cout << algorithm.runAlg(Sigma, 4, config);
-    // // std::cout << mSpace.getDistance(1,1);
+    //Does copy over
+    std::cout << objects[0].doesPersist;
+    //Doesn't copy over
+    std::cout << objects[0].doesntPersist;
     return 0;
 }

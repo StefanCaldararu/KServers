@@ -10,11 +10,13 @@ class Mspace
     public:
         //The metric space, an adjacency matrix of distances between nodes
         //FIXME: there is a bug because I want this to be a vector, not a pointer.
-        int ** graph;
+        std::vector<std::vector<int> > graph;
         //The default constructor, without a size.
         Mspace();
         //The constructor
         Mspace(std::size_t size);
+        //The copy constructor
+        Mspace(Mspace& t);
         //Set the size of this metric space
         void setSize(std::size_t size);
         //Returns the number of points in this metric space
