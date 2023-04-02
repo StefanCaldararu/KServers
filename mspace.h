@@ -14,9 +14,9 @@ class Mspace
         //The default constructor, without a size.
         Mspace();
         //The constructor
-        Mspace(std::size_t size);
+        // Mspace(std::size_t size);
         //The copy constructor
-        Mspace(Mspace& t);
+        // Mspace(Mspace& t);
         //Set the size of this metric space
         void setSize(std::size_t size);
         //Returns the number of points in this metric space

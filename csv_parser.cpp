@@ -52,10 +52,20 @@ int parseInput(char* inputFile, char*outputFile, int * runAlgs, int argc, char**
 }
 //Returns the number of mspaces, or if doesn't work returns -1.
 //TODO: create object for this whole function?
-int getInput(char* inputFile, std::vector <std::vector<int> >& inputs, std::vector<int>& num_inputs, std::vector <Mspace>& spaces)
+int getInput(char* inputFile,std::vector<int>& algsToRun, std::vector <std::vector<int> >& inputs, std::vector<int>& num_inputs, std::vector <Mspace>& spaces)
 {
     GetInput reader(inputFile);
     // reader.openFile(inputFile);
+    //now first line is which algs to run. algs are sorted in the following order:
+    //FIXME: whenever an alg is added, add it to this...
+    reader.getLine();
+    std::stringstream str(reader.line);
+    std::string word;
+    algsToRun.reserve(NUM_ALGS);
+    while(getline(str, word, ','))
+        algsToRun.push_back(stoi(word));
+
+
     reader.getLine();
     int num_mspaces = std::stoi(reader.line);
     spaces.reserve(num_mspaces);
@@ -64,14 +74,12 @@ int getInput(char* inputFile, std::vector <std::vector<int> >& inputs, std::vect
     for(int i = 0; i<num_mspaces; i++){
         reader.getLine();
         int size = std::stoi(reader.line);
-        Mspace temp(size);
-        spaces.push_back(temp);
-
+        spaces.push_back(Mspace());
+        spaces[i].setSize(size);
         for(int j = 0; j<size; j++){
             reader.getLine();
             std::stringstream str(reader.line);
             int k = 0;
-            std::string word;
             while(getline(str, word, ',')){
                 spaces[i].setDistance(j, k, stoi(word));
                 k++;
@@ -112,9 +120,10 @@ int main(int argc, char ** argv)
     std::vector<std::vector<int> > inputs;
     std::vector<int> num_inputs;
     std::vector<Mspace> spaces;
-    int num_spaces = getInput(inputFile, inputs, num_inputs,spaces);
+    std::vector<int> algsToRun;
+    int num_spaces = getInput(inputFile, algsToRun, inputs, num_inputs,spaces);
     if(num_spaces!=-1){
-        std::cout << "the distance of first metric space, 0,2 should be 1: " << spaces[0].getDistance(0,2) << "\n";
+        std::cout << "the distance of first metric space, 0,2 should be 2: " << spaces[0].getDistance(0,2) << "\n";
     
     }
 
