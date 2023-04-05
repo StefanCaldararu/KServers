@@ -1,15 +1,17 @@
 //author: Stefan Caldararu
-#ifndef GREEDYALG
-#define GREEDYALG
+
+#ifndef OPTALG
+#define OPTALG
 #include "alg.h"
 
-class GreedyAlg : public Alg
+class OptAlg : public Alg
 {
     private:
 
     public:
-    GreedyAlg();
+    OptAlg();
     int runAlg(std::vector <int> Sigma, int inputLength);
-    ~GreedyAlg();
+    ~OptAlg();
 };
+
 #endif

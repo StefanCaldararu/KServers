@@ -12,6 +12,7 @@
 //following line is each input, until we reach the next mspace, and follows as above.
 
 #include "randomAlg.h"
+#include "greedyAlg.h"
 #include <iostream>
 #include <string.h> 
 #include <fstream>
@@ -20,7 +21,7 @@
 #include "RAII_Classes/getInput.cpp"
 
 
-const int NUM_ALGS = 1;
+const int NUM_ALGS = 2;
 //This takes in the argv and parses it for the main function. 
 //gives pointer to input file, output file, and there is an array of which algorithms to run.
 //TODO: probably want to create object for this.
@@ -130,7 +131,52 @@ int main(int argc, char ** argv)
     std::cout << "the input file is: " << inputFile << "\n";
     delete [] inputFile;
     delete [] outputFile;
-    //std::cout << "runAlgs[0] is: " << runAlgs[0] << "\n";
+    //Now need to run the algs!!
+    //First, create a list of alg objects that we will be running.
+    int numRunningAlgs = 0;
+    for(int i = 0; i<NUM_ALGS; i++)
+        numRunningAlgs = numRunningAlgs+algsToRun[i];
+    std::vector <Alg*> runningAlgs;
+    runningAlgs.reserve(numRunningAlgs);
+
+        //TODO: find better way to do this...
+    int totalRuns = 0;
+    for(int i = 0; i<num_spaces;i++)
+        totalRuns = totalRuns+num_inputs[i];
+    std::vector <int> a1_costs;
+    std::vector <int> a2_costs;
+
+    if(algsToRun[0] == 1)
+        runningAlgs.push_back(new RandomAlg());
+        a1_costs.reserve(totalRuns);
+
+    if(algsToRun[1] == 1)
+        runningAlgs.push_back(new GreedyAlg());
+        a2_costs.reserve(totalRuns);
+    //Now we know we want to run all of the algorithms in runningAlgs.
+    std::vector<std::vector <int> > costs;
+    costs.reserve(2);
+    costs.push_back(a1_costs);
+    costs.push_back(a2_costs);
+
+    for(int i = 0; i< num_spaces; i++){
+        for(int j = 0; j < num_inputs[i]; j++){
+            for(int l = 0; l<numRunningAlgs; l++){
+                //First, set the metric space. 
+                runningAlgs[l]->setGraph(spaces[i]);
+                //TODO: Fix this pronto! actually set the servers and number of servers correctly.
+                std::vector<int> temp;
+                temp.reserve(1);
+                temp.push_back(1);
+                runningAlgs[l]->setServers(1,temp);
+                //Now we have the servers set, and the graph set. 
+                int cost = runningAlgs[l]->runAlg(inputs[i], num_inputs[i]);
+                costs[l].push_back(cost);
+            }
+        }
+    }
+    //TODO: now need to output a file with all of the data!
+
     //TODO: need to free mspaces and inputs
     return 0;
 }

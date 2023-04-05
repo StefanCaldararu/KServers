@@ -3,20 +3,20 @@
 #include<cstdlib>
 #include<iostream>
 
-RandomAlg::RandomAlg(Mspace& metric_space, int servers): Alg(metric_space, servers)
+RandomAlg::RandomAlg(): Alg()
 {}
 
-int RandomAlg::runAlg(int Sigma[], int inputLength, int config[])
+int RandomAlg::runAlg(std::vector <int> Sigma, int inputLength)
 {
     srand((unsigned) time(NULL));
 
     int random;
     int cost = 0;
     for(int i = 0; i<inputLength; i++){
-        if(!Alg::checkIfCovered(Sigma[i], config)){
+        if(!checkIfCovered(Sigma[i])){
             random = rand() % k;
             cost += metricSpace.getDistance(config[random], Sigma[i]);
-            config[random] = Sigma[i];
+            moveServer(random, Sigma[i]);
         }
     }
     return cost;

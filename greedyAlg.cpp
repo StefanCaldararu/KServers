@@ -3,14 +3,28 @@
 #include<cstdlib>
 #include<iostream>
 
-GreedyAlg::GreedyAlg(Mspace& metric_space, int servers): Alg(metric_space, servers)
+GreedyAlg::GreedyAlg(): Alg()
 {}
 
-int GreedyAlg::runAlg(int Sigma[], int inputLength, int config[])
+int GreedyAlg::runAlg(std::vector <int> Sigma, int inputLength)
 {
-
     int cost = 0;
-    //TODO: implement this algorithm!!!
+    for(int i = 0; i<inputLength;i++){
+        int input = Sigma[i];
+        if(!checkIfCovered(input)){
+            int closest = 0;
+            int closest_dist = metricSpace.getDistance(input, config[0]);
+            for(int j = 1; j<k; j++){
+                int dist = metricSpace.getDistance(input, config[j]);
+                if(closest_dist>dist){
+                    closest = j;
+                    closest_dist = dist;
+                }
+            }
+            cost = cost+closest_dist;
+            moveServer(closest, input);
+        }
+    }
     return cost;
 }
 

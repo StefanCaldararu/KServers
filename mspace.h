@@ -1,5 +1,6 @@
 //author: Stefan Caldararu
-
+#ifndef MSPACE
+#define MSPACE
 #include <cstddef>
 #include <vector>
 
@@ -9,7 +10,6 @@ class Mspace
         std::size_t m;
     public:
         //The metric space, an adjacency matrix of distances between nodes
-        //FIXME: there is a bug because I want this to be a vector, not a pointer.
         std::vector<std::vector<int> > graph;
         //The default constructor, without a size.
         Mspace();
@@ -30,3 +30,5 @@ class Mspace
         //The destructor
         ~Mspace();
 };
+
+#endif

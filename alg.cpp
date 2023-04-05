@@ -2,10 +2,9 @@
 #include "alg.h"
 
 //The Constructor
-Alg::Alg(Mspace& metric_space, int servers)
+Alg::Alg()
 {
-    k = servers;
-    setGraph(metric_space);
+    //TODO: probably need to do more in the constructor
 }
 
 void Alg::setGraph(Mspace& metric_space)
@@ -17,12 +16,35 @@ void Alg::setGraph(Mspace& metric_space)
             metricSpace.setDistance(i,j,metric_space.getDistance(i,j));
 }
 
+void Alg::setServers(int numServers, std::vector <int> c)
+{
+    k = numServers;
+    //TODO: check that this is written correctly.
+    config.clear();
+    coverage.clear();
+    config.reserve(k);
+    coverage.reserve(metricSpace.getSize());
+    for(int i = 0; i<metricSpace.getSize();i++)
+        coverage.push_back(-1);
+    for(int i = 0; i<k; i++){
+        config.push_back(c[i]);
+        coverage[c[i]] = i;
+    }
+}
+void Alg::moveServer(int server, int loc)
+{
+    coverage[config[server]] = -1;
+    config[server] = loc;
+    coverage[loc] = server;
+}
+
+
 //checks if the location is already covered by a server
-bool Alg::checkIfCovered(int i, int config []){
-    for(int j = 0;j<k;j++)
-        if(config[j] == i)
-            return true;
-    return false;
+bool Alg::checkIfCovered(int i){
+    if(config[i] != -1)
+        return true;
+    else
+        return false;
 }
 Alg::~Alg()
 {}
