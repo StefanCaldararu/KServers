@@ -26,7 +26,7 @@ const int NUM_ALGS = 2;
 //gives pointer to input file, output file, and there is an array of which algorithms to run.
 //TODO: probably want to create object for this.
 //TODO: move the -algorithms option into the file.
-int parseInput(char* inputFile, char*outputFile, int * runAlgs, int argc, char** argv)
+int parseInput(char* inputFile, char*outputFile, int argc, char** argv)
 {
     for(int i = 0; i<argc; i++){
         if(strcmp(argv[i], "-input") == 0 || strcmp(argv[i], "-i") == 0){
@@ -41,19 +41,12 @@ int parseInput(char* inputFile, char*outputFile, int * runAlgs, int argc, char**
             else
                 return 1;
         }
-        if(strcmp(argv[i], "-algorithms") == 0 || strcmp(argv[i], "-a") == 0){
-            if(i+1<=argc)
-                for(int j = 0;j<NUM_ALGS; j++)
-                    runAlgs[j] = std::stoi(std::string(1,argv[i+1][j]));
-            else
-                return 1;
-        }
     }
     return 0;
 }
 //Returns the number of mspaces, or if doesn't work returns -1.
 //TODO: create object for this whole function?
-int getInput(char* inputFile,std::vector<int>& algsToRun, std::vector <std::vector<int> >& inputs, std::vector<int>& num_inputs, std::vector <Mspace>& spaces)
+int getInput(char* inputFile,std::vector<int>& algsToRun, std::vector <std::vector<std::vector<int> > >& inputs,std::vector<std::vector<int> >& input_lengths, std::vector<int >& num_servers, std::vector<int>& num_inputs, std::vector <Mspace>& spaces)
 {
     GetInput reader(inputFile);
     // reader.openFile(inputFile);
@@ -66,17 +59,22 @@ int getInput(char* inputFile,std::vector<int>& algsToRun, std::vector <std::vect
     while(getline(str, word, ','))
         algsToRun.push_back(stoi(word));
 
-
+    //Now we have the algs we want to run
+    //So, we want to get the number of mspaces.
     reader.getLine();
     int num_mspaces = std::stoi(reader.line);
     spaces.reserve(num_mspaces);
+    //Now we have the number of mspaces.
     num_inputs.reserve(num_mspaces);
     inputs.reserve(num_mspaces);
+    num_servers.reserve(num_mspaces);
     for(int i = 0; i<num_mspaces; i++){
+        //Number of nodes for this input, size of the mspace
         reader.getLine();
         int size = std::stoi(reader.line);
         spaces.push_back(Mspace());
         spaces[i].setSize(size);
+        //populate the mspace!
         for(int j = 0; j<size; j++){
             reader.getLine();
             std::stringstream str(reader.line);
@@ -85,22 +83,30 @@ int getInput(char* inputFile,std::vector<int>& algsToRun, std::vector <std::vect
                 spaces[i].setDistance(j, k, stoi(word));
                 k++;
             }
+            
         }
         //now the mspace is filled in correctly. we now need to make sure that 
         //the inputs all get filled in.
+        //Number of inputs for this mspace
         reader.getLine();
         int NI = std::stoi(reader.line);
         num_inputs.push_back(NI);
+        inputs[i].reserve(NI);
+        //Now we want to get the number of servers for this mspace. all inputs will have the same number of servers.
+        reader.getLine();
+        num_servers.push_back(std::stoi(reader.line));
+        std::vector<int> input_length;
         for(int j = 0; j<NI; j++){
             std::vector<int> input;
-            input.reserve(NI);
             reader.getLine();
             std::string word;
             std::stringstream str(reader.line);
             while(getline(str, word, ','))
                 input.push_back(stoi(word));
-            inputs.push_back(input);
+            inputs[i].push_back(input);
+            input_length.push_back(input.size());
         }
+        input_lengths.push_back(input_length);
     }
     return num_mspaces;
 
@@ -111,20 +117,21 @@ int main(int argc, char ** argv)
     //FIXME: ok that these are hardcoded?
     char* inputFile = new char[200];
     char* outputFile = new char[200];
-    int runAlgs[NUM_ALGS];
 
-    if(parseInput(inputFile, outputFile, runAlgs, argc, argv) == 1)
+    if(parseInput(inputFile, outputFile, argc, argv) == 1)
         return 1;
     //We now know what algorithms to run, have the input file, and
     //output file, and are ready to start getting the data from the
     //input file.
-    std::vector<std::vector<int> > inputs;
+    std::vector<std::vector<std::vector<int> > > inputs;
     std::vector<int> num_inputs;
     std::vector<Mspace> spaces;
     std::vector<int> algsToRun;
-    int num_spaces = getInput(inputFile, algsToRun, inputs, num_inputs,spaces);
+    std::vector<int> num_servers;
+    std::vector< std::vector <int> > input_lengths;
+    int num_spaces = getInput(inputFile, algsToRun, inputs, input_lengths, num_servers, num_inputs,spaces);
     if(num_spaces!=-1){
-        std::cout << "the distance of first metric space, 0,2 should be 2: " << spaces[0].getDistance(0,2) << "\n";
+        std::cout << "the distance of first metric space, 0,2 should be 1: " << spaces[0].getDistance(0,2) << "\n";
     
     }
 
@@ -160,23 +167,24 @@ int main(int argc, char ** argv)
     costs.push_back(a2_costs);
 
     for(int i = 0; i< num_spaces; i++){
+        std::vector<int> server_locations;
+        server_locations.reserve(num_servers[i]);
+        for(int j = 0; j<num_servers[i];j++){
+            server_locations.push_back(j);
+        }
         for(int j = 0; j < num_inputs[i]; j++){
             for(int l = 0; l<numRunningAlgs; l++){
                 //First, set the metric space. 
                 runningAlgs[l]->setGraph(spaces[i]);
-                //TODO: Fix this pronto! actually set the servers and number of servers correctly.
-                std::vector<int> temp;
-                temp.reserve(1);
-                temp.push_back(1);
-                runningAlgs[l]->setServers(1,temp);
+                runningAlgs[l]->setServers(num_servers[i],server_locations);
                 //Now we have the servers set, and the graph set. 
-                int cost = runningAlgs[l]->runAlg(inputs[i], num_inputs[i]);
+                int cost = runningAlgs[l]->runAlg(inputs[i][j], input_lengths[i][j]);
                 costs[l].push_back(cost);
             }
         }
     }
     //TODO: now need to output a file with all of the data!
-
+    std::cout << "The output for the greedy alg, for the first graph and first input should be 9, and is: "<< costs[1][0] << "\n";
     //TODO: need to free mspaces and inputs
     return 0;
 }

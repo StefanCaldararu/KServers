@@ -12,6 +12,7 @@ int GreedyAlg::runAlg(std::vector <int> Sigma, int inputLength)
     for(int i = 0; i<inputLength;i++){
         int input = Sigma[i];
         if(!checkIfCovered(input)){
+            //FIXME: we always move the server w/ smallest ID number to the location in the event of a tie, should we do something else?
             int closest = 0;
             int closest_dist = metricSpace.getDistance(input, config[0]);
             for(int j = 1; j<k; j++){

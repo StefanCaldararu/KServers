@@ -41,7 +41,7 @@ void Alg::moveServer(int server, int loc)
 
 //checks if the location is already covered by a server
 bool Alg::checkIfCovered(int i){
-    if(config[i] != -1)
+    if(coverage[i] != -1)
         return true;
     else
         return false;

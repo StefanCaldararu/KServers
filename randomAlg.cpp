@@ -9,7 +9,7 @@ RandomAlg::RandomAlg(): Alg()
 int RandomAlg::runAlg(std::vector <int> Sigma, int inputLength)
 {
     srand((unsigned) time(NULL));
-
+    //TODO: there are some problems, check to make sure this works correctly!!!
     int random;
     int cost = 0;
     for(int i = 0; i<inputLength; i++){
