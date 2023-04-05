@@ -7,6 +7,7 @@
 #include "../mspace.h"
 #include<iostream>
 #include<stack>
+#include<algorithm>
 
 
 struct edge{
@@ -78,15 +79,15 @@ class Mcfp
         }
         int computeMCFP(){
             while(pathexists()){
-                std::vector<edge> path = findMinCostPath(source, sink);
+                std::vector<edge> path = minCostBF(source, sink);
                 reversePath(path);
             }
             //Now we have the residual graph. we want to do the same thing from the sink.
             int cost = 0;
             for(int i = 0;i<k;i++){
-                std::vector <edge> path = findMinCostPath(sink, s[i]);
+                std::vector <edge> path = minCostBF(sink, s[i]);
                 for(int j = 0;j<path.size();j++)
-                    if(path[j].cost!=-1e6 && path[j].cost!=1e6)
+                    if(path[j].cost!=-1e6)
                         cost = cost+path[j].cost;
             }
             return cost;
@@ -98,6 +99,55 @@ class Mcfp
                 if(graph[source][s[i]].flow == 1)
                     return true;
             return false;
+        }
+
+        std::vector<edge> minCostBF(int src, int dest){
+            std::vector< std::vector<int> > paths;
+            std::vector<int> curPath = {src};
+            generatePaths(src, dest, curPath, paths);
+
+            int locShortest = 0;
+            int cost = computePathLength(paths[0]);
+            for(int i = 1; i<paths.size();i++){
+                int thiscost = computePathLength(paths[i]);
+                if(thiscost<cost){
+                    locShortest = i;
+                    cost = thiscost;
+                }
+            }
+            std::vector<int> bestpath = paths[locShortest];
+            std::vector<edge> ret;
+            int crnt = bestpath[0];
+            for(int i = 1;i<bestpath.size();i++){
+                ret.push_back(graph[crnt][bestpath[i]]);
+                crnt = bestpath[i];
+            }
+            return ret;
+
+        }
+        int computePathLength(std::vector<int> path){
+            int loc = path[0];
+            int cost = 0;
+            for(int i = 1; i<path.size();i++){
+                cost = cost+graph[loc][path[i]].cost;
+                loc = path[i];
+            }
+            return cost;
+        }
+
+        void generatePaths(int src, int dest, std::vector<int>& curPath, std::vector<std::vector<int> >& paths){
+            if(src == dest){
+                paths.push_back(curPath);
+            }
+            else{
+                for(int i = 0;i<num_nodes;i++){
+                    if(graph[src][i].flow == 1 && !std::count(curPath.begin(), curPath.end(), i)){
+                        curPath.push_back(i);
+                        generatePaths(i, dest, curPath, paths);
+                        curPath.pop_back();
+                    }
+                }
+            }
         }
         //TODO: probably want to check this works...lol
         std::vector<edge> findMinCostPath(int src, int dest){
@@ -145,8 +195,6 @@ class Mcfp
             for(int i = 0;i<path.size();i++){
                 graph[path[i].dest][path[i].src] = graph[path[i].src][path[i].dest];
                 graph[path[i].src][path[i].dest] = edge(static_cast<int>(path[i].src), static_cast<int>(path[i].dest), 0,0);
-                if(graph[path[i].dest][path[i].src].cost == -1e6)
-                    graph[path[i].dest][path[i].src].cost =1e6;
             }
         }
 
