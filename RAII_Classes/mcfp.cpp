@@ -27,6 +27,7 @@ class Mcfp
 {
     private:
         std::vector<std::vector<edge> > graph;
+        int inputLength;
         int source;
         int num_nodes;
         int sink;
@@ -36,8 +37,9 @@ class Mcfp
         int k;
     public:
         Mcfp(){}
-        void setGraph(Mspace & metricSpace, std::vector<int> Sigma, int inputLength, int num_servers, std::vector<int> init_config){
+        void setGraph(Mspace & metricSpace, std::vector<int> Sigma, int IL, int num_servers, std::vector<int> init_config){
             graph.clear();
+            inputLength = IL;
             k = num_servers;
             num_nodes = 2+k+2*inputLength;
             source = 0;
@@ -78,18 +80,21 @@ class Mcfp
 
         }
         int computeMCFP(){
+            int cost = 1e6*inputLength;
             while(pathexists()){
                 std::vector<edge> path = minCostBF(source, sink);
-                reversePath(path);
+
+                cost += reversePath(path);
             }
-            //Now we have the residual graph. we want to do the same thing from the sink.
-            int cost = 0;
-            for(int i = 0;i<k;i++){
-                std::vector <edge> path = minCostBF(sink, s[i]);
-                for(int j = 0;j<path.size();j++)
-                    if(path[j].cost!=-1e6)
-                        cost = cost+path[j].cost;
-            }
+            // cost = cost+1e6*inputLength;
+            // //Now we have the residual graph. we want to do the same thing from the sink.
+            // int cost = 0;
+            // for(int i = 0;i<k;i++){
+            //     std::vector <edge> path = minCostBF(sink, s[i]);
+            //     for(int j = 0;j<path.size();j++)
+            //         if(path[j].cost!=-1e6 && path[j].cost!=1e6)
+            //             cost = cost+path[j].cost;
+            // }
             return cost;
 
         }
@@ -191,11 +196,16 @@ class Mcfp
 
         }
 
-        void reversePath(std::vector<edge> path){
+        int reversePath(std::vector<edge> path){
+            int cost = 0;
             for(int i = 0;i<path.size();i++){
-                graph[path[i].dest][path[i].src] = graph[path[i].src][path[i].dest];
-                graph[path[i].src][path[i].dest] = edge(static_cast<int>(path[i].src), static_cast<int>(path[i].dest), 0,0);
+                graph[path[i].dest][path[i].src].flow = 1;
+                cost += graph[path[i].src][path[i].dest].cost;
+                graph[path[i].dest][path[i].src].cost = -graph[path[i].src][path[i].dest].cost;
+                graph[path[i].src][path[i].dest].cost = 0;
+                graph[path[i].src][path[i].dest].flow = 0; 
             }
+            return cost;
         }
 
         ~Mcfp(){}
