@@ -5,6 +5,8 @@
 int main() {
     Mspace metricSpace;
     metricSpace.setSize(4);
+    metricSpace.setSize(4);
+    metricSpace.setSize(4);
     metricSpace.setDistance(0,0,0);
     metricSpace.setDistance(0,1,3);
     metricSpace.setDistance(0,2,2);
@@ -25,16 +27,16 @@ int main() {
 
     std::vector<int> Sigma;
     Sigma.push_back(2);
-    // Sigma.push_back(0);
-    // Sigma.push_back(3);
-    // Sigma.push_back(0);
-    // Sigma.push_back(2);
-    // Sigma.push_back(0);
-    // Sigma.push_back(3);
-    // Sigma.push_back(0);
-    // Sigma.push_back(2);
-    // Sigma.push_back(0);
-    int inputLength = 1;
+    Sigma.push_back(0);
+    Sigma.push_back(3);
+    Sigma.push_back(0);
+    Sigma.push_back(2);
+    Sigma.push_back(0);
+    Sigma.push_back(3);
+    Sigma.push_back(0);
+    Sigma.push_back(2);
+    Sigma.push_back(0);
+    int inputLength = 10;
     int num_servers = 2;
     std::vector<int> init_config;
     init_config.push_back(0);

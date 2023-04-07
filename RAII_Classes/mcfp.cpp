@@ -53,13 +53,18 @@ class Mcfp
                 r.push_back(k+1+2*i);
                 rprime.push_back(k+2+2*i);
             }
+            graph.reserve(num_nodes);
             //Now want to make sure that graph is an adjacency matrix, with source, dest as index.
             for(int i = 0;i<num_nodes;i++){
                 std::vector<edge> temp;
                 temp.reserve(num_nodes);
+                // graph.push_back(temp);
+                // graph[i].reserve(num_nodes);
+                for(int j = 0;j<num_nodes;j++){
+                    temp.push_back(edge(i,j,0,0));
+                    std::cout << "THIS RAN FOR I: " << std::to_string(i) << " AND J: " << std::to_string(j) << "\n";
+                }
                 graph.push_back(temp);
-                for(int j = 0;j<num_nodes;j++)
-                    graph[i].push_back(edge(i,j,0,0));
             }
             //Now, we need to populate the graph as     
             //Reference: in notes, 0404017, page 179/180. "NEW RESULTS ON SERVER PROBLEMS, M. CHROBAK"

@@ -26,6 +26,7 @@ Mspace::Mspace(){
 
 void Mspace::setSize(std::size_t size)
 {
+    graph.clear();
     // if(m){
     //     for(int i = 0;i<m;i++)
     //         delete [] graph[i];
@@ -35,10 +36,11 @@ void Mspace::setSize(std::size_t size)
     graph.reserve(m);
     //graph = new int *[m];
     for(int i = 0; i<m; i++){
+        graph.push_back(std::vector<int> ());
         graph[i].reserve(m);
         //graph[i] = new int[m];
         for (int j = 0;j<m;j++)
-            graph[i][j] = -1;
+            graph[i].push_back(-1);
     }   
 }
 
@@ -66,7 +68,5 @@ void Mspace::clear()
 
 Mspace::~Mspace()
 {
-    // for(int i = 0; i<m; i++)
-    //     delete [] graph[i];
-    // delete [] graph;
+    
 }
