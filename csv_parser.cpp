@@ -13,15 +13,17 @@
 
 #include "randomAlg.h"
 #include "greedyAlg.h"
+#include "optAlg.h"
 #include <iostream>
 #include <string.h> 
 #include <fstream>
 #include <vector>
 #include <sstream>
 #include "RAII_Classes/getInput.cpp"
+#include "RAII_Classes/writeOutput.cpp"
 
 
-const int NUM_ALGS = 2;
+const int NUM_ALGS = 3;
 //This takes in the argv and parses it for the main function. 
 //gives pointer to input file, output file, and there is an array of which algorithms to run.
 //TODO: probably want to create object for this.
@@ -112,6 +114,27 @@ int getInput(char* inputFile,std::vector<int>& algsToRun, std::vector <std::vect
 
 }
 
+void printOutput(char* outputFile, std::vector<std::vector<int> >& costs, std::vector<int>& numInputs, std::vector<Mspace>& metricSpaces, std::vector<std::vector<std::vector<int> > >& inputs){
+    WriteOutput writer(outputFile);
+    int counter = 0;
+    for(int i = 0;i<metricSpaces.size();i++){
+
+        writer.writeLine("The metric space is:");
+        for(int j = 0;j<metricSpaces[i].getSize();j++){
+            writer.writeLine(metricSpaces[i].graph[j]);
+        }
+        //Now we have the metric space written in. 
+        for(int j = 0; j<numInputs[i];j++){
+            writer.writeLine("For the input:");
+            writer.writeLine(inputs[i][j]);
+            for(int l = 0;l<NUM_ALGS;l++){
+                writer.writeLine("Alg "+ std::to_string(l) + "got a cost of: " + std::to_string(costs[l][counter]));
+            }
+            counter++;
+        }
+    }
+}
+
 int main(int argc, char ** argv)
 {
     //FIXME: ok that these are hardcoded?
@@ -136,8 +159,6 @@ int main(int argc, char ** argv)
     }
 
     std::cout << "the input file is: " << inputFile << "\n";
-    delete [] inputFile;
-    delete [] outputFile;
     //Now need to run the algs!!
     //First, create a list of alg objects that we will be running.
     int numRunningAlgs = 0;
@@ -152,19 +173,26 @@ int main(int argc, char ** argv)
         totalRuns = totalRuns+num_inputs[i];
     std::vector <int> a1_costs;
     std::vector <int> a2_costs;
+    std::vector <int> a3_costs;
 
-    if(algsToRun[0] == 1)
+    if(algsToRun[0] == 1){
         runningAlgs.push_back(new RandomAlg());
         a1_costs.reserve(totalRuns);
-
-    if(algsToRun[1] == 1)
+    }
+    if(algsToRun[1] == 1){
         runningAlgs.push_back(new GreedyAlg());
         a2_costs.reserve(totalRuns);
+    }
+    if(algsToRun[2] == 1){
+        runningAlgs.push_back(new OptAlg());
+        a3_costs.reserve(totalRuns);
+    }
     //Now we know we want to run all of the algorithms in runningAlgs.
     std::vector<std::vector <int> > costs;
-    costs.reserve(2);
+    costs.reserve(NUM_ALGS);
     costs.push_back(a1_costs);
     costs.push_back(a2_costs);
+    costs.push_back(a3_costs);
 
     for(int i = 0; i< num_spaces; i++){
         std::vector<int> server_locations;
@@ -184,7 +212,9 @@ int main(int argc, char ** argv)
         }
     }
     //TODO: now need to output a file with all of the data!
-    std::cout << "The output for the greedy alg, for the first graph and first input should be 9, and is: "<< costs[1][0] << "\n";
+    printOutput(outputFile, costs, num_inputs, spaces, inputs);
+    delete [] inputFile;
+    delete [] outputFile;
     //TODO: need to free mspaces and inputs
     return 0;
 }
