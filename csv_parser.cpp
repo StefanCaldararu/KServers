@@ -114,21 +114,22 @@ int getInput(char* inputFile,std::vector<int>& algsToRun, std::vector <std::vect
 
 }
 
-void printOutput(char* outputFile, std::vector<std::vector<int> >& costs, std::vector<int>& numInputs, std::vector<Mspace>& metricSpaces, std::vector<std::vector<std::vector<int> > >& inputs){
+void printOutput(char* outputFile, std::vector<std::vector<int> >& costs, std::vector<int>& numInputs, std::vector<Mspace>& metricSpaces, std::vector<std::vector<std::vector<int> > >& inputs, std::vector<int> num_servers){
     WriteOutput writer(outputFile);
     int counter = 0;
     for(int i = 0;i<metricSpaces.size();i++){
 
         writer.writeLine("The metric space is:");
+        writer.writeLine("and the numer of servers is: "+ std::to_string(num_servers[i]));
         for(int j = 0;j<metricSpaces[i].getSize();j++){
             writer.writeLine(metricSpaces[i].graph[j]);
         }
         //Now we have the metric space written in. 
         for(int j = 0; j<numInputs[i];j++){
-            writer.writeLine("For the input:");
+            writer.writeLine("For the input: ");
             writer.writeLine(inputs[i][j]);
             for(int l = 0;l<NUM_ALGS;l++){
-                writer.writeLine("Alg "+ std::to_string(l) + "got a cost of: " + std::to_string(costs[l][counter]));
+                writer.writeLine("Alg "+ std::to_string(l) + " got a cost of: " + std::to_string(costs[l][counter]));
             }
             counter++;
         }
@@ -153,12 +154,6 @@ int main(int argc, char ** argv)
     std::vector<int> num_servers;
     std::vector< std::vector <int> > input_lengths;
     int num_spaces = getInput(inputFile, algsToRun, inputs, input_lengths, num_servers, num_inputs,spaces);
-    if(num_spaces!=-1){
-        std::cout << "the distance of first metric space, 0,2 should be 1: " << spaces[0].getDistance(0,2) << "\n";
-    
-    }
-
-    std::cout << "the input file is: " << inputFile << "\n";
     //Now need to run the algs!!
     //First, create a list of alg objects that we will be running.
     int numRunningAlgs = 0;
@@ -212,7 +207,7 @@ int main(int argc, char ** argv)
         }
     }
     //TODO: now need to output a file with all of the data!
-    printOutput(outputFile, costs, num_inputs, spaces, inputs);
+    printOutput(outputFile, costs, num_inputs, spaces, inputs, num_servers);
     delete [] inputFile;
     delete [] outputFile;
     //TODO: need to free mspaces and inputs

@@ -32,11 +32,77 @@ class Mcfp
         int num_nodes;
         int sink;
         std::vector<int> s;
+        std::vector<int> sprime;
         std::vector<int> r;
         std::vector<int> rprime;
         int k;
     public:
         Mcfp(){}
+        //This constructor is for the WF alg, here we return which server to move, and also include a final configuration. This both sets the graph and runs the algorithm
+        int setGraph(Mspace& metricSpace, std::vector<int> Sigma, int IL, int num_servers, std::vector<int> init_config, std::vector<int> final_config){
+            graph.clear();
+            inputLength = IL;
+            k = num_servers;
+            num_nodes = 2+2*k+2*inputLength;
+            source = 0;
+            sink = num_nodes-1;
+            s.clear();
+            r.clear();
+            sprime.clear();
+            rprime.clear();
+            for(int i = 1;i<k+1;i++){
+                s.push_back(2*i-1);
+                sprime.push_back(2*i);
+            }
+            for(int i = 0;i<inputLength;i++){
+                r.push_back(2*k+1*2*i);
+                rprime.push_back(2*k+2+2*i);
+            }
+            graph.reserve(num_nodes);
+            for(int i = 0;i<num_nodes;i++){
+                std::vector<edge> temp;
+                temp.reserve(num_nodes);
+                for(int j = 0;j<num_nodes;j++){
+                    temp.push_back(edge(i,j,0,0));
+                }
+                graph.push_back(temp);
+            }
+            //calc x.
+            int x = 0;
+            for(int i = 0;i<k;i++)
+                x = x+metricSpace.getDistance(final_config[i], Sigma[inputLength-1]);
+            x = x/(k-1);
+
+
+            for(int i = 0;i<k;i++){
+                graph[source][s[i]] = edge(source, s[i], 0, 1);
+                for(int j = 0;j<r.size();j++)
+                    graph[s[i]][r[j]] = edge(s[i], r[j], metricSpace.getDistance(init_config[i], Sigma[j]), 1);
+                for(int j = 0;j<k;j++){
+                    graph[s[i]][sprime[j]] = edge(s[i], sprime[j], metricSpace.getDistance(init_config[i], final_config[j]), 1);
+                }
+                graph[sprime[i]][sink] = edge(sprime[i], sink, x-metricSpace.getDistance(final_config[i],Sigma[inputLength-1]),1);
+            }
+            for(int i = 0;i<inputLength;i++){
+                graph[r[i]][rprime[i]] = edge(r[i], rprime[i], -1e6, 1);
+                for(int j = i+1; j<inputLength;j++)
+                    graph[rprime[i]][r[j]] = edge(rprime[i], r[j], metricSpace.getDistance(Sigma[j], Sigma[i]), 1);
+                if(i+1 != inputLength)    
+                    for(int j = 0;j<k;j++)
+                        graph[rprime[i]][sprime[j]] = edge (rprime[i], sprime[j], metricSpace.getDistance(Sigma[i], final_config[j]), 1);
+            }
+            graph[rprime[inputLength-1]][sink] = edge(rprime[inputLength-1], sink, 0, 1);
+            //Now the graph should be set up correctly.
+            //Now, we want to compute the graph. We don't care about what the cost is, but we want to figure out afterwards which final_node wasn't used.
+            int cost = computeMCFP();
+            //Now the flow through the graph is k, one of the sprime shouldn't be used. find which one it is, and return that int(server ID.)
+            for(int i = 0;i<k;i++)
+                if(graph[sprime[i]][sink].flow == 1)
+                    return i;
+            //We are returning the server that we want to move (its ID).
+            return -1;
+        }
+
         void setGraph(Mspace & metricSpace, std::vector<int> Sigma, int IL, int num_servers, std::vector<int> init_config){
             graph.clear();
             inputLength = IL;
@@ -62,7 +128,6 @@ class Mcfp
                 // graph[i].reserve(num_nodes);
                 for(int j = 0;j<num_nodes;j++){
                     temp.push_back(edge(i,j,0,0));
-                    std::cout << "THIS RAN FOR I: " << std::to_string(i) << " AND J: " << std::to_string(j) << "\n";
                 }
                 graph.push_back(temp);
             }
@@ -91,17 +156,7 @@ class Mcfp
 
                 cost += reversePath(path);
             }
-            // cost = cost+1e6*inputLength;
-            // //Now we have the residual graph. we want to do the same thing from the sink.
-            // int cost = 0;
-            // for(int i = 0;i<k;i++){
-            //     std::vector <edge> path = minCostBF(sink, s[i]);
-            //     for(int j = 0;j<path.size();j++)
-            //         if(path[j].cost!=-1e6 && path[j].cost!=1e6)
-            //             cost = cost+path[j].cost;
-            // }
             return cost;
-
         }
         //check if a path exists from src to dest.
         bool pathexists(){

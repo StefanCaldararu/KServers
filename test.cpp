@@ -1,49 +1,21 @@
-#include <iostream>
-#include "RAII_Classes/mcfp.cpp"
-#include "mspace.h"
 #include<vector>
+#include <iostream>
 int main() {
-    Mspace metricSpace;
-    metricSpace.setSize(4);
-    metricSpace.setSize(4);
-    metricSpace.setSize(4);
-    metricSpace.setDistance(0,0,0);
-    metricSpace.setDistance(0,1,3);
-    metricSpace.setDistance(0,2,2);
-    metricSpace.setDistance(1,0,3);
-    metricSpace.setDistance(1,1,0);
-    metricSpace.setDistance(1,2,5);
-    metricSpace.setDistance(2,0,2);
-    metricSpace.setDistance(2,1,5);
-    metricSpace.setDistance(2,2,0);
-    metricSpace.setDistance(3,3,0);
+    if(true){
+        std::vector<int> bad_reference;
+        std::vector<int> good_reference;
+        bad_reference.reserve(5);
+        good_reference.reserve(5);
+        bad_reference[0] = 1;
+        good_reference.push_back(1);
+        std::cout << "Both of these print out 1: \n";
+        std::cout <<bad_reference[0] << "\n";
+        std::cout << good_reference[0] << "\n";
+        //We can even change the value at the specified location once it has been assigned
+        good_reference[0] = 2;
 
-    metricSpace.setDistance(0,3,2);
-    metricSpace.setDistance(3,0,2);
-    metricSpace.setDistance(2,3,1);
-    metricSpace.setDistance(3,2,1);
-    metricSpace.setDistance(1,3,4);
-    metricSpace.setDistance(3,1,4);
-
-    std::vector<int> Sigma;
-    Sigma.push_back(2);
-    Sigma.push_back(0);
-    Sigma.push_back(3);
-    Sigma.push_back(0);
-    Sigma.push_back(2);
-    Sigma.push_back(0);
-    Sigma.push_back(3);
-    Sigma.push_back(0);
-    Sigma.push_back(2);
-    Sigma.push_back(0);
-    int inputLength = 10;
-    int num_servers = 2;
-    std::vector<int> init_config;
-    init_config.push_back(0);
-    init_config.push_back(1);
-    Mcfp calc;
-    calc.setGraph(metricSpace, Sigma, inputLength, num_servers, init_config);
-    int cost = calc.computeMCFP();
-    std::cout << cost << std::endl;
+    }
+    //Once we go out of scope, there is a memory leak from the
+    //bad_reference vector
     return 0;
 }
