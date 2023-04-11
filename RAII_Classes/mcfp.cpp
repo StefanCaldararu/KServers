@@ -55,7 +55,7 @@ class Mcfp
                 sprime.push_back(2*i);
             }
             for(int i = 0;i<inputLength;i++){
-                r.push_back(2*k+1*2*i);
+                r.push_back(2*k+1+2*i);
                 rprime.push_back(2*k+2+2*i);
             }
             graph.reserve(num_nodes);
@@ -71,7 +71,8 @@ class Mcfp
             int x = 0;
             for(int i = 0;i<k;i++)
                 x = x+metricSpace.getDistance(final_config[i], Sigma[inputLength-1]);
-            x = x/(k-1);
+            if(x>1)
+                x = x/(k-1);
 
 
             for(int i = 0;i<k;i++){
@@ -152,9 +153,10 @@ class Mcfp
         int computeMCFP(){
             int cost = 1e6*inputLength;
             while(pathexists()){
-                std::vector<edge> path = minCostBF(source, sink);
+                std::vector<edge> path = findMinCostPath(source, sink);
 
                 cost += reversePath(path);
+                std::cout << "path exists...\n";
             }
             return cost;
         }
@@ -250,7 +252,6 @@ class Mcfp
                 crnt_node = path.top();
                 path.pop();
             }
-            std::cout << "Shortest distance from source to sink: " << dist[dest] << std::endl;
 
             return ret;
 

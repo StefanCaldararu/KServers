@@ -1,7 +1,7 @@
 //author: Stefan Caldararu
 
-#ifndef OPTALG
-#define OPTALG
+#ifndef WFALG
+#define WFALG
 #include "alg.h"
 #include "RAII_Classes/mcfp.cpp"
 

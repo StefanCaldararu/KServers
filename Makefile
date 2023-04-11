@@ -1,5 +1,5 @@
 csv: alg.cpp alg.h csv_parser.cpp mspace.cpp randomAlg.cpp greedyAlg.cpp mspace.h randomAlg.h RAII_Classes/getInput.cpp
-	g++ -std=c++11 -o csv_run -g csv_parser.cpp alg.cpp mspace.cpp randomAlg.cpp optAlg.cpp greedyAlg.cpp RAII_Classes/getInput.cpp RAII_Classes/mcfp.cpp RAII_Classes/writeOutput.cpp
+	g++ -std=c++11 -o csv_run -g csv_parser.cpp alg.cpp mspace.cpp randomAlg.cpp optAlg.cpp greedyAlg.cpp WFAlg.cpp RAII_Classes/getInput.cpp RAII_Classes/mcfp.cpp RAII_Classes/writeOutput.cpp
 
 runcsv:
 	./csv_run -i sample_input.csv -o outputFile.csv

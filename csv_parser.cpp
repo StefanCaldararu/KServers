@@ -10,10 +10,11 @@
 //second line is this mspace
 //third line is number of inputs for this metric space
 //following line is each input, until we reach the next mspace, and follows as above.
-
+#include "WFAlg.h"
 #include "randomAlg.h"
-#include "greedyAlg.h"
 #include "optAlg.h"
+#include "greedyAlg.h"
+
 #include <iostream>
 #include <string.h> 
 #include <fstream>
@@ -23,7 +24,7 @@
 #include "RAII_Classes/writeOutput.cpp"
 
 
-const int NUM_ALGS = 3;
+const int NUM_ALGS = 4;
 //This takes in the argv and parses it for the main function. 
 //gives pointer to input file, output file, and there is an array of which algorithms to run.
 //TODO: probably want to create object for this.
@@ -169,6 +170,7 @@ int main(int argc, char ** argv)
     std::vector <int> a1_costs;
     std::vector <int> a2_costs;
     std::vector <int> a3_costs;
+    std::vector<int> a4_costs;
 
     if(algsToRun[0] == 1){
         runningAlgs.push_back(new RandomAlg());
@@ -182,12 +184,17 @@ int main(int argc, char ** argv)
         runningAlgs.push_back(new OptAlg());
         a3_costs.reserve(totalRuns);
     }
+    if(algsToRun[3] == 1){
+        runningAlgs.push_back(new WFAlg());
+        a4_costs.reserve(totalRuns);
+    }
     //Now we know we want to run all of the algorithms in runningAlgs.
     std::vector<std::vector <int> > costs;
     costs.reserve(NUM_ALGS);
     costs.push_back(a1_costs);
     costs.push_back(a2_costs);
     costs.push_back(a3_costs);
+    costs.push_back(a4_costs);
 
     for(int i = 0; i< num_spaces; i++){
         std::vector<int> server_locations;

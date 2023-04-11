@@ -20,6 +20,7 @@ int WFAlg::runAlg(std::vector <int> Sigma, int inputLength)
         //Now we have the server to move. 
         cost = cost+metricSpace.getDistance(config[serverToMove], Sigma[i]);
         moveServer(serverToMove, Sigma[i]);
+        std::cout <<"MOVED SERVER " << std::to_string(i) <<" of " << std::to_string(inputLength) << "\n";
     }
     return cost;
 }
