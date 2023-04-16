@@ -3,6 +3,7 @@
 #include "RAII_Classes/mcfp.cpp"
 #include<cstdlib>
 #include<iostream>
+#include "RAII_Classes/lemon_mcfp.cpp"
 
 WFAlg::WFAlg(): Alg()
 {}
@@ -12,7 +13,7 @@ int WFAlg::runAlg(std::vector <int> Sigma, int inputLength)
     std::vector<int> initConfig = config;
     int cost = 0;
     for(int i = 0;i<inputLength;i++){
-        Mcfp flowNetwork;
+        Lemon_Mcfp flowNetwork;
         std::vector<int> S;
         for(int j = 0;j<i+1;j++)
             S.push_back(Sigma[j]);

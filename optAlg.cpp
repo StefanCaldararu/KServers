@@ -8,8 +8,8 @@ OptAlg::OptAlg(): Alg()
 
 int OptAlg::runAlg(std::vector <int> Sigma, int inputLength)
 {
-    flowNetwork.setGraph(metricSpace, Sigma, inputLength, k, config);
-    int cost = flowNetwork.computeMCFP();
+    int cost = flowNetwork.setGraph(metricSpace, Sigma, inputLength, k, config);
+    //int cost = flowNetwork.computeMCFP();
     return cost;
 }
 
