@@ -11,7 +11,6 @@ class WFAlg : public Alg
 
     public:
     WFAlg();
-    Mcfp flowNetwork;
     int runAlg(std::vector <int> Sigma, int inputLength);
     ~WFAlg();
 };

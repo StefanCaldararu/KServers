@@ -14,6 +14,7 @@
 #include "randomAlg.h"
 #include "optAlg.h"
 #include "greedyAlg.h"
+#include "doubleCoverageAlg.h"
 
 #include <iostream>
 #include <string.h> 
@@ -24,7 +25,7 @@
 #include "RAII_Classes/writeOutput.cpp"
 
 
-const int NUM_ALGS = 4;
+const int NUM_ALGS = 5;
 //This takes in the argv and parses it for the main function. 
 //gives pointer to input file, output file, and there is an array of which algorithms to run.
 //TODO: probably want to create object for this.
@@ -139,6 +140,7 @@ void printOutput(char* outputFile, std::vector<std::vector<int> >& costs, std::v
 
 int main(int argc, char ** argv)
 {
+    auto start = std::chrono::high_resolution_clock::now();
     //FIXME: ok that these are hardcoded?
     char* inputFile = new char[200];
     char* outputFile = new char[200];
@@ -170,7 +172,8 @@ int main(int argc, char ** argv)
     std::vector <int> a1_costs;
     std::vector <int> a2_costs;
     std::vector <int> a3_costs;
-    std::vector<int> a4_costs;
+    std::vector <int> a4_costs;
+    std::vector <int> a5_costs;
 
     if(algsToRun[0] == 1){
         runningAlgs.push_back(new RandomAlg());
@@ -188,6 +191,11 @@ int main(int argc, char ** argv)
         runningAlgs.push_back(new WFAlg());
         a4_costs.reserve(totalRuns);
     }
+    if(algsToRun[4] == 1){
+        runningAlgs.push_back(new DoubleCoverageAlg());
+        a5_costs.reserve(totalRuns);
+    }
+
     //Now we know we want to run all of the algorithms in runningAlgs.
     std::vector<std::vector <int> > costs;
     costs.reserve(NUM_ALGS);
@@ -203,6 +211,7 @@ int main(int argc, char ** argv)
             server_locations.push_back(j);
         }
         for(int j = 0; j < num_inputs[i]; j++){
+            std::cout << "ran for input "<< j << std::endl;
             for(int l = 0; l<numRunningAlgs; l++){
                 //First, set the metric space. 
                 runningAlgs[l]->setGraph(spaces[i]);
@@ -213,6 +222,9 @@ int main(int argc, char ** argv)
             }
         }
     }
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+    std::cout << duration.count() <<std::endl;
     //TODO: now need to output a file with all of the data!
     printOutput(outputFile, costs, num_inputs, spaces, inputs, num_servers);
     delete [] inputFile;

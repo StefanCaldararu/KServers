@@ -8,6 +8,7 @@
 #include<iostream>
 #include<stack>
 #include<algorithm>
+#include <chrono>
 
 
 struct edge{
@@ -156,7 +157,6 @@ class Mcfp
                 std::vector<edge> path = findMinCostPath(source, sink);
 
                 cost += reversePath(path);
-                std::cout << "path exists...\n";
             }
             return cost;
         }

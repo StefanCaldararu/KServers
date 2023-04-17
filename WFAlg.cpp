@@ -10,6 +10,7 @@ WFAlg::WFAlg(): Alg()
 
 int WFAlg::runAlg(std::vector <int> Sigma, int inputLength)
 {
+    // auto start = std::chrono::high_resolution_clock::now();
     std::vector<int> initConfig = config;
     int cost = 0;
     for(int i = 0;i<inputLength;i++){
@@ -21,8 +22,10 @@ int WFAlg::runAlg(std::vector <int> Sigma, int inputLength)
         //Now we have the server to move. 
         cost = cost+metricSpace.getDistance(config[serverToMove], Sigma[i]);
         moveServer(serverToMove, Sigma[i]);
-        std::cout <<"MOVED SERVER " << std::to_string(i) <<" of " << std::to_string(inputLength) << "\n";
     }
+    // auto stop = std::chrono::high_resolution_clock::now();
+    // auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+    //std::cout << duration.count() <<std::endl;
     return cost;
 }
 

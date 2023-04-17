@@ -10,6 +10,7 @@
 #include<algorithm>
 #include <lemon/list_graph.h>
 #include <lemon/cost_scaling.h>
+#include <chrono>
 
 using namespace lemon;
 

@@ -24,7 +24,7 @@ void generate_combinations(vector<int>& current, int length, ofstream& file) {
 int main() {
     ofstream file;
     file.open("file.csv");
-    int line_length = 5;
+    int line_length = 3;
 
     file << "1,1,1,1,1" <<endl;
     file << "1"<<endl;
