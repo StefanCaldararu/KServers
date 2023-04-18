@@ -24,8 +24,8 @@ void generate_combinations(vector<int>& current, int length, ofstream& file) {
 int main() {
     ofstream file;
     file.open("file.csv");
-    int line_length = 3;
-
+    int line_length = 100;
+    int num_lines = 1000;
     file << "1,1,1,1,1" <<endl;
     file << "1"<<endl;
     file << "10"<<endl;
@@ -39,10 +39,19 @@ int main() {
     file << "7,6,5,4,3,2,1,0,1,2"<<endl;
     file << "8,7,6,5,4,3,2,1,0,1"<<endl;
     file << "9,8,7,6,5,4,3,2,1,0"<<endl;
-    file << pow(10,line_length) <<endl;
+    file << num_lines <<endl;
     file << "3 "<<endl;
-    vector<int> current;
-    generate_combinations(current, line_length, file);
+    srand(time(NULL));
+    for (int i = 0; i < num_lines; i++) {
+        for (int j = 0; j < line_length; j++) {
+            int digit = rand() % 10;
+            file << digit;
+            if (j < line_length - 1) {
+                file << ",";
+            }
+        }
+        file << endl;
+    }
     
     file.close();
     return 0;

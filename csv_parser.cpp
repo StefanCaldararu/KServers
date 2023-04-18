@@ -95,10 +95,10 @@ int getInput(char* inputFile,std::vector<int>& algsToRun, std::vector <std::vect
         reader.getLine();
         int NI = std::stoi(reader.line);
         num_inputs.push_back(NI);
-        inputs[i].reserve(NI);
         //Now we want to get the number of servers for this mspace. all inputs will have the same number of servers.
         reader.getLine();
         num_servers.push_back(std::stoi(reader.line));
+        inputs.push_back(std::vector<std::vector<int> >());
         std::vector<int> input_length;
         for(int j = 0; j<NI; j++){
             std::vector<int> input;
@@ -162,8 +162,8 @@ int main(int argc, char ** argv)
     int numRunningAlgs = 0;
     for(int i = 0; i<NUM_ALGS; i++)
         numRunningAlgs = numRunningAlgs+algsToRun[i];
-    std::vector <Alg*> runningAlgs;
-    runningAlgs.reserve(numRunningAlgs);
+    // std::vector <Alg*> runningAlgs;
+    //runningAlgs.reserve(numRunningAlgs);
 
         //TODO: find better way to do this...
     int totalRuns = 0;
@@ -175,26 +175,26 @@ int main(int argc, char ** argv)
     std::vector <int> a4_costs;
     std::vector <int> a5_costs;
 
-    if(algsToRun[0] == 1){
-        runningAlgs.push_back(new RandomAlg());
-        a1_costs.reserve(totalRuns);
-    }
-    if(algsToRun[1] == 1){
-        runningAlgs.push_back(new GreedyAlg());
-        a2_costs.reserve(totalRuns);
-    }
-    if(algsToRun[2] == 1){
-        runningAlgs.push_back(new OptAlg());
-        a3_costs.reserve(totalRuns);
-    }
-    if(algsToRun[3] == 1){
-        runningAlgs.push_back(new WFAlg());
-        a4_costs.reserve(totalRuns);
-    }
-    if(algsToRun[4] == 1){
-        runningAlgs.push_back(new DoubleCoverageAlg());
-        a5_costs.reserve(totalRuns);
-    }
+    // if(algsToRun[0] == 1){
+    //     runningAlgs.push_back(new RandomAlg);
+    //     a1_costs.reserve(totalRuns);
+    // }
+    // if(algsToRun[1] == 1){
+    //     runningAlgs.push_back(new GreedyAlg);
+    //     a2_costs.reserve(totalRuns);
+    // }
+    // if(algsToRun[2] == 1){
+    //     runningAlgs.push_back(new OptAlg);
+    //     a3_costs.reserve(totalRuns);
+    // }
+    // if(algsToRun[3] == 1){
+    //     runningAlgs.push_back(new WFAlg);
+    //     a4_costs.reserve(totalRuns);
+    // }
+    // if(algsToRun[4] == 1){
+    //     runningAlgs.push_back(new DoubleCoverageAlg);
+    //     a5_costs.reserve(totalRuns);
+    // }
 
     //Now we know we want to run all of the algorithms in runningAlgs.
     std::vector<std::vector <int> > costs;
@@ -203,6 +203,7 @@ int main(int argc, char ** argv)
     costs.push_back(a2_costs);
     costs.push_back(a3_costs);
     costs.push_back(a4_costs);
+    costs.push_back(a5_costs);
 
     for(int i = 0; i< num_spaces; i++){
         std::vector<int> server_locations;
@@ -212,21 +213,55 @@ int main(int argc, char ** argv)
         }
         for(int j = 0; j < num_inputs[i]; j++){
             std::cout << "ran for input "<< j << std::endl;
-            for(int l = 0; l<numRunningAlgs; l++){
-                //First, set the metric space. 
-                runningAlgs[l]->setGraph(spaces[i]);
-                runningAlgs[l]->setServers(num_servers[i],server_locations);
-                //Now we have the servers set, and the graph set. 
-                int cost = runningAlgs[l]->runAlg(inputs[i][j], input_lengths[i][j]);
-                costs[l].push_back(cost);
-            }
+
+            RandomAlg ralg;
+            GreedyAlg galg;
+            OptAlg oalg;
+            WFAlg walg;
+            DoubleCoverageAlg dalg;
+
+            ralg.setGraph(spaces[i]);
+            ralg.setServers(num_servers[i], server_locations);
+            int cost = ralg.runAlg(inputs[i][j], input_lengths[i][j]);
+            costs[0].push_back(cost);
+            
+            galg.setGraph(spaces[i]);
+            galg.setServers(num_servers[i], server_locations);
+            cost = galg.runAlg(inputs[i][j], input_lengths[i][j]);
+            costs[1].push_back(cost);
+
+            oalg.setGraph(spaces[i]);
+            oalg.setServers(num_servers[i], server_locations);
+            cost = oalg.runAlg(inputs[i][j], input_lengths[i][j]);
+            costs[2].push_back(cost);
+
+            walg.setGraph(spaces[i]);
+            walg.setServers(num_servers[i], server_locations);
+            cost = walg.runAlg(inputs[i][j], input_lengths[i][j]);
+            costs[3].push_back(cost);
+
+            dalg.setGraph(spaces[i]);
+            dalg.setServers(num_servers[i], server_locations);
+            cost = dalg.runAlg(inputs[i][j], input_lengths[i][j]);
+            costs[4].push_back(cost);
+
+            // for(int l = 0; l<numRunningAlgs; l++){
+            //     //First, set the metric space. 
+            //     runningAlgs[l]->setGraph(spaces[i]);
+            //     runningAlgs[l]->setServers(num_servers[i],server_locations);
+            //     //Now we have the servers set, and the graph set. 
+            //     int cost = runningAlgs[l]->runAlg(inputs[i][j], input_lengths[i][j]);
+            //     costs[l].push_back(cost);
+            // }
         }
     }
     auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+    auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop-start);
     std::cout << duration.count() <<std::endl;
     //TODO: now need to output a file with all of the data!
     printOutput(outputFile, costs, num_inputs, spaces, inputs, num_servers);
+    // for(auto ptr:runningAlgs)
+    //     delete ptr;
     delete [] inputFile;
     delete [] outputFile;
     //TODO: need to free mspaces and inputs
