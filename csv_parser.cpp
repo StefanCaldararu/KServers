@@ -15,6 +15,7 @@
 #include "ALGS/optAlg.h"
 #include "ALGS/greedyAlg.h"
 #include "ALGS/doubleCoverageAlg.h"
+#include "ALGS/KCentersAlg.h"
 
 #include <iostream>
 #include <string.h> 
@@ -25,7 +26,7 @@
 #include "RAII_Classes/writeOutput.cpp"
 
 
-const int NUM_ALGS = 5;
+const int NUM_ALGS = 6;
 //This takes in the argv and parses it for the main function. 
 //gives pointer to input file, output file, and there is an array of which algorithms to run.
 //TODO: probably want to create object for this.
@@ -174,6 +175,7 @@ int main(int argc, char ** argv)
     std::vector <int> a3_costs;
     std::vector <int> a4_costs;
     std::vector <int> a5_costs;
+    std::vector <int> a6_costs;
 
     // if(algsToRun[0] == 1){
     //     runningAlgs.push_back(new RandomAlg);
@@ -204,6 +206,7 @@ int main(int argc, char ** argv)
     costs.push_back(a3_costs);
     costs.push_back(a4_costs);
     costs.push_back(a5_costs);
+    costs.push_back(a6_costs);
 
     for(int i = 0; i< num_spaces; i++){
         std::vector<int> server_locations;
@@ -219,6 +222,7 @@ int main(int argc, char ** argv)
             OptAlg oalg;
             WFAlg walg;
             DoubleCoverageAlg dalg;
+            KCentersAlg kalg;
 
             ralg.setGraph(spaces[i]);
             ralg.setServers(num_servers[i], server_locations);
@@ -244,6 +248,11 @@ int main(int argc, char ** argv)
             dalg.setServers(num_servers[i], server_locations);
             cost = dalg.runAlg(inputs[i][j], input_lengths[i][j]);
             costs[4].push_back(cost);
+
+            kalg.setGraph(spaces[i]);
+            kalg.setServers(num_servers[i], server_locations);
+            cost = kalg.runAlg(inputs[i][j], input_lengths[i][j]);
+            costs[5].push_back(cost);
 
             // for(int l = 0; l<numRunningAlgs; l++){
             //     //First, set the metric space. 
