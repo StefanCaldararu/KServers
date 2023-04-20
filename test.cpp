@@ -2,12 +2,12 @@
 #include <lemon/cost_scaling.h>
 #include "RAII_Classes/getInput.cpp"
 #include "mspace.h"
-#include "alg.h"
-#include "doubleCoverageAlg.h"
-#include "randomAlg.h"
-#include "greedyAlg.h"
-#include "optAlg.h"
-#include "WFAlg.h"
+#include "ALGS/alg.h"
+#include "ALGS/doubleCoverageAlg.h"
+#include "ALGS/randomAlg.h"
+#include "ALGS/greedyAlg.h"
+#include "ALGS/optAlg.h"
+#include "ALGS/WFAlg.h"
 #include "RAII_Classes/lemon_mcfp.cpp"
 using namespace lemon;
 

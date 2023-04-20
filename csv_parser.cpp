@@ -10,11 +10,11 @@
 //second line is this mspace
 //third line is number of inputs for this metric space
 //following line is each input, until we reach the next mspace, and follows as above.
-#include "WFAlg.h"
-#include "randomAlg.h"
-#include "optAlg.h"
-#include "greedyAlg.h"
-#include "doubleCoverageAlg.h"
+#include "ALGS/WFAlg.h"
+#include "ALGS/randomAlg.h"
+#include "ALGS/optAlg.h"
+#include "ALGS/greedyAlg.h"
+#include "ALGS/doubleCoverageAlg.h"
 
 #include <iostream>
 #include <string.h> 
@@ -256,7 +256,7 @@ int main(int argc, char ** argv)
         }
     }
     auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop-start);
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
     std::cout << duration.count() <<std::endl;
     //TODO: now need to output a file with all of the data!
     printOutput(outputFile, costs, num_inputs, spaces, inputs, num_servers);
