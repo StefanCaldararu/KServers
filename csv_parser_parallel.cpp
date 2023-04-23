@@ -17,6 +17,7 @@
 #include "ALGS/doubleCoverageAlg.h"
 #include "ALGS/KCentersAlg.h"
 
+#include <omp.h>
 #include <iostream>
 #include <string.h> 
 #include <fstream>
@@ -121,16 +122,18 @@ void printOutput(char* outputFile, std::vector<std::vector<int> >& costs, std::v
     WriteOutput writer(outputFile);
     int counter = 0;
     for(int i = 0;i<metricSpaces.size();i++){
-        writer.writeLine("numserver: "+ std::to_string(num_servers[i]));
+
+        writer.writeLine("mspace:");
+        writer.writeLine("k: "+ std::to_string(num_servers[i]));
         for(int j = 0;j<metricSpaces[i].getSize();j++){
             writer.writeLine(metricSpaces[i].graph[j]);
         }
         //Now we have the metric space written in. 
         for(int j = 0; j<numInputs[i];j++){
-            writer.writeLine("i: ");
+            writer.writeLine("inp:");
             writer.writeLine(inputs[i][j]);
             for(int l = 0;l<NUM_ALGS;l++){
-                writer.writeLine("A"+ std::to_string(l) + " c: " + std::to_string(costs[l][counter]));
+                writer.writeLine("A "+ std::to_string(l) + " c " + std::to_string(costs[l][counter]));
             }
             counter++;
         }
@@ -167,13 +170,15 @@ int main(int argc, char ** argv)
         //TODO: find better way to do this...
     int totalRuns = 0;
     for(int i = 0; i<num_spaces;i++)
-        totalRuns = totalRuns+num_inputs[i];
-    std::vector <int> a1_costs;
-    std::vector <int> a2_costs;
-    std::vector <int> a3_costs;
-    std::vector <int> a4_costs;
-    std::vector <int> a5_costs;
-    std::vector <int> a6_costs;
+        totalRuns = totalRuns+num_inputs[i];    
+
+    std::vector <std::vector<int> > a1_costs;
+    std::vector <std::vector<int> > a2_costs;
+    std::vector <std::vector<int> > a3_costs;
+    std::vector <std::vector<int> > a4_costs;
+    std::vector <std::vector<int> > a5_costs;
+    std::vector <std::vector<int> > a6_costs;
+
 
     // if(algsToRun[0] == 1){
     //     runningAlgs.push_back(new RandomAlg);
@@ -197,7 +202,7 @@ int main(int argc, char ** argv)
     // }
 
     //Now we know we want to run all of the algorithms in runningAlgs.
-    std::vector<std::vector <int> > costs;
+    std::vector<std::vector< std::vector <int> > > costs;
     costs.reserve(NUM_ALGS);
     costs.push_back(a1_costs);
     costs.push_back(a2_costs);
@@ -206,9 +211,13 @@ int main(int argc, char ** argv)
     costs.push_back(a5_costs);
     costs.push_back(a6_costs);
 
+    for(int i = 0;i<NUM_ALGS;i++)
+        for(int j = 0;j<num_spaces;j++)
+            costs[i].push_back(std::vector<int>());
+
     
 
-
+    #pragma omp parallel for num_threads(16)
     for(int i = 0; i< num_spaces; i++){
         std::vector<int> server_locations;
         server_locations.reserve(num_servers[i]);
@@ -228,32 +237,32 @@ int main(int argc, char ** argv)
             ralg.setGraph(spaces[i]);
             ralg.setServers(num_servers[i], server_locations);
             int cost = ralg.runAlg(inputs[i][j], input_lengths[i][j]);
-            costs[0].push_back(cost);
+            costs[0][i].push_back(cost);
             
             galg.setGraph(spaces[i]);
             galg.setServers(num_servers[i], server_locations);
             cost = galg.runAlg(inputs[i][j], input_lengths[i][j]);
-            costs[1].push_back(cost);
+            costs[1][i].push_back(cost);
 
             oalg.setGraph(spaces[i]);
             oalg.setServers(num_servers[i], server_locations);
             cost = oalg.runAlg(inputs[i][j], input_lengths[i][j]);
-            costs[2].push_back(cost);
+            costs[2][i].push_back(cost);
 
             walg.setGraph(spaces[i]);
             walg.setServers(num_servers[i], server_locations);
             cost = walg.runAlg(inputs[i][j], input_lengths[i][j]);
-            costs[3].push_back(cost);
+            costs[3][i].push_back(cost);
 
             dalg.setGraph(spaces[i]);
             dalg.setServers(num_servers[i], server_locations);
             cost = dalg.runAlg(inputs[i][j], input_lengths[i][j]);
-            costs[4].push_back(cost);
+            costs[4][i].push_back(cost);
 
             kalg.setGraph(spaces[i]);
             kalg.setServers(num_servers[i], server_locations);
             cost = kalg.runAlg(inputs[i][j], input_lengths[i][j]);
-            costs[5].push_back(cost);
+            costs[5][i].push_back(cost);
 
             // for(int l = 0; l<numRunningAlgs; l++){
             //     //First, set the metric space. 
@@ -265,11 +274,25 @@ int main(int argc, char ** argv)
             // }
         }
     }
+
+
+    //Now need to merge all of the lists into the final cost list...
+
+    std::vector<std::vector<int> > final_costs;
+    for(int i = 0;i<NUM_ALGS;i++)
+        final_costs.push_back(std::vector<int>());
+    for(int i = 0;i<NUM_ALGS;i++){
+        for(int j = 0;j<num_spaces;j++){
+            for(int l = 0;l<num_inputs[j];l++)
+                final_costs[i].push_back(costs[i][j][l]);
+        }
+    }
+
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
     std::cout << duration.count() <<std::endl;
     //TODO: now need to output a file with all of the data!
-    printOutput(outputFile, costs, num_inputs, spaces, inputs, num_servers);
+    printOutput(outputFile, final_costs, num_inputs, spaces, inputs, num_servers);
     // for(auto ptr:runningAlgs)
     //     delete ptr;
     delete [] inputFile;

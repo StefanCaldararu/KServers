@@ -6,45 +6,68 @@
 #include <cmath>
 using namespace std;
 
-void generate_combinations(vector<int>& current, int length, ofstream& file) {
+int GRAPH_SIZE = 6;
+int LINE_LENGTH = 8;
+int NUM_LINES = 1679616;
+int k = 2;
+int NUM_THREADS = 16;
+int INP_PER_THREAD = NUM_LINES/NUM_THREADS;
+int threads_used = 0;
+bool printed = false;
+
+void printMspace(ofstream& file){
+    file << GRAPH_SIZE << endl;
+        for(int i = 0;i<GRAPH_SIZE;i++){
+            for(int j = 0;j<GRAPH_SIZE;j++){
+                int value = abs(j-i);
+                file << value;
+                if(j<GRAPH_SIZE-1)
+                    file << ",";
+            }
+            file << endl;
+        }
+        if(NUM_LINES-threads_used*INP_PER_THREAD<INP_PER_THREAD)
+            file << NUM_LINES-threads_used*INP_PER_THREAD <<endl;
+        else
+            file << INP_PER_THREAD << endl;
+        threads_used ++;
+        file << k<<endl;
+}
+
+
+int generate_combinations(vector<int>& current, int length, ofstream& file, int gsize, int count, int mod) {
+    if(count%mod == 0 && !printed){
+        printMspace(file);
+        printed = true;
+    }
+    else if(count%mod !=0)
+        printed = false;
     if (current.size() == length) {
         for (int i = 0; i < length - 1; i++) {
             file << current[i] << ",";
         }
         file << current[length - 1] << endl;
-        return;
+        count ++;
+        return count;
     }
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < gsize; i++) {
         current.push_back(i);
-        generate_combinations(current, length, file);
+        count = generate_combinations(current, length, file, gsize, count, mod);
         current.pop_back();
     }
+    return count;
 }
 
 int main() {
     ofstream file;
     file.open("file.csv");
-    int line_length = 6;
-    int num_lines = 1000000;
     file << "1,1,1,1,1,1" <<endl;
-    file << 4 <<endl;
-    int graph_size = 10;
-    for(int k = 0;k<4;k++){
-        file << graph_size << endl;
-        for(int i = 0;i<graph_size;i++){
-            for(int j = 0;j<graph_size;j++){
-                int value = abs(j-i);
-                file << value;
-                if(j<graph_size-1)
-                    file << ",";
-            }
-            file << endl;
-        }
-        file << num_lines <<endl;
-        file << k+2<<endl;
+    if(NUM_LINES%NUM_THREADS == 0)
+        file << NUM_THREADS << endl;
+    else
+        file << NUM_THREADS+1 <<endl;
         vector<int> current;
-        generate_combinations(current, line_length, file);
-    }
+        generate_combinations(current, LINE_LENGTH, file, GRAPH_SIZE, 0, INP_PER_THREAD);
     // srand(time(NULL));
     // for (int i = 0; i < num_lines; i++) {
     //     for (int j = 0; j < line_length; j++) {
