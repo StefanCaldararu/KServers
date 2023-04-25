@@ -216,64 +216,65 @@ int main(int argc, char ** argv)
             costs[i].push_back(std::vector<int>());
 
     
+    
+    //#pragma omp parallel for num_threads(16)
+        for(int i = 0; i< num_spaces; i++){
+            std::vector<int> server_locations;
+            server_locations.reserve(num_servers[i]);
+            for(int j = 0; j<num_servers[i];j++){
+                server_locations.push_back(j);
+            }
+            for(int j = 0; j < num_inputs[i]; j++){
+                std::cout << "ran for input "<< j << std::endl;
 
-    #pragma omp parallel for num_threads(16)
-    for(int i = 0; i< num_spaces; i++){
-        std::vector<int> server_locations;
-        server_locations.reserve(num_servers[i]);
-        for(int j = 0; j<num_servers[i];j++){
-            server_locations.push_back(j);
+                RandomAlg ralg;
+                GreedyAlg galg;
+                OptAlg oalg;
+                WFAlg walg;
+                DoubleCoverageAlg dalg;
+                KCentersAlg kalg;
+
+                ralg.setGraph(spaces[i]);
+                ralg.setServers(num_servers[i], server_locations);
+                int cost = ralg.runAlg(inputs[i][j], input_lengths[i][j]);
+                //FIXME: FALSE SHARING ERROR HERE...
+                costs[0][i].push_back(cost);
+                
+                galg.setGraph(spaces[i]);
+                galg.setServers(num_servers[i], server_locations);
+                cost = galg.runAlg(inputs[i][j], input_lengths[i][j]);
+                costs[1][i].push_back(cost);
+
+                oalg.setGraph(spaces[i]);
+                oalg.setServers(num_servers[i], server_locations);
+                cost = oalg.runAlg(inputs[i][j], input_lengths[i][j]);
+                costs[2][i].push_back(cost);
+
+                walg.setGraph(spaces[i]);
+                walg.setServers(num_servers[i], server_locations);
+                cost = walg.runAlg(inputs[i][j], input_lengths[i][j]);
+                costs[3][i].push_back(cost);
+
+                dalg.setGraph(spaces[i]);
+                dalg.setServers(num_servers[i], server_locations);
+                cost = dalg.runAlg(inputs[i][j], input_lengths[i][j]);
+                costs[4][i].push_back(cost);
+
+                kalg.setGraph(spaces[i]);
+                kalg.setServers(num_servers[i], server_locations);
+                cost = kalg.runAlg(inputs[i][j], input_lengths[i][j]);
+                costs[5][i].push_back(cost);
+
+                // for(int l = 0; l<numRunningAlgs; l++){
+                //     //First, set the metric space. 
+                //     runningAlgs[l]->setGraph(spaces[i]);
+                //     runningAlgs[l]->setServers(num_servers[i],server_locations);
+                //     //Now we have the servers set, and the graph set. 
+                //     int cost = runningAlgs[l]->runAlg(inputs[i][j], input_lengths[i][j]);
+                //     costs[l].push_back(cost);
+                // }
+            }
         }
-        for(int j = 0; j < num_inputs[i]; j++){
-            std::cout << "ran for input "<< j << std::endl;
-
-            RandomAlg ralg;
-            GreedyAlg galg;
-            OptAlg oalg;
-            WFAlg walg;
-            DoubleCoverageAlg dalg;
-            KCentersAlg kalg;
-
-            ralg.setGraph(spaces[i]);
-            ralg.setServers(num_servers[i], server_locations);
-            int cost = ralg.runAlg(inputs[i][j], input_lengths[i][j]);
-            costs[0][i].push_back(cost);
-            
-            galg.setGraph(spaces[i]);
-            galg.setServers(num_servers[i], server_locations);
-            cost = galg.runAlg(inputs[i][j], input_lengths[i][j]);
-            costs[1][i].push_back(cost);
-
-            oalg.setGraph(spaces[i]);
-            oalg.setServers(num_servers[i], server_locations);
-            cost = oalg.runAlg(inputs[i][j], input_lengths[i][j]);
-            costs[2][i].push_back(cost);
-
-            walg.setGraph(spaces[i]);
-            walg.setServers(num_servers[i], server_locations);
-            cost = walg.runAlg(inputs[i][j], input_lengths[i][j]);
-            costs[3][i].push_back(cost);
-
-            dalg.setGraph(spaces[i]);
-            dalg.setServers(num_servers[i], server_locations);
-            cost = dalg.runAlg(inputs[i][j], input_lengths[i][j]);
-            costs[4][i].push_back(cost);
-
-            kalg.setGraph(spaces[i]);
-            kalg.setServers(num_servers[i], server_locations);
-            cost = kalg.runAlg(inputs[i][j], input_lengths[i][j]);
-            costs[5][i].push_back(cost);
-
-            // for(int l = 0; l<numRunningAlgs; l++){
-            //     //First, set the metric space. 
-            //     runningAlgs[l]->setGraph(spaces[i]);
-            //     runningAlgs[l]->setServers(num_servers[i],server_locations);
-            //     //Now we have the servers set, and the graph set. 
-            //     int cost = runningAlgs[l]->runAlg(inputs[i][j], input_lengths[i][j]);
-            //     costs[l].push_back(cost);
-            // }
-        }
-    }
 
 
     //Now need to merge all of the lists into the final cost list...

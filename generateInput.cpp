@@ -7,8 +7,8 @@
 using namespace std;
 
 int GRAPH_SIZE = 6;
-int LINE_LENGTH = 8;
-int NUM_LINES = 1679616;
+int LINE_LENGTH = 5;
+int NUM_LINES = 7776;
 int k = 2;
 int NUM_THREADS = 16;
 int INP_PER_THREAD = NUM_LINES/NUM_THREADS;
