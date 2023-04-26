@@ -37,9 +37,9 @@ int getInput(char* inputFile, std::vector<std::vector<int> >& results)
             for(int i = 0;i<NUM_ALGS;i++){
                 std::getline(file, line);
                 std::size_t pos = line.find(':');
-                std::string word = line.substr(pos+2);
+                std::string word = line.substr(pos+1);
                 int value = std::stoi(word);
-                if(size > 2999999 && size<4000000)
+                //if(size > 2999999 && size<4000000)
                 results[i].push_back(value);
             }
             size++;
@@ -66,7 +66,7 @@ int main(int argc, char ** argv)
     for(int i = 0;i<NUM_ALGS;i++)
         results.push_back(std::vector<int>()); 
     int size = getInput(inputFile, results);
-    #pragma omp parallel for
+    //#pragma omp parallel for
     for (size_t i = 0;i<NUM_ALGS;i++){
         std::sort(results[i].begin(), results[i].end());
     }

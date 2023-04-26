@@ -133,7 +133,7 @@ void printOutput(char* outputFile, std::vector<std::vector<int> >& costs, std::v
             writer.writeLine("inp:");
             writer.writeLine(inputs[i][j]);
             for(int l = 0;l<NUM_ALGS;l++){
-                writer.writeLine("A "+ std::to_string(l) + " c:" + std::to_string(costs[l][counter]));
+                writer.writeLine("A "+ std::to_string(l) + " c " + std::to_string(costs[l][counter]));
             }
             counter++;
         }
@@ -180,96 +180,183 @@ int main(int argc, char ** argv)
     std::vector <std::vector<int> > a6_costs;
 
 
-    
+    std::string folder_name(outputFile);
+    //std::filesystem::create_directory(folder_name);
+    std::ofstream randFile("rand_output.csv");
+    std::ofstream greedyFile("greedy_output.csv");
+    std::ofstream optFile1("opt1_output.csv");
+    std::ofstream optFile2("opt2_output.csv");
+    std::ofstream wfaFile1("wfa1_output.csv");
+    std::ofstream wfaFile2("wfa2_output.csv");
+    std::ofstream doubleCoverageFile("doubleCoverage_output.csv");
+    std::ofstream kcentersFile("kcenters_output.csv");
+    #pragma omp parallel for num_threads(8)
+    for(int l = 0;l<8;l++){
+        if(l == 0){
+            for(int i = 0;i<num_spaces;i++){
+                std::vector<int> server_locations;
+                server_locations.reserve(num_servers[i]);
+                for(int j = 0; j<num_servers[i];j++){
+                    server_locations.push_back(j);
+                }
+                for(int j = 0;j<num_inputs[i];j++){
+                    std::cout << "ran for input "<< j << std::endl;
+                    RandomAlg alg;
+                    alg.setGraph(spaces[i]);
+                    alg.setServers(num_servers[i], server_locations);
+                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
+                    randFile << cost << "\n";
 
+                }
 
-    //Now we know we want to run all of the algorithms in runningAlgs.
-    std::vector<std::vector< std::vector <int> > > costs;
-    costs.reserve(NUM_ALGS);
-    costs.push_back(a1_costs);
-    costs.push_back(a2_costs);
-    costs.push_back(a3_costs);
-    costs.push_back(a4_costs);
-    costs.push_back(a5_costs);
-    costs.push_back(a6_costs);
-
-    for(int i = 0;i<NUM_ALGS;i++)
-        for(int j = 0;j<num_spaces;j++)
-            costs[i].push_back(std::vector<int>());
-
-    
-    
-    #pragma omp parallel for num_threads(16)
-        for(int i = 0; i< num_spaces; i++){
-            std::vector<int> server_locations;
-            server_locations.reserve(num_servers[i]);
-            for(int j = 0; j<num_servers[i];j++){
-                server_locations.push_back(j);
             }
-            for(int j = 0; j < num_inputs[i]; j++){
-                std::cout << "ran for input "<< j << std::endl;
 
-                RandomAlg ralg;
-                GreedyAlg galg;
-                OptAlg oalg;
-                WFAlg walg;
-                DoubleCoverageAlg dalg;
-                KCentersAlg kalg;
+        }
+        if(l == 1){
+            for(int i = 0;i<num_spaces;i++){
+                std::vector<int> server_locations;
+                server_locations.reserve(num_servers[i]);
+                for(int j = 0; j<num_servers[i];j++){
+                    server_locations.push_back(j);
+                }
+                for(int j = 0;j<num_inputs[i];j++){
+                    std::cout << "ran for input "<< j << std::endl;
+                    GreedyAlg alg;
+                    alg.setGraph(spaces[i]);
+                    alg.setServers(num_servers[i], server_locations);
+                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
+                    greedyFile << cost << "\n";
 
-                ralg.setGraph(spaces[i]);
-                ralg.setServers(num_servers[i], server_locations);
-                int cost = ralg.runAlg(inputs[i][j], input_lengths[i][j]);
-                //FIXME: FALSE SHARING ERROR HERE...
-                costs[0][i].push_back(cost);
-                
-                galg.setGraph(spaces[i]);
-                galg.setServers(num_servers[i], server_locations);
-                cost = galg.runAlg(inputs[i][j], input_lengths[i][j]);
-                costs[1][i].push_back(cost);
-
-                oalg.setGraph(spaces[i]);
-                oalg.setServers(num_servers[i], server_locations);
-                cost = oalg.runAlg(inputs[i][j], input_lengths[i][j]);
-                costs[2][i].push_back(cost);
-
-                walg.setGraph(spaces[i]);
-                walg.setServers(num_servers[i], server_locations);
-                cost = walg.runAlg(inputs[i][j], input_lengths[i][j]);
-                costs[3][i].push_back(cost);
-
-                dalg.setGraph(spaces[i]);
-                dalg.setServers(num_servers[i], server_locations);
-                cost = dalg.runAlg(inputs[i][j], input_lengths[i][j]);
-                costs[4][i].push_back(cost);
-
-                kalg.setGraph(spaces[i]);
-                kalg.setServers(num_servers[i], server_locations);
-                cost = kalg.runAlg(inputs[i][j], input_lengths[i][j]);
-                costs[5][i].push_back(cost);
+                }
 
             }
         }
+        if(l == 2){
+            for(int i = 0;i<(num_spaces/2)+1;i++){
+                std::vector<int> server_locations;
+                server_locations.reserve(num_servers[i]);
+                for(int j = 0; j<num_servers[i];j++){
+                    server_locations.push_back(j);
+                }
+                for(int j = 0;j<num_inputs[i];j++){
+                    std::cout << "ran for input "<< j << std::endl;
+                    OptAlg alg;
+                    alg.setGraph(spaces[i]);
+                    alg.setServers(num_servers[i], server_locations);
+                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
+                    optFile1 << cost << "\n";
+                }
 
+            }
+        }
+        if( l == 3){
+            for(int i = (num_spaces/2)+1;i<num_spaces;i++){
+                std::vector<int> server_locations;
+                server_locations.reserve(num_servers[i]);
+                for(int j = 0; j<num_servers[i];j++){
+                    server_locations.push_back(j);
+                }
+                for(int j = 0;j<num_inputs[i];j++){
+                    std::cout << "ran for input "<< j << std::endl;
+                    OptAlg alg;
+                    alg.setGraph(spaces[i]);
+                    alg.setServers(num_servers[i], server_locations);
+                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
+                    optFile2 << cost << "\n";
+                }
 
-    //Now need to merge all of the lists into the final cost list...
+            }
+        }
+        if(l == 4){
+            for(int i = 0;i<(num_spaces/2)+1;i++){
+                std::vector<int> server_locations;
+                server_locations.reserve(num_servers[i]);
+                for(int j = 0; j<num_servers[i];j++){
+                    server_locations.push_back(j);
+                }
+                for(int j = 0;j<num_inputs[i];j++){
+                    std::cout << "ran for input "<< j << std::endl;
+                    WFAlg alg;
+                    alg.setGraph(spaces[i]);
+                    alg.setServers(num_servers[i], server_locations);
+                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
+                    wfaFile1 << cost << "\n";
 
-    std::vector<std::vector<int> > final_costs;
-    for(int i = 0;i<NUM_ALGS;i++)
-        final_costs.push_back(std::vector<int>());
-    for(int i = 0;i<NUM_ALGS;i++){
-        for(int j = 0;j<num_spaces;j++){
-            for(int l = 0;l<num_inputs[j];l++)
-                final_costs[i].push_back(costs[i][j][l]);
+                }
+
+            }
+        }
+        if(l == 5){
+            for(int i = (num_spaces/2)+1;i<num_spaces;i++){
+                std::vector<int> server_locations;
+                server_locations.reserve(num_servers[i]);
+                for(int j = 0; j<num_servers[i];j++){
+                    server_locations.push_back(j);
+                }
+                for(int j = 0;j<num_inputs[i];j++){
+                    std::cout << "ran for input "<< j << std::endl;
+                    WFAlg alg;
+                    alg.setGraph(spaces[i]);
+                    alg.setServers(num_servers[i], server_locations);
+                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
+                    wfaFile2 << cost << "\n";
+                }
+            }
+        }
+        if(l == 6){
+            for(int i = 0;i<num_spaces;i++){
+                std::vector<int> server_locations;
+                server_locations.reserve(num_servers[i]);
+                for(int j = 0; j<num_servers[i];j++){
+                    server_locations.push_back(j);
+                }
+                for(int j = 0;j<num_inputs[i];j++){
+                    std::cout << "ran for input "<< j << std::endl;
+                    DoubleCoverageAlg alg;
+                    alg.setGraph(spaces[i]);
+                    alg.setServers(num_servers[i], server_locations);
+                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
+                    doubleCoverageFile << cost << "\n";
+
+                }
+
+            }
+        }
+        if(l == 7){
+            for(int i = 0;i<num_spaces;i++){
+                std::vector<int> server_locations;
+                server_locations.reserve(num_servers[i]);
+                for(int j = 0; j<num_servers[i];j++){
+                    server_locations.push_back(j);
+                }
+                for(int j = 0;j<num_inputs[i];j++){
+                    std::cout << "ran for input "<< j << std::endl;
+                    KCentersAlg alg;
+                    alg.setGraph(spaces[i]);
+                    alg.setServers(num_servers[i], server_locations);
+                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
+                    kcentersFile << cost << "\n";
+                }
+            }
         }
     }
+
+
+    randFile.close();
+    greedyFile.close();
+    optFile1.close();
+    optFile2.close();
+    wfaFile1.close();
+    wfaFile2.close();
+    doubleCoverageFile.close();
+    kcentersFile.close();
+
 
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
     std::cout << duration.count() <<std::endl;
     //TODO: now need to output a file with all of the data!
-    printOutput(outputFile, final_costs, num_inputs, spaces, inputs, num_servers);
-    // for(auto ptr:runningAlgs)
-    //     delete ptr;
+    
     delete [] inputFile;
     delete [] outputFile;
     //TODO: need to free mspaces and inputs
