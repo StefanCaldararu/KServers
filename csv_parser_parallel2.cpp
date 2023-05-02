@@ -1,4 +1,7 @@
 //autor: Stefan Caldararu
+
+//In this version, we assume there is only ONE MSPACE being input. 
+//This will 
 //We want to be able to read directly from csv files, and then output ot csv files.
 //want to take an input parameter, and an output parameter.
 //options will be passed to this program, to denote:
@@ -17,7 +20,10 @@
 #include "ALGS/doubleCoverageAlg.h"
 #include "ALGS/KCentersAlg.h"
 
-#include <omp.h>
+#include <thread>
+#include <mutex>
+#include <queue>
+#include <condition_variable>
 #include <iostream>
 #include <string.h> 
 #include <fstream>
@@ -50,73 +56,6 @@ int parseInput(char* inputFile, char*outputFile, int argc, char** argv)
     }
     return 0;
 }
-//Returns the number of mspaces, or if doesn't work returns -1.
-//TODO: create object for this whole function?
-int getInput(char* inputFile,std::vector<int>& algsToRun, std::vector <std::vector<std::vector<int> > >& inputs,std::vector<std::vector<int> >& input_lengths, std::vector<int >& num_servers, std::vector<int>& num_inputs, std::vector <Mspace>& spaces)
-{
-    GetInput reader(inputFile);
-    // reader.openFile(inputFile);
-    //now first line is which algs to run. algs are sorted in the following order:
-    //FIXME: whenever an alg is added, add it to this...
-    reader.getLine();
-    std::stringstream str(reader.line);
-    std::string word;
-    algsToRun.reserve(NUM_ALGS);
-    while(getline(str, word, ','))
-        algsToRun.push_back(stoi(word));
-
-    //Now we have the algs we want to run
-    //So, we want to get the number of mspaces.
-    reader.getLine();
-    int num_mspaces = std::stoi(reader.line);
-    spaces.reserve(num_mspaces);
-    //Now we have the number of mspaces.
-    num_inputs.reserve(num_mspaces);
-    inputs.reserve(num_mspaces);
-    num_servers.reserve(num_mspaces);
-    for(int i = 0; i<num_mspaces; i++){
-        //Number of nodes for this input, size of the mspace
-        reader.getLine();
-        int size = std::stoi(reader.line);
-        spaces.push_back(Mspace());
-        spaces[i].setSize(size);
-        //populate the mspace!
-        for(int j = 0; j<size; j++){
-            reader.getLine();
-            std::stringstream str(reader.line);
-            int k = 0;
-            while(getline(str, word, ',')){
-                spaces[i].setDistance(j, k, stoi(word));
-                k++;
-            }
-            
-        }
-        //now the mspace is filled in correctly. we now need to make sure that 
-        //the inputs all get filled in.
-        //Number of inputs for this mspace
-        reader.getLine();
-        int NI = std::stoi(reader.line);
-        num_inputs.push_back(NI);
-        //Now we want to get the number of servers for this mspace. all inputs will have the same number of servers.
-        reader.getLine();
-        num_servers.push_back(std::stoi(reader.line));
-        inputs.push_back(std::vector<std::vector<int> >());
-        std::vector<int> input_length;
-        for(int j = 0; j<NI; j++){
-            std::vector<int> input;
-            reader.getLine();
-            std::string word;
-            std::stringstream str(reader.line);
-            while(getline(str, word, ','))
-                input.push_back(stoi(word));
-            inputs[i].push_back(input);
-            input_length.push_back(input.size());
-        }
-        input_lengths.push_back(input_length);
-    }
-    return num_mspaces;
-
-}
 
 void printOutput(char* outputFile, std::vector<std::vector<int> >& costs, std::vector<int>& numInputs, std::vector<Mspace>& metricSpaces, std::vector<std::vector<std::vector<int> > >& inputs, std::vector<int> num_servers){
     WriteOutput writer(outputFile);
@@ -140,6 +79,43 @@ void printOutput(char* outputFile, std::vector<std::vector<int> >& costs, std::v
     }
 }
 
+int location = 0;
+int writerLocation = 0;
+std::queue<std::vector<int> > queue;
+std::mutex m;
+std::condition_variable cv;
+//Default holds -1 in the 0th position, until all of the others are filled in. Each alg has a position to put it's cost, from 1 to 6
+std::vector<int> DEFAULT;
+DEFAULT.push_back(-1);
+for(int i = 0;i<6;i++)
+    DEFAULT.push_back(0);
+
+void producer_function (Mspace mspace, int threadID, GetInput& reader, int num_inputs){
+    std::unique_lock<std::mutex> queueLock(m);
+    int myloc = location;
+    while(location<num_inputs-1){
+        reader.getLine();
+        std::vector<int> input;
+        reader.getLine();
+        std::string word;
+        std::stringstream str(reader.line);
+        while(getline(str, word, ','))
+            input.push_back(stoi(word));
+        //Now we have the input...
+        location++;
+        queue.push(DEFAULT);
+        queueLock.unlock();
+        std::vector<int> out;
+        out.push_back(myloc);
+        
+        //TODO: Get the costs of the algs, and push_back to out...
+
+        queueLock(m);
+
+        
+    }
+}
+
 int main(int argc, char ** argv)
 {
     auto start = std::chrono::high_resolution_clock::now();
@@ -149,6 +125,46 @@ int main(int argc, char ** argv)
 
     if(parseInput(inputFile, outputFile, argc, argv) == 1)
         return 1;
+
+
+
+    //Here we are assuming that ther eis only one mspace, and each line has a new input. We will be processing the inputs one at a time, and having one consumer thread, multiple producer threads.
+
+
+    GetInput reader(inputFile);
+    //The algs we want to run
+    reader.getLine();
+    //The number of mspaces(1)
+    reader.getLine();
+    Mspace space;
+    //Number of nodes for this input, size of the mspace
+    reader.getLine();
+    int size = std::stoi(reader.line);
+    space.setSize(size);
+    std::string word;
+    //populate the mspace!
+    for(int j = 0; j<size; j++){
+        reader.getLine();
+        std::stringstream str(reader.line);
+        int k = 0;
+        while(getline(str, word, ',')){
+            space.setDistance(j, k, stoi(word));
+            k++;
+        }
+    }
+    //Now we have the mspace loaded in... get the number of inputs..
+    reader.getLine();
+    int NI = std::stoi(reader.line);
+    //Now we have the number of inputs. want to create a child to output stuff, and child threads to process inputs...
+    //global variables:
+    std::queue<std::vector<int> > queue;
+    std::mutex m;
+    std::condition_variable cv;
+
+
+
+    
+
     //We now know what algorithms to run, have the input file, and
     //output file, and are ready to start getting the data from the
     //input file.
