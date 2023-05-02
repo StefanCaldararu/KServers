@@ -66,6 +66,20 @@ int main(int argc, char ** argv)
     for(int i = 0;i<NUM_ALGS;i++)
         results.push_back(std::vector<int>()); 
     int size = getInput(inputFile, results);
+
+    double GO_MM = 0;
+    double WO_MM = 0;
+    double WG_MM = 0;
+    int length = results[0].size();
+    for(int i = 0;i<results[0].size();i++){
+        if((double)results[1][i]/(double)results[2][i]>GO_MM)
+            GO_MM = (double)results[1][i]/(double)results[2][i];
+        if((double)results[3][i]/(double)results[2][i]>WO_MM)
+            WO_MM = (double)results[3][i]/(double)results[2][i];
+        if((double)results[3][i]/(double)results[1][i]>WG_MM)
+            WG_MM = (double)results[3][i]/(double)results[1][i];
+    }
+
     //#pragma omp parallel for
     for (size_t i = 0;i<NUM_ALGS;i++){
         std::sort(results[i].begin(), results[i].end());
@@ -101,12 +115,20 @@ int main(int argc, char ** argv)
             WG_BA = (double)results[3][i]/(double)results[1][i];
     }
 
+
     std::cout <<"GREEDY BA: " << greedy_BA << std::endl;
     std::cout <<"WFA BA: " << WFA_BA << std::endl;
-    std::cout <<"DC BA: " << DC_BA << std::endl;
-    std::cout <<"KC BA: " << KC_BA << std::endl;
-    std::cout << "GREEDY/WFA BA: " << GW_BA << std::endl;
     std::cout << "WFA/GREEDY BA: " << WG_BA << std::endl;
+    std::cout << "MM GO: " << (double)results[1][length-1]/(double)results[2][length-1] << std::endl;
+    std::cout << "MM WO: " << (double)results[3][length-1]/(double)results[2][length-1] << std::endl;
+    std::cout << "MM WG: " << (double)results[3][length-1]/(double)results[1][length-1] << std::endl;
+    std::cout << "DA GO: " << GO_MM << std::endl;
+    std::cout << "DA WO: " << WO_MM << std::endl;
+    std::cout << "DA WG: " << WG_MM << std::endl;
+    
+    // std::cout <<"DC BA: " << DC_BA << std::endl;
+    // std::cout <<"KC BA: " << KC_BA << std::endl;
+    // std::cout << "GREEDY/WFA BA: " << GW_BA << std::endl;
 
     return 0;
 }

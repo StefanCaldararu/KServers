@@ -33,7 +33,7 @@ class Alg
         //Run this algorithm on the metric space, with request sequence Simga. Return the cost.
         virtual int runAlg(std::vector <int> Sigma, int inputLength) = 0;
         //The destructor
-        ~Alg();
+        virtual ~Alg();
 };
 
 #endif

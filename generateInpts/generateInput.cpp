@@ -2,13 +2,13 @@
 #include <string.h>
 #include <fstream>
 #include <sstream>
-#include "RAII_Classes/writeOutput.cpp"
+#include "../RAII_Classes/writeOutput.cpp"
 #include <cmath>
 using namespace std;
 
-int GRAPH_SIZE = 8;
-int LINE_LENGTH = 7;
-int NUM_LINES = 2097152;
+int GRAPH_SIZE = 6;
+int LINE_LENGTH = 11;
+int NUM_LINES = 362797056;
 int k = 2;
 int NUM_THREADS = 16;
 int INP_PER_THREAD = NUM_LINES/NUM_THREADS;
@@ -36,6 +36,7 @@ void printMspace(ofstream& file){
 
 
 int generate_combinations(vector<int>& current, int length, ofstream& file, int gsize, int count, int mod) {
+    cout << count <<" of " << NUM_LINES << endl;
     if(count%mod == 0 && !printed){
         printMspace(file);
         printed = true;
@@ -60,14 +61,14 @@ int generate_combinations(vector<int>& current, int length, ofstream& file, int 
 
 int main() {
     ofstream file;
-    file.open("file.csv");
+    file.open("file1.csv");
     file << "1,1,1,1,1,1" <<endl;
     if(NUM_LINES%NUM_THREADS == 0)
         file << NUM_THREADS << endl;
     else
         file << NUM_THREADS+1 <<endl;
-        vector<int> current;
-        generate_combinations(current, LINE_LENGTH, file, GRAPH_SIZE, 0, INP_PER_THREAD);
+    vector<int> current;
+    generate_combinations(current, LINE_LENGTH, file, GRAPH_SIZE, 0, INP_PER_THREAD);
     // srand(time(NULL));
     // for (int i = 0; i < num_lines; i++) {
     //     for (int j = 0; j < line_length; j++) {

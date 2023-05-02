@@ -123,11 +123,11 @@ void printOutput(char* outputFile, std::vector<std::vector<int> >& costs, std::v
     int counter = 0;
     for(int i = 0;i<metricSpaces.size();i++){
 
-        writer.writeLine("mspace:");
-        writer.writeLine("k: "+ std::to_string(num_servers[i]));
-        for(int j = 0;j<metricSpaces[i].getSize();j++){
-            writer.writeLine(metricSpaces[i].graph[j]);
-        }
+        // writer.writeLine("mspace:");
+        // writer.writeLine("k: "+ std::to_string(num_servers[i]));
+        // for(int j = 0;j<metricSpaces[i].getSize();j++){
+        //     writer.writeLine(metricSpaces[i].graph[j]);
+        // }
         //Now we have the metric space written in. 
         for(int j = 0; j<numInputs[i];j++){
             writer.writeLine("inp:");

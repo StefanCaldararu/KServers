@@ -12,7 +12,7 @@ class OptAlg : public Alg
 
     public:
     OptAlg();
-    Lemon_Mcfp flowNetwork;
+    Mcfp flowNetwork;
     int runAlg(std::vector <int> Sigma, int inputLength);
     ~OptAlg();
 };
