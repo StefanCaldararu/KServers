@@ -122,13 +122,6 @@ void printOutput(char* outputFile, std::vector<std::vector<int> >& costs, std::v
     WriteOutput writer(outputFile);
     int counter = 0;
     for(int i = 0;i<metricSpaces.size();i++){
-
-        // writer.writeLine("mspace:");
-        // writer.writeLine("k: "+ std::to_string(num_servers[i]));
-        // for(int j = 0;j<metricSpaces[i].getSize();j++){
-        //     writer.writeLine(metricSpaces[i].graph[j]);
-        // }
-        //Now we have the metric space written in. 
         for(int j = 0; j<numInputs[i];j++){
             writer.writeLine("inp:");
             writer.writeLine(inputs[i][j]);
@@ -161,11 +154,6 @@ int main(int argc, char ** argv)
     int num_spaces = getInput(inputFile, algsToRun, inputs, input_lengths, num_servers, num_inputs,spaces);
     //Now need to run the algs!!
     //First, create a list of alg objects that we will be running.
-    int numRunningAlgs = 0;
-    for(int i = 0; i<NUM_ALGS; i++)
-        numRunningAlgs = numRunningAlgs+algsToRun[i];
-    // std::vector <Alg*> runningAlgs;
-    //runningAlgs.reserve(numRunningAlgs);
 
         //TODO: find better way to do this...
     int totalRuns = 0;
@@ -201,11 +189,13 @@ int main(int argc, char ** argv)
     
     #pragma omp parallel for num_threads(16)
         for(int i = 0; i< num_spaces; i++){
+            //Set the initial server locations... for now just default to 0,1,2...
             std::vector<int> server_locations;
             server_locations.reserve(num_servers[i]);
             for(int j = 0; j<num_servers[i];j++){
                 server_locations.push_back(j);
             }
+            //Run each of the inputs...
             for(int j = 0; j < num_inputs[i]; j++){
                 std::cout << "ran for input "<< j << std::endl;
 

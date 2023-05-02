@@ -19,7 +19,6 @@ class GetInput
         std::fstream fin;
     public:
         std::string line, word;
-        std::vector<std::string> row;
 
         GetInput(char* inputFile){
             openFile(inputFile);

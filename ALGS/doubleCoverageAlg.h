@@ -6,13 +6,11 @@
 class DoubleCoverageAlg : public Alg
 {
     private:
-
-    
+        std::vector<int> findClosestID(int input);
+        int checkMspace();
     public:
-    std::vector<int> findClosestID(int input);
-    DoubleCoverageAlg();
-    int runAlg(std::vector <int> Sigma, int inputLength);
-    int checkMspace();
-    ~DoubleCoverageAlg();
+        DoubleCoverageAlg();
+        int runAlg(std::vector <int> Sigma, int inputLength);
+        ~DoubleCoverageAlg();
 };
 #endif

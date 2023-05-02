@@ -6,12 +6,11 @@
 class KCentersAlg : public Alg
 {
     private:
-
+        int checkMspace();
     
     public:
-    KCentersAlg();
-    int runAlg(std::vector <int> Sigma, int inputLength);
-    int checkMspace();
-    ~KCentersAlg();
+        KCentersAlg();
+        int runAlg(std::vector <int> Sigma, int inputLength);
+        ~KCentersAlg();
 };
 #endif
