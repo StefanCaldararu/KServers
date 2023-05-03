@@ -29,11 +29,22 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <unistd.h>
 #include "RAII_Classes/getInput.cpp"
 #include "RAII_Classes/writeOutput.cpp"
 
 
 const int NUM_ALGS = 6;
+struct cost{
+    int location;
+    int rand;
+    int greedy;
+    int OPT;
+    int WFA;
+    int DC;
+    int KC;
+    std::vector<int> input;
+};
 //This takes in the argv and parses it for the main function. 
 //gives pointer to input file, output file, and there is an array of which algorithms to run.
 //TODO: probably want to create object for this.
@@ -57,43 +68,29 @@ int parseInput(char* inputFile, char*outputFile, int argc, char** argv)
     return 0;
 }
 
-void printOutput(char* outputFile, std::vector<std::vector<int> >& costs, std::vector<int>& numInputs, std::vector<Mspace>& metricSpaces, std::vector<std::vector<std::vector<int> > >& inputs, std::vector<int> num_servers){
-    WriteOutput writer(outputFile);
-    int counter = 0;
-    for(int i = 0;i<metricSpaces.size();i++){
+Mspace mspace;
+int location = 0;
+std::vector<cost> results;
+std::mutex m;
+std::mutex write;
+std::condition_variable cv;
 
-        writer.writeLine("mspace:");
-        writer.writeLine("k: "+ std::to_string(num_servers[i]));
-        for(int j = 0;j<metricSpaces[i].getSize();j++){
-            writer.writeLine(metricSpaces[i].graph[j]);
-        }
-        //Now we have the metric space written in. 
-        for(int j = 0; j<numInputs[i];j++){
-            writer.writeLine("inp:");
-            writer.writeLine(inputs[i][j]);
-            for(int l = 0;l<NUM_ALGS;l++){
-                writer.writeLine("A "+ std::to_string(l) + " c " + std::to_string(costs[l][counter]));
-            }
-            counter++;
-        }
+
+int binarySearch(std::vector<cost> v, cost p, int l, int r){
+    while(l<=r){
+        int m = l+(r-l)/2;
+        if(v[m]<p.location)
+            l = m+l;
+        else
+            r = m-1;
     }
+    return l;
 }
 
-int location = 0;
-int writerLocation = 0;
-std::queue<std::vector<int> > queue;
-std::mutex m;
-std::condition_variable cv;
-//Default holds -1 in the 0th position, until all of the others are filled in. Each alg has a position to put it's cost, from 1 to 6
-std::vector<int> DEFAULT;
-DEFAULT.push_back(-1);
-for(int i = 0;i<6;i++)
-    DEFAULT.push_back(0);
-
-void producer_function (Mspace mspace, int threadID, GetInput& reader, int num_inputs){
-    std::unique_lock<std::mutex> queueLock(m);
-    int myloc = location;
+void producer_function (int threadID, GetInput reader, int num_inputs, int k){
+    //int myloc = location;
     while(location<num_inputs-1){
+        std::unique_lock<std::mutex> queueLock(m);
         reader.getLine();
         std::vector<int> input;
         reader.getLine();
@@ -102,18 +99,88 @@ void producer_function (Mspace mspace, int threadID, GetInput& reader, int num_i
         while(getline(str, word, ','))
             input.push_back(stoi(word));
         //Now we have the input...
+        struct cost c;
+        c.location = location;
         location++;
-        queue.push(DEFAULT);
         queueLock.unlock();
-        std::vector<int> out;
-        out.push_back(myloc);
+
+        c.input = input;
+
+        std::vector<int> server_locations;
+        server_locations.reserve(k);
+        for(int j = 0;j<k;j++)
+            server_locations.push_back(j);
         
+        RandomAlg ralg;
+        GreedyAlg galg;
+        OptAlg oalg;
+        WFAlg walg;
+        DoubleCoverageAlg dalg;
+        KCentersAlg kalg;
+
+        int size = input.size();
+        ralg.setGraph(mspace);
+        ralg.setServers(k, server_locations);
+        c.rand = ralg.runAlg(input, size);
+        
+        galg.setGraph(mspace);
+        galg.setServers(k, server_locations);
+        c.greedy = galg.runAlg(input, size);
+        
+        oalg.setGraph(mspace);
+        oalg.setServers(k, server_locations);
+        c.OPT = oalg.runAlg(input, size);
+
+        walg.setGraph(mspace);
+        walg.setServers(k, server_locations);
+        c.WFA = walg.runAlg(input, size);
+
+        dalg.setGraph(mspace);
+        dalg.setServers(k, server_locations);
+        c.DC = dalg.runAlg(input, size);
+
+        kalg.setGraph(mspace);
+        kalg.setServers(k, server_locations);
+        c.KC = kalg.runAlg(input, size);
         //TODO: Get the costs of the algs, and push_back to out...
 
-        queueLock(m);
+        std::unique_lock<std::mutex> lock(write);
 
+        int loc = binarySearch(results, c, 0, results.size());
+        results.insert(results.begin()+loc, c);
+
+
+        lock.unlock();
+
+        //now want to put cost in the right spot of the list...
+        //FIXME: false sharing, maybe use multiple buckets so only consumer has this prblem, which runs fast anyways?
         
     }
+}
+
+void consumer_function(WriteOutput writer, int numInputs){
+    int myLoc = 0;
+    while (myLoc<numInputs){
+        std::unique_lock<std::mutex> lock(write);
+        while(results.size() >0 && results[0].location == myLoc){
+            writer.writeLine("inp:");
+            writer.writeLine(results[0].input);
+            writer.writeLine("A 0 c: "+std::to_string(results[0].rand));
+            writer.writeLine("A 1 c: "+std::to_string(results[0].greedy));
+            writer.writeLine("A 2 c: "+std::to_string(results[0].OPT));
+            writer.writeLine("A 3 c: "+std::to_string(results[0].WFA));
+            writer.writeLine("A 4 c: "+std::to_string(results[0].DC));
+            writer.writeLine("A 5 c: "+std::to_string(results[0].KC));
+            myLoc++;
+            results.erase(results.begin());
+
+        }
+
+        lock.unlock();
+        sleep(1);
+
+    }
+
 }
 
 int main(int argc, char ** argv)
@@ -155,217 +222,28 @@ int main(int argc, char ** argv)
     //Now we have the mspace loaded in... get the number of inputs..
     reader.getLine();
     int NI = std::stoi(reader.line);
-    //Now we have the number of inputs. want to create a child to output stuff, and child threads to process inputs...
-    //global variables:
-    std::queue<std::vector<int> > queue;
-    std::mutex m;
-    std::condition_variable cv;
+    //and number of servers...
+    reader.getLine();
+    int num_servers = std::stoi(reader.line);
+    mspace = space;
+    //create consumer thread...
 
-
-
+    //create the producer threads....
+    std::vector<std::thread> producerThreads;
+    for(int i = 0;i<20;i++)
+        producerThreads.emplace_back(producer_function, i, reader, NI, num_servers);
     
+    //
+    WriteOutput writer(outputFile);
+    std::thread consumerThread(consumer_function, writer, NI);
 
-    //We now know what algorithms to run, have the input file, and
-    //output file, and are ready to start getting the data from the
-    //input file.
-    std::vector<std::vector<std::vector<int> > > inputs;
-    std::vector<int> num_inputs;
-    std::vector<Mspace> spaces;
-    std::vector<int> algsToRun;
-    std::vector<int> num_servers;
-    std::vector< std::vector <int> > input_lengths;
-    int num_spaces = getInput(inputFile, algsToRun, inputs, input_lengths, num_servers, num_inputs,spaces);
-    //Now need to run the algs!!
-    //First, create a list of alg objects that we will be running.
-    int numRunningAlgs = 0;
-    for(int i = 0; i<NUM_ALGS; i++)
-        numRunningAlgs = numRunningAlgs+algsToRun[i];
-    // std::vector <Alg*> runningAlgs;
-    //runningAlgs.reserve(numRunningAlgs);
+    //join the threads...
+    for(auto& thread : producerThreads)
+        thread.join();
+    
+    consumerThread.join();
+    //Now we have the number of inputs. want to create a child to output stuff, and child threads to process inputs...
 
-        //TODO: find better way to do this...
-    int totalRuns = 0;
-    for(int i = 0; i<num_spaces;i++)
-        totalRuns = totalRuns+num_inputs[i];    
-
-    std::vector <std::vector<int> > a1_costs;
-    std::vector <std::vector<int> > a2_costs;
-    std::vector <std::vector<int> > a3_costs;
-    std::vector <std::vector<int> > a4_costs;
-    std::vector <std::vector<int> > a5_costs;
-    std::vector <std::vector<int> > a6_costs;
-
-
-    std::string folder_name(outputFile);
-    //std::filesystem::create_directory(folder_name);
-    std::ofstream randFile("rand_output.csv");
-    std::ofstream greedyFile("greedy_output.csv");
-    std::ofstream optFile1("opt1_output.csv");
-    std::ofstream optFile2("opt2_output.csv");
-    std::ofstream wfaFile1("wfa1_output.csv");
-    std::ofstream wfaFile2("wfa2_output.csv");
-    std::ofstream doubleCoverageFile("doubleCoverage_output.csv");
-    std::ofstream kcentersFile("kcenters_output.csv");
-    #pragma omp parallel for num_threads(8)
-    for(int l = 0;l<8;l++){
-        if(l == 0){
-            for(int i = 0;i<num_spaces;i++){
-                std::vector<int> server_locations;
-                server_locations.reserve(num_servers[i]);
-                for(int j = 0; j<num_servers[i];j++){
-                    server_locations.push_back(j);
-                }
-                for(int j = 0;j<num_inputs[i];j++){
-                    std::cout << "ran for input "<< j << std::endl;
-                    RandomAlg alg;
-                    alg.setGraph(spaces[i]);
-                    alg.setServers(num_servers[i], server_locations);
-                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
-                    randFile << cost << "\n";
-
-                }
-
-            }
-
-        }
-        if(l == 1){
-            for(int i = 0;i<num_spaces;i++){
-                std::vector<int> server_locations;
-                server_locations.reserve(num_servers[i]);
-                for(int j = 0; j<num_servers[i];j++){
-                    server_locations.push_back(j);
-                }
-                for(int j = 0;j<num_inputs[i];j++){
-                    std::cout << "ran for input "<< j << std::endl;
-                    GreedyAlg alg;
-                    alg.setGraph(spaces[i]);
-                    alg.setServers(num_servers[i], server_locations);
-                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
-                    greedyFile << cost << "\n";
-
-                }
-
-            }
-        }
-        if(l == 2){
-            for(int i = 0;i<(num_spaces/2)+1;i++){
-                std::vector<int> server_locations;
-                server_locations.reserve(num_servers[i]);
-                for(int j = 0; j<num_servers[i];j++){
-                    server_locations.push_back(j);
-                }
-                for(int j = 0;j<num_inputs[i];j++){
-                    std::cout << "ran for input "<< j << std::endl;
-                    OptAlg alg;
-                    alg.setGraph(spaces[i]);
-                    alg.setServers(num_servers[i], server_locations);
-                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
-                    optFile1 << cost << "\n";
-                }
-
-            }
-        }
-        if( l == 3){
-            for(int i = (num_spaces/2)+1;i<num_spaces;i++){
-                std::vector<int> server_locations;
-                server_locations.reserve(num_servers[i]);
-                for(int j = 0; j<num_servers[i];j++){
-                    server_locations.push_back(j);
-                }
-                for(int j = 0;j<num_inputs[i];j++){
-                    std::cout << "ran for input "<< j << std::endl;
-                    OptAlg alg;
-                    alg.setGraph(spaces[i]);
-                    alg.setServers(num_servers[i], server_locations);
-                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
-                    optFile2 << cost << "\n";
-                }
-
-            }
-        }
-        if(l == 4){
-            for(int i = 0;i<(num_spaces/2)+1;i++){
-                std::vector<int> server_locations;
-                server_locations.reserve(num_servers[i]);
-                for(int j = 0; j<num_servers[i];j++){
-                    server_locations.push_back(j);
-                }
-                for(int j = 0;j<num_inputs[i];j++){
-                    std::cout << "ran for input "<< j << std::endl;
-                    WFAlg alg;
-                    alg.setGraph(spaces[i]);
-                    alg.setServers(num_servers[i], server_locations);
-                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
-                    wfaFile1 << cost << "\n";
-
-                }
-
-            }
-        }
-        if(l == 5){
-            for(int i = (num_spaces/2)+1;i<num_spaces;i++){
-                std::vector<int> server_locations;
-                server_locations.reserve(num_servers[i]);
-                for(int j = 0; j<num_servers[i];j++){
-                    server_locations.push_back(j);
-                }
-                for(int j = 0;j<num_inputs[i];j++){
-                    std::cout << "ran for input "<< j << std::endl;
-                    WFAlg alg;
-                    alg.setGraph(spaces[i]);
-                    alg.setServers(num_servers[i], server_locations);
-                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
-                    wfaFile2 << cost << "\n";
-                }
-            }
-        }
-        if(l == 6){
-            for(int i = 0;i<num_spaces;i++){
-                std::vector<int> server_locations;
-                server_locations.reserve(num_servers[i]);
-                for(int j = 0; j<num_servers[i];j++){
-                    server_locations.push_back(j);
-                }
-                for(int j = 0;j<num_inputs[i];j++){
-                    std::cout << "ran for input "<< j << std::endl;
-                    DoubleCoverageAlg alg;
-                    alg.setGraph(spaces[i]);
-                    alg.setServers(num_servers[i], server_locations);
-                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
-                    doubleCoverageFile << cost << "\n";
-
-                }
-
-            }
-        }
-        if(l == 7){
-            for(int i = 0;i<num_spaces;i++){
-                std::vector<int> server_locations;
-                server_locations.reserve(num_servers[i]);
-                for(int j = 0; j<num_servers[i];j++){
-                    server_locations.push_back(j);
-                }
-                for(int j = 0;j<num_inputs[i];j++){
-                    std::cout << "ran for input "<< j << std::endl;
-                    KCentersAlg alg;
-                    alg.setGraph(spaces[i]);
-                    alg.setServers(num_servers[i], server_locations);
-                    int cost = alg.runAlg(inputs[i][j], input_lengths[i][j]);
-                    kcentersFile << cost << "\n";
-                }
-            }
-        }
-    }
-
-
-    randFile.close();
-    greedyFile.close();
-    optFile1.close();
-    optFile2.close();
-    wfaFile1.close();
-    wfaFile2.close();
-    doubleCoverageFile.close();
-    kcentersFile.close();
 
 
     auto stop = std::chrono::high_resolution_clock::now();
