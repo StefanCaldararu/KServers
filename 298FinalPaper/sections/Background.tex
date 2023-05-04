@@ -1,14 +1,24 @@
 \subsection{Literature Overview}
 \label{sec:lit}
 
+
 \subsection{Analysis Methods}
 \label{sec:AM}
 
-\subsubsection*{Competative Analysis}
+\subsubsection*{Competitive Analysis}
 \label{sec:Comp}
+The most popular method for analyzing the performance of online algorithms for a problem is competitive analysis. Here, we assume a "malicious adversary", who is attempting to make our algorithm \textit{ALG} perform as poorly as possible in relation to the performance of the optimal algorithm \textit{OPT}. The malicious adversary is allowed to come up with any finite input, and our competitive ratio is determined by this. If for any finite input, we are able to guaruntee that \textit{ALG} has a cost within a certain ratio $c$ of \textit{OPT} (allowing for a constant additive factor), then we say that our algorithm is $c$-competitive~\cite{OnlineComp1998}. So, if we define $ALG(\sigma)$ as the cost \textit{ALG} incurs while processing request \s, then we have the following definition: 
+
+\begin{definition}
+\label{def:comp}
+Algorithm \textit{ALG} is said to be \textbf{\textit{c}-competitive} if for every finite request sequence \s, $ALG(\sigma) \leq c\cdot OPT(\sigma)+\alpha$ for some constant $\alpha$.
+\end{definition}
+
+Competitive analysis is in some sense similar to "worst case" analysis, where we try to see how poorly an algorithm will ever perform. This may not always be as useful in practice, as there are algorithms that perform very well on most inputs, but given specific inputs may not be competitive at all. That is, given some value $c$, a finite length input can be found such that the algorithm doesn't satisfy the above definition. Additionally, a lower bound if $k$-competitive has been shown for any online algorithm. This means that if we are looking at the 3-Servers problem, the best competitive ratio an online algorithm can achieve is 3~\cite{OnlineComp1998}. 
 
 \subsubsection*{Direct Analysis}
 \label{sec:Direct}
+Direct analysis is a similar techinque to competitive analysis, in that we directly compare the performance of \textit{ALG} to the performance of \textit{OPT} on a request. Rather than looking across all request sequences of any finite length, we determine a specified length for our request sequence. Then, 
 
 \subsubsection*{Max/Max Ratio}
 \label{sec:MaxMax}
