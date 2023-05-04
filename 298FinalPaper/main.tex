@@ -1,0 +1,92 @@
+\documentclass[11pt]{article}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{cite}
+\usepackage{color}
+\usepackage[inline]{enumitem}
+\usepackage[top=1.5in,bottom=1in,right=1in,left=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{placeins}
+\usepackage{siunitx}
+\usepackage{subfig}
+\usepackage{todonotes}
+\usepackage{wrapfig}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+
+\begin{document}
+	
+\begin{titlepage}
+	\begin{center}
+		University of Wisconsin-Madison \\
+		\vfill 
+		\LARGE An Analysis of K-Server algorithm performance\\
+		\vspace{0.5in}
+		\Large Stefan Caldararu, Marc Renault\\
+		\vspace{0.2in}
+		{\normalsize Department of Computer Science, University of Wisconsin -- Madison}	
+		\vfill		
+		\today		
+	\end{center}
+\end{titlepage}
+
+\newpage 
+
+\begin{abstract} 
+Write something here...
+\end{abstract}
+
+{\textbf{Keywords}}: add keywords...
+
+\newpage 
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+\label{sec:intro}
+\input{sections/Introduction.tex}
+
+\section{Background}
+\label{sec:background}
+\input{sections/Background.tex}
+
+\pagebreak
+\section{Algorithm Description}
+\label{sec:algDescription}
+\input{sections/AlgDescription.tex}
+
+\section{Software implementation details and API}
+\label{sec:implementationDetails}
+\input{sections/SoftwareImplementation.tex}
+
+\section{Numerical Experiments}
+\label{sec:numExperiments}
+\input{sections/NumericalExperiments.tex}
+
+\section{Analysis}
+\label{sec:analysis}
+\input{sections/Analysis.tex}
+
+\section{Conclusion}
+\label{sec:conclusion}
+\input{sections/Conclusion.tex}
+
+
+\bibliographystyle{ieeetr}
+\bibliography{BibFiles/refsMBS,BibFiles/refsChronoSpecific,BibFiles/refsDEM,BibFiles/refsSBELspecific,BibFiles/refsSensors}
+
+
+\end{document}          
