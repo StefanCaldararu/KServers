@@ -1,12 +1,16 @@
 
 \subsection*{Random Algorithm}
 \label{sec:rand}
+The random algorithm \textit{RAND} is the most basic of all of the online algorithms, and has little practical use. If the request is not currently covered by a server, then \textit{RAND} randomly selects one of it's servers, and moves the selected server to the service point. This algorithm is mostly just used as a baseline, as we would hope that none of the other algorithms will perform worse than random.
 
 \subsection*{Greedy Algorithm}
 \label{sec:greedy}
+The greedy algorithm \textit{GREEDY} is also a computationally inexpensive online algorithm, which has many practical uses. This algorithm checks the distance that each server would have to travel to get to the service point, and selects the server which would incur the smallest cost. While this algorithm has very good performance for the majority of practical application inputs, it is surprisingly not a competitive algorithm. This can be demonstrated by fig.~\comment{add figure}. Here, with a request sequence that alternates between point 0 and point 1, this algorithm will continue to incur a higher and higher cost by moving server 1 back and forth. It is clear that an optimal agorithm would bring server 2 to service point 1, and incur a constant cost of 1 for any length request of this type~\cite{OnlineComp1998}.
 
 \subsection*{Optimal Algorithm}
 \label{sec:OPT}
+Any optimal offline algorithm is simply defined as an algorithm that will have the smallest possible cost for any request sequence. Computationally, the fastest implementations leverage a reduction to a Min Cost Max Flow problem. This reduction can be further studied in~\cite{WFA2009}
+
 
 \subsection*{Work-Function Algorithm}
 \label{sec:WFA}

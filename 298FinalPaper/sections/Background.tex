@@ -1,5 +1,6 @@
 \subsection{Literature Overview}
 \label{sec:lit}
+As preliminary research for this project, a literature review was conducted to gauge the current state of research into the \KS problem. First, initial readings included information on online algorithms and competitive analysis proofs, in order to get a solid background on the subject. Future readings progressed to common \KS algorithms, and their performance relative to the competitive ratio~\cite{OnlineComp1998}. Following readings included information about other analysis methods~\cite{MAXMAX2005, bij2016}, which are described in sec.~\ref{sec:AM}. Finally, a practical implementation for the Work Function Algorithm was analyzed~\cite{WFA2009}, and algorithm implementations began, as described in sec.~\ref{sec:algDescription} and sec.~\ref{sec:implementationDetails}.
 
 
 \subsection{Analysis Methods}
@@ -18,10 +19,24 @@ Competitive analysis is in some sense similar to "worst case" analysis, where we
 
 \subsubsection*{Direct Analysis}
 \label{sec:Direct}
-Direct analysis is a similar techinque to competitive analysis, in that we directly compare the performance of \textit{ALG} to the performance of \textit{OPT} on a request. Rather than looking across all request sequences of any finite length, we determine a specified length for our request sequence. Then, 
+Direct analysis is a similar techinque to competitive analysis, in that we directly compare the performance of \textit{ALG} to the performance of \textit{OPT} on a request. Rather than looking across all request sequences of any finite length, we determine a specified length for our request sequence. Then, we look directly at the ratio of \textit{ALG}'s to \textit{OPT}'s performance for each input, and take the largest such ratio. It is important to note that as the length of our input approaches infinity, our direct analysis ratio will aproach the competitive ratio of our algorithm \comment{make sure this is true, makes sense intuitively}.
+
+\begin{definition}
+    \label{def:direct}
+    Algorithm \textit{ALG} has a direct analysis ratio of $c$ if for every input \s~\comment{why do we need ~ here?} of length $n$, $ALG(\sigma) \leq c\cdot OPT(\sigma)$.
+\end{definition}
 
 \subsubsection*{Max/Max Ratio}
 \label{sec:MaxMax}
+For the Max/Max ratio, we are comparing the worst case of each algorithm to each other. In practice, this makes sense to do on finite sets of input sequences. Here, we will take the highest cost of \textit{ALG} and the highest cost of \textit{OPT}, and this ratio will be our performance metric~\cite{MAXMAX2005}. 
 
 \subsubsection*{Bijective Analysis}
 \label{sec:Bij}
+The bijective ratio is similar to using direct analysis, except we allow for a bijection between the two data sets. In some sense, it is doing for the MAX/MAX ratio what direct analysis does for the competitive ratio. So, we look at the input space of all inputs of length $n$, denoted $I_n$. If there exists a bijetion $\pi:I_n \rightarrow I_n$ such that $ALG(\sigma) \leq c\cdot OPT(\pi(\sigma))$, then  we say that the bijective ratio between \textit{ALG} and \textit{OPT} is $c$~\cite{bij2016}. Therefore, we obtain def.~\ref{def:bij}. 
+
+\begin{definition}
+    \label{def:bij}
+    For a given input space $I_n$, we say that algorithm \textit{A} has bijective ratio $c$ with respect to algorithm \textit{B} if there exists a bijection $\pi:I_n \rightarrow I_n$ such that $A(\sigma) \leq c\cdot B(\pi(\sigma))$, $\forall \sigma \in I_n$. 
+\end{definition}
+
+It is important to note that this definition doesn't only compare the ratio of an algorithm to the optimal, but can also be used to compare between two different online algorithms. This can be used to prove an online algorithms optimality~\cite{bij2016}, and allows for some interesting test-case results found in sec.~\ref{sec:analysis}.
