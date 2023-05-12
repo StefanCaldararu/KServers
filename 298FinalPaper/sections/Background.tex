@@ -19,7 +19,7 @@ Competitive analysis is in some sense similar to "worst case" analysis, where we
 
 \subsubsection*{Direct Analysis}
 \label{sec:Direct}
-Direct analysis is a similar techinque to competitive analysis, in that we directly compare the performance of \textit{ALG} to the performance of \textit{OPT} on a request. Rather than looking across all request sequences of any finite length, we determine a specified length for our request sequence. Then, we look directly at the ratio of \textit{ALG}'s to \textit{OPT}'s performance for each input, and take the largest such ratio. It is important to note that as the length of our input approaches infinity, our direct analysis ratio will aproach the competitive ratio of our algorithm \comment{make sure this is true, makes sense intuitively}.
+Direct analysis is a similar techinque to competitive analysis, in that we directly compare the performance of \textit{ALG} to the performance of \textit{OPT} on a request. Rather than looking across all request sequences of any finite length, we determine a specified length for our request sequence. Then, we look directly at the ratio of \textit{ALG}'s to \textit{OPT}'s performance for each input, and take the largest such ratio. It is important to note that as the length of our input approaches infinity, our direct analysis ratio will aproach the competitive ratio of our algorithm.
 
 \begin{definition}
     \label{def:direct}
@@ -32,7 +32,7 @@ For the Max/Max ratio, we are comparing the worst case of each algorithm to each
 
 \subsubsection*{Bijective Analysis}
 \label{sec:Bij}
-The bijective ratio is similar to using direct analysis, except we allow for a bijection between the two data sets. In some sense, it is doing for the MAX/MAX ratio what direct analysis does for the competitive ratio. So, we look at the input space of all inputs of length $n$, denoted $I_n$. If there exists a bijetion $\pi:I_n \rightarrow I_n$ such that $ALG(\sigma) \leq c\cdot OPT(\pi(\sigma))$, then  we say that the bijective ratio between \textit{ALG} and \textit{OPT} is $c$~\cite{bij2016}. Therefore, we obtain def.~\ref{def:bij}. 
+The bijective ratio is similar to using direct analysis, except we allow for a bijection between the two data sets. So, we look at the input space of all inputs of length $n$, denoted $I_n$. If there exists a bijetion $\pi:I_n \rightarrow I_n$ such that $ALG(\sigma) \leq c\cdot OPT(\pi(\sigma))$, then  we say that the bijective ratio between \textit{ALG} and \textit{OPT} is $c$~\cite{bij2016}. Therefore, we obtain def.~\ref{def:bij}. 
 
 \begin{definition}
     \label{def:bij}

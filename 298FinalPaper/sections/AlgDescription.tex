@@ -5,7 +5,7 @@ The random algorithm \textit{RAND} is the most basic of all of the online algori
 
 \subsection*{Greedy Algorithm}
 \label{sec:greedy}
-The greedy algorithm \textit{GREEDY} is also a computationally inexpensive online algorithm, which has many practical uses. This algorithm checks the distance that each server would have to travel to get to the service point, and selects the server which would incur the smallest cost. While this algorithm has very good performance for the majority of practical application inputs, it is surprisingly not a competitive algorithm. This can be demonstrated by fig.~\comment{add figure}. Here, with a request sequence that alternates between point 0 and point 1, this algorithm will continue to incur a higher and higher cost by moving server 1 back and forth. It is clear that an optimal agorithm would bring server 2 to service point 1, and incur a constant cost of 1 for any length request of this type~\cite{OnlineComp1998}.
+The greedy algorithm \textit{GREEDY} is also a computationally inexpensive online algorithm, but which has many practical uses. This algorithm checks the distance that each server would have to travel to get to the service point, and selects the server which would incur the smallest cost. While this algorithm has very good performance for the majority of practical application inputs, it is surprisingly not a competitive algorithm~\cite{OnlineComp1998}. \textit{GREEDY} is one of the primary focuses of this study, as it is often looked over due to it's non-competitiveness, but still performs very well in practice.
 
 \subsection*{Optimal Algorithm}
 \label{sec:OPT}
@@ -21,4 +21,4 @@ The Double Coverage algorithm \textit{DC} is a $k$-competitive algorithm on the 
 
 \subsection*{$k$-Centers Algorithm}
 \label{sec:KC}
-The $k$-Centers algorithm divides the metric space into $k$ sections, and assigns each server a section of the space to operate in. Implementations of this algorithm can either have the server return to the center of it's operating space after servicing the request in a non-lazy fashion, or just remember the bounds of each operating space, and service each request with the appropriate server \comment{what reference?}.
+The $k$-Centers algorithm divides the metric space into $k$ sections, and assigns each server a section of the space to operate in. Implementations of this algorithm can either have the server return to the center of it's operating space after servicing the request in a non-lazy fashion, or just remember the bounds of each operating space, and service each request with the appropriate server~\cite{bij2016}.
