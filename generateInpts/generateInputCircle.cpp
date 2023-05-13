@@ -6,9 +6,9 @@
 #include <cmath>
 using namespace std;
 
-int GRAPH_SIZE = 10;
+int GRAPH_SIZE = 20;
 int LINE_LENGTH = 6;
-int NUM_LINES = 1000000;
+int NUM_LINES = 64000000;
 int k = 3;
 int NUM_THREADS = 16;
 int INP_PER_THREAD = NUM_LINES/NUM_THREADS;

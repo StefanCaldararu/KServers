@@ -4,10 +4,10 @@
 #include <ctime>
 using namespace std;
 
-int GRAPH_SIZE = 10;
-int LINE_LENGTH = 20;
-int NUM_LINES = 10000000;
-int k = 3;
+int GRAPH_SIZE = 6;
+int LINE_LENGTH = 8;
+int NUM_LINES = 1679616;
+int k = 2;
 int NUM_THREADS = 16;
 int INP_PER_THREAD = NUM_LINES/NUM_THREADS;
 int threads_used = 0;

@@ -6,11 +6,11 @@
 #include <cmath>
 using namespace std;
 
-int GRAPH_SIZE = 6;
-int LINE_LENGTH = 11;
-int NUM_LINES = 362797056;
+int GRAPH_SIZE = 3;
+int LINE_LENGTH = 3;
+int NUM_LINES = 27;
 int k = 2;
-int NUM_THREADS = 16;
+int NUM_THREADS = 1;
 int INP_PER_THREAD = NUM_LINES/NUM_THREADS;
 int threads_used = 0;
 bool printed = false;

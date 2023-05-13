@@ -32,7 +32,8 @@
 #include <unistd.h>
 #include "RAII_Classes/getInput.cpp"
 #include "RAII_Classes/writeOutput.cpp"
-
+#include "RAII_Classes/out.h"
+#include "RAII_Classes/buffer.hpp"
 
 const int NUM_ALGS = 6;
 struct cost{
@@ -70,40 +71,29 @@ int parseInput(char* inputFile, char*outputFile, int argc, char** argv)
 
 Mspace mspace;
 int location = 0;
+int num_inputs;
 std::vector<cost> results;
 std::mutex m;
-std::mutex write;
 std::condition_variable cv;
+int asdf = 0;
 
-
-int binarySearch(std::vector<cost> v, cost p, int l, int r){
-    while(l<=r){
-        int m = l+(r-l)/2;
-        if(v[m]<p.location)
-            l = m+l;
-        else
-            r = m-1;
-    }
-    return l;
-}
-
-void producer_function (int threadID, GetInput reader, int num_inputs, int k){
+void producer_function (int threadID, GetInput& reader, Buffer &buffer, int k){
     //int myloc = location;
-    while(location<num_inputs-1){
-        std::unique_lock<std::mutex> queueLock(m);
+    std::unique_lock<std::mutex> queueLock(m);
+    while(location<num_inputs){
         reader.getLine();
         std::vector<int> input;
-        reader.getLine();
         std::string word;
         std::stringstream str(reader.line);
         while(getline(str, word, ','))
             input.push_back(stoi(word));
         //Now we have the input...
-        struct cost c;
-        c.location = location;
         location++;
         queueLock.unlock();
 
+
+
+        struct Out c;
         c.input = input;
 
         std::vector<int> server_locations;
@@ -142,43 +132,30 @@ void producer_function (int threadID, GetInput reader, int num_inputs, int k){
         kalg.setGraph(mspace);
         kalg.setServers(k, server_locations);
         c.KC = kalg.runAlg(input, size);
-        //TODO: Get the costs of the algs, and push_back to out...
 
-        std::unique_lock<std::mutex> lock(write);
+        buffer.produce(threadID, c);
+        queueLock.lock();
 
-        int loc = binarySearch(results, c, 0, results.size());
-        results.insert(results.begin()+loc, c);
-
-
-        lock.unlock();
-
+        std::cout << "produced: " << location << std::endl;
         //now want to put cost in the right spot of the list...
         //FIXME: false sharing, maybe use multiple buckets so only consumer has this prblem, which runs fast anyways?
         
     }
+    queueLock.unlock();
 }
 
-void consumer_function(WriteOutput writer, int numInputs){
-    int myLoc = 0;
-    while (myLoc<numInputs){
-        std::unique_lock<std::mutex> lock(write);
-        while(results.size() >0 && results[0].location == myLoc){
-            writer.writeLine("inp:");
-            writer.writeLine(results[0].input);
-            writer.writeLine("A 0 c: "+std::to_string(results[0].rand));
-            writer.writeLine("A 1 c: "+std::to_string(results[0].greedy));
-            writer.writeLine("A 2 c: "+std::to_string(results[0].OPT));
-            writer.writeLine("A 3 c: "+std::to_string(results[0].WFA));
-            writer.writeLine("A 4 c: "+std::to_string(results[0].DC));
-            writer.writeLine("A 5 c: "+std::to_string(results[0].KC));
-            myLoc++;
-            results.erase(results.begin());
-
-        }
-
-        lock.unlock();
-        sleep(1);
-
+void consumer_function(int threadID, WriteOutput& writer, Buffer &buffer){
+    for(int i = 0;i<num_inputs;i++){
+        // std::cout << "write1: " << i << std::endl;
+        Out results = buffer.consume(i);
+        writer.writeLine("inp:");
+        writer.writeLine(results.input);
+        writer.writeLine("A 0 c: "+std::to_string(results.rand));
+        writer.writeLine("A 1 c: "+std::to_string(results.greedy));
+        writer.writeLine("A 2 c: "+std::to_string(results.OPT));
+        writer.writeLine("A 3 c: "+std::to_string(results.WFA));
+        writer.writeLine("A 4 c: "+std::to_string(results.DC));
+        writer.writeLine("A 5 c: "+std::to_string(results.KC));
     }
 
 }
@@ -221,29 +198,30 @@ int main(int argc, char ** argv)
     }
     //Now we have the mspace loaded in... get the number of inputs..
     reader.getLine();
-    int NI = std::stoi(reader.line);
+    num_inputs = std::stoi(reader.line);
+
     //and number of servers...
     reader.getLine();
     int num_servers = std::stoi(reader.line);
     mspace = space;
-    //create consumer thread...
+
+
+    Buffer buffer;
 
     //create the producer threads....
     std::vector<std::thread> producerThreads;
-    for(int i = 0;i<20;i++)
-        producerThreads.emplace_back(producer_function, i, reader, NI, num_servers);
+    for(int i = 0;i<16;i++)
+        producerThreads.emplace_back(producer_function, i, std::ref(reader), std::ref(buffer), num_servers);
     
     //
     WriteOutput writer(outputFile);
-    std::thread consumerThread(consumer_function, writer, NI);
+    std::thread consumerThread(consumer_function, 20, std::ref(writer), std::ref(buffer));
 
     //join the threads...
     for(auto& thread : producerThreads)
         thread.join();
-    
     consumerThread.join();
     //Now we have the number of inputs. want to create a child to output stuff, and child threads to process inputs...
-
 
 
     auto stop = std::chrono::high_resolution_clock::now();

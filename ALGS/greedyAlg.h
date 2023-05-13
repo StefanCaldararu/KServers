@@ -8,8 +8,8 @@ class GreedyAlg : public Alg
     private:
 
     public:
-    GreedyAlg();
-    int runAlg(std::vector <int> Sigma, int inputLength);
-    ~GreedyAlg();
+        GreedyAlg();
+        int runAlg(std::vector <int> Sigma, int inputLength);
+        ~GreedyAlg();
 };
 #endif
