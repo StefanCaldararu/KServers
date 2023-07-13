@@ -1,0 +1,11 @@
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Outline}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Problem Description}{3}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Background}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Literature Overview}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Analysis Methods}{4}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Algorithm Description}{5}{section.3}%
+\contentsline {section}{\numberline {4}Software implementation details and API}{6}{section.4}%
+\contentsline {section}{\numberline {5}Numerical Experiments}{7}{section.5}%
+\contentsline {section}{\numberline {6}Analysis}{7}{section.6}%
+\contentsline {section}{\numberline {7}Conclusion}{9}{section.7}%
