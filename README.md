@@ -7,5 +7,5 @@ Implementation of K-Servers Problem
 **csv_parser_parallel.cpp**: basic parallel implementation, omp for loop
 **csv_parser_parallel2.cpp**: parallel, using threads/mutex, and producer/consumer framework, finite memory for very long inputs.
 
-**THE C IMPLEMENTATION, IN THE C FOLDER. FOR CUDA**
+**THE CPP IMPLEMENTATION, IN THE CU FOLDER. FOR CUDA**
 **csv_parser_parallel3.cu**: cuda gpu implementation, basic, no p/c. p/c will be in the future.
