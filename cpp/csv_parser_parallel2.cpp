@@ -18,6 +18,7 @@
 #include "ALGS/optAlg.h"
 #include "ALGS/greedyAlg.h"
 #include "ALGS/doubleCoverageAlg.h"
+#include "ALGS/lazyDoubleCoverageAlg.h"
 #include "ALGS/KCentersAlg.h"
 
 #include <thread>
@@ -43,6 +44,7 @@ struct cost{
     int OPT;
     int WFA;
     int DC;
+    int LDC;
     int KC;
     std::vector<int> input;
 };
@@ -106,6 +108,7 @@ void producer_function (int threadID, GetInput& reader, Buffer &buffer, int k){
         OptAlg oalg;
         WFAlg walg;
         DoubleCoverageAlg dalg;
+        LazyDoubleCoverageAlg ldalg;
         KCentersAlg kalg;
 
         int size = input.size();
@@ -128,6 +131,10 @@ void producer_function (int threadID, GetInput& reader, Buffer &buffer, int k){
         dalg.setGraph(mspace);
         dalg.setServers(k, server_locations);
         c.DC = dalg.runAlg(input, size);
+
+        ldalg.setGraph(mspace);
+        ldalg.setServers(k, server_locations);
+        c.LDC = ldalg.runAlg(input, size);
 
         kalg.setGraph(mspace);
         kalg.setServers(k, server_locations);
@@ -155,7 +162,8 @@ void consumer_function(int threadID, WriteOutput& writer, Buffer &buffer){
         writer.writeLine("A 2 c: "+std::to_string(results.OPT));
         writer.writeLine("A 3 c: "+std::to_string(results.WFA));
         writer.writeLine("A 4 c: "+std::to_string(results.DC));
-        writer.writeLine("A 5 c: "+std::to_string(results.KC));
+        writer.writeLine("A 5 c: "+std::to_string(results.LDC));
+        writer.writeLine("A 6 c: "+std::to_string(results.KC));
     }
 
 }
@@ -185,14 +193,16 @@ int main(int argc, char ** argv)
     reader.getLine();
     int size = std::stoi(reader.line);
     space.setSize(size);
-    std::string word;
+
     //populate the mspace!
     for(int j = 0; j<size; j++){
         reader.getLine();
         std::stringstream str(reader.line);
+        std::string word;
+
         int k = 0;
         while(getline(str, word, ',')){
-            space.setDistance(j, k, stoi(word));
+            space.setDistance(j, k, std::stoi(word));
             k++;
         }
     }

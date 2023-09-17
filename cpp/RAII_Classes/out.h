@@ -13,6 +13,7 @@ struct Out
     int OPT;
     int WFA;
     int DC;
+    int LDC;
     int KC;
 };
 

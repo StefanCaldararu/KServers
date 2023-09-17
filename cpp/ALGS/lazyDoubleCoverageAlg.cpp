@@ -50,14 +50,16 @@ int LazyDoubleCoverageAlg::runAlg(std::vector <int> Sigma, int inputLength)
                     moveVirtualServer(closest[0], input);
                     virtualConfig[closest[0]] = input;
                 }
-                else if(metricSpace.getDistance(virtualConfig[closest[0]], input)<metricSpace.getDistance(virtualConfig[closest[1]],input)){
+                else if(metricSpace.getDistance(virtualConfig[closest[0]], input)<metricSpace.getDistance(virtualConfig[closest[1]],input) || (
+                    metricSpace.getDistance(config[closest[0]],input)<metricSpace.getDistance(config[closest[1]],input) && metricSpace.getDistance(virtualConfig[closest[0]], input)==metricSpace.getDistance(virtualConfig[closest[1]],input)
+                )){
                     //only move the closest server...
                     int dist = metricSpace.getDistance(config[closest[0]], input);
                     cost = cost+dist;
                     //moveServer(closest[1], config[closest[1]]-dist);
                     moveServer(closest[0], input);
                     int virtualDist = metricSpace.getDistance(virtualConfig[closest[0]], input);
-                    moveVirtualServer(closest[1], config[closest[1]]-virtualDist);
+                    moveVirtualServer(closest[1], virtualConfig[closest[1]]-virtualDist);
                     moveVirtualServer(closest[0], input);
                 }
                 else{
@@ -66,7 +68,7 @@ int LazyDoubleCoverageAlg::runAlg(std::vector <int> Sigma, int inputLength)
                     //moveServer(closest[0], config[closest[0]]+dist);
                     moveServer(closest[1], input);
                     int virtualDist = metricSpace.getDistance(virtualConfig[closest[1]], input);
-                    moveVirtualServer(closest[0], config[closest[1]]-virtualDist);
+                    moveVirtualServer(closest[0], virtualConfig[closest[1]]-virtualDist);
                     moveVirtualServer(closest[1], input);
                 }
             }
@@ -94,7 +96,7 @@ std::vector<int> LazyDoubleCoverageAlg::findClosestID(int input){
     return ID;
 }
 
-void LazyDoubleCoverage::moveVirtualServer(int server, int loc)
+void LazyDoubleCoverageAlg::moveVirtualServer(int server, int loc)
 {
     virtualCoverage[virtualConfig[server]] = -1;
     virtualConfig[server] = loc;
@@ -102,7 +104,7 @@ void LazyDoubleCoverage::moveVirtualServer(int server, int loc)
 }
 
 //checks if the location is already covered by a virtualserver
-bool LazyDoubleCoverage::checkIfVirtuallyCovered(int i){
+bool LazyDoubleCoverageAlg::checkIfVirtuallyCovered(int i){
     if(virtualCoverage[i] != -1)
         return true;
     else
