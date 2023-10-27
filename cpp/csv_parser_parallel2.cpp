@@ -143,7 +143,7 @@ void producer_function (int threadID, GetInput& reader, Buffer &buffer, int k){
         buffer.produce(threadID, c);
         queueLock.lock();
 
-        std::cout << "produced: " << location << std::endl;
+        //std::cout << "produced: " << location << std::endl;
         //now want to put cost in the right spot of the list...
         //FIXME: false sharing, maybe use multiple buckets so only consumer has this prblem, which runs fast anyways?
         
@@ -220,7 +220,7 @@ int main(int argc, char ** argv)
 
     //create the producer threads....
     std::vector<std::thread> producerThreads;
-    for(int i = 0;i<16;i++)
+    for(int i = 0;i<1;i++)
         producerThreads.emplace_back(producer_function, i, std::ref(reader), std::ref(buffer), num_servers);
     
     //
@@ -236,7 +236,7 @@ int main(int argc, char ** argv)
 
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
-    std::cout << duration.count() <<std::endl;
+    //std::cout << duration.count() <<std::endl;
     //TODO: now need to output a file with all of the data!
     
     delete [] inputFile;

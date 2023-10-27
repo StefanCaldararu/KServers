@@ -6,23 +6,26 @@
 #include <cmath>
 using namespace std;
 
-int GRAPH_SIZE = 20; //The number of points in the graph
-int LINE_LENGTH = 6; //The input length
-int NUM_LINES = 64000000; // The number of inputs 
-int k = 3; //The number of servers
-int NUM_THREADS = 1; //For OMP...
+int GRAPH_SIZE = 10;
+int LINE_LENGTH = 6;
+int NUM_LINES = 1000000;
+int k = 3;
+int NUM_THREADS = 1;
 int INP_PER_THREAD = NUM_LINES/NUM_THREADS;
 int threads_used = 0;
 bool printed = false;
 
 void printMspace(ofstream& file){
     file << GRAPH_SIZE << endl;
+    //The ceter node is node 0, all other nodes are points.
     for(int i = 0;i<GRAPH_SIZE;i++){
         for(int j = 0;j<GRAPH_SIZE;j++){
-            int val1 = abs(j-i);
-            int val2 = GRAPH_SIZE-abs(i-j);
-            int val = (val1<val2) ? val1:val2;
-            file << val;
+            if(i == j)
+                file << 0;
+            else if(j == 0 || i ==0)
+                file << 1;
+            else
+                file << 2;
             if(j<GRAPH_SIZE-1)
                 file << ",";
         }
@@ -35,10 +38,8 @@ void printMspace(ofstream& file){
     threads_used ++;
     file << k<<endl;
 }
-
-
 int generate_combinations(vector<int>& current, int length, ofstream& file, int gsize, int count, int mod) {
-    cout << count <<" of " << NUM_LINES << endl;
+    //cout << count <<" of " << NUM_LINES << endl;
     if(count%mod == 0 && !printed){
         printMspace(file);
         printed = true;
@@ -61,7 +62,12 @@ int generate_combinations(vector<int>& current, int length, ofstream& file, int 
     return count;
 }
 
-int main() {
+int main(int argc, char **argv) {
+    GRAPH_SIZE = std::stoi(argv[1]);
+    LINE_LENGTH = std::stoi(argv[2]);
+    k = std::stoi(argv[3]);
+    NUM_LINES = std::pow(GRAPH_SIZE, LINE_LENGTH);
+    INP_PER_THREAD = NUM_LINES/NUM_THREADS;
     ofstream file;
     file.open("file.csv");
     file << "1,1,1,1,1,1" <<endl;

@@ -1,0 +1,8 @@
+star graph (1 hop)
+star graph (variable length)
+spider graph
+caterpillar graph (1 hop from body, degree 3)
+caterpillar grpah (defined body length and num feet, unif. dist. of which node gets foot)
+add in nodes, and connect new nodes randomly as they come in.
+Find library for generating specific types of graphs.
+bash script for multiple runs
