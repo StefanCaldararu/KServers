@@ -6,9 +6,9 @@
 #include <sstream>
 #include <omp.h>
 #include <algorithm>
-#include "RAII_Classes/writeOutput.cpp"
+#include "cpp/RAII_Classes/writeOutput.cpp"
 
-int NUM_ALGS = 6;
+int NUM_ALGS = 7;
 
 int parseInput(char* inputFile, int argc, char** argv)
 {
@@ -28,6 +28,7 @@ int getInput(char* inputFile, std::vector<std::vector<int> >& results)
 
 //std::vector<int>& algsToRun, std::vector <std::vector<std::vector<int> > >& inputs,std::vector<std::vector<int> >& input_lengths, std::vector<int >& num_servers, std::vector<int>& num_inputs, std::vector <Mspace>& spaces)
 {
+    std::cout << "loading data..." <<std::endl;
     int size = 0;
     std::fstream file(inputFile);
     if(file.is_open()){
@@ -42,6 +43,8 @@ int getInput(char* inputFile, std::vector<std::vector<int> >& results)
                 //if(size > 2999999 && size<4000000)
                 results[i].push_back(value);
             }
+	    //Get the next line, becasue we have an extra alg that is just returning -1 in the current graphs. TODO: actually add this in.
+	    //std::getline(file, line);
             size++;
 
         }
@@ -51,6 +54,7 @@ int getInput(char* inputFile, std::vector<std::vector<int> >& results)
         return 1;
     }
     file.close();
+    std::cout << "...loading complete" << std::endl;
     return size;
 
 }
@@ -119,6 +123,7 @@ int main(int argc, char ** argv)
     std::cout <<"GREEDY BA: " << greedy_BA << std::endl;
     std::cout <<"WFA BA: " << WFA_BA << std::endl;
     std::cout << "WFA/GREEDY BA: " << WG_BA << std::endl;
+    std::cout << "MG: " << (double)results[1][length-1] << " MO: " << (double)results[2][length-1] << std::endl;
     std::cout << "MM GO: " << (double)results[1][length-1]/(double)results[2][length-1] << std::endl;
     std::cout << "MM WO: " << (double)results[3][length-1]/(double)results[2][length-1] << std::endl;
     std::cout << "MM WG: " << (double)results[3][length-1]/(double)results[1][length-1] << std::endl;
