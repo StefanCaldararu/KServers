@@ -45,6 +45,8 @@ struct state{
     std::vector <int> config;
     Mspace metricSpace;
     std::vector <int> Sigma;
+    std::vector <int> fullSigma;
+    std::vector <int> endSigma;
     int inputLength;
     int k;
 };
@@ -91,10 +93,31 @@ std::condition_variable cv;
 int SigmaLength = 20;
 std::vector <int> current_input;
 
-void producer_function (int threadID, GetInput& reader, Buffer &buffer, int k){
-    //int myloc = location;
-    std::unique_lock<std::mutex> queueLock(m);
-    while(location<num_inputs){
+void producer_function (int threadID, state startState, Buffer &buffer, int k){
+    //first, we need to compute the FIRST state, and make sure we get the correct cost. then output that, and start the while loop.
+    std::vector <state> myStates;
+    //for loop, that pushes back each state to myStates increasing the input length each time.
+    myStates.push_back(startState);
+    for(int i = 0;i<SigmaLength;i++){
+        state newState = myStates[i];
+        newState.inputLength = i+1;
+        newState.Sigma.push_back(newState.fullSigma[i]);
+        //calculate the cost of this state.
+        runAlg(newState);
+        myStates.push_back(newState);
+    }
+    //the initial number of replacements we need is 0
+    int num_replacements = 0;
+    //now we have the initial states, and we can start the while loop.
+    while(startState.Sigma != startState.endSigma){
+        //first, run a for loop to replace the correct number of elements from newStates, given the new input sequence.
+        for(int i = 0;i<num_replacements;i++){
+            //replace the length of the input -num_replacements +i
+            //TODO: TODO: TODO: we are here
+        }
+    }
+
+    while(startState.Sigma != startState.endSigma){
         reader.getLine();
         std::vector<int> input;
         std::string word;
@@ -127,9 +150,7 @@ void producer_function (int threadID, GetInput& reader, Buffer &buffer, int k){
         buffer.produce(threadID, c);
         queueLock.lock();
 
-        //std::cout << "produced: " << location << std::endl;
-        //now want to put cost in the right spot of the list...
-        //FIXME: false sharing, maybe use multiple buckets so only consumer has this prblem, which runs fast anyways?
+        
         
     }
     queueLock.unlock();
