@@ -34,7 +34,6 @@
 
 const int NUM_ALGS = 6;
 struct cost{
-    int location;
     int WFA;
     std::vector<int> input;
 };
@@ -98,12 +97,11 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
     std::vector <state> myStates;
     //for loop, that pushes back each state to myStates increasing the input length each time.
     myStates.push_back(theState);
-    myStates[0].inputLength = 1;
+    myStates[0].inputLength = 0;
     myStates[0].Sigma.clear();
-    myStates[0].Sigma.push_back(myStates[0].fullSigma[0]);
-    for(int i = 1;i<SigmaLength;i++){
+    for(int i = 1;i<SigmaLength+1;i++){
         state newState = myStates[i-1];
-        newState.inputLength = i+1;
+        newState.inputLength = i;
         newState.Sigma.push_back(newState.fullSigma[i]);
         //calculate the cost of this state.
         runAlg(newState);
@@ -115,51 +113,34 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
     while(myStates[SigmaLength].Sigma != theState.endSigma){
         //first, run a for loop to replace the correct number of elements from newStates, given the new input sequence.
         for(int i = 0;i<num_replacements;i++){
+            //ci for current index
+            int ci = SigmaLength-num_replacements+i;
             //first, update the fullSigma
-            myStates[SigmaLength-num_replacements+i].fullSigma = myStates[SigmaLength].fullSigma;
-            //replace the length of the input -num_replacements +i
-            //TODO: TODO: TODO: we are here
+            myStates[ci].fullSigma = myStates[SigmaLength].fullSigma;
+            //now, copy the Sigma from the previous state
+            myStates[ci].Sigma = myStates[ci-1].Sigma;
+            myStates[ci].Sigma.push_back(myStates[ci].fullSigma[ci]);
+            //copy the cost from the previous state
+            myStates[ci].cost = myStates[ci-1].cost;
+            //now, run the algorithm on this state
+            runAlg(myStates[ci]);
         }
-        //myStates[sigmaLength].sigma gets updated at the end
-    }
-
-    while(startState.Sigma != startState.endSigma){
-        reader.getLine();
-        std::vector<int> input;
-        std::string word;
-        std::stringstream str(reader.line);
-        while(getline(str, word, ','))
-            input.push_back(stoi(word));
-        //Now we have the input...
-        location++;
-        queueLock.unlock();
-
-
-
+        //now, we have the correct cost. add this to the buffer, and increment the sigma, simultanously updating the num_replacements appropriately.
         struct Out c;
-        c.input = input;
-
-        std::vector<int> server_locations;
-        server_locations.reserve(k);
-        for(int j = 0;j<k;j++)
-            server_locations.push_back(j);
-        
-        WFAlg walg;
-
-        int size = input.size();
-
-        walg.setGraph(mspace);
-        walg.setServers(k, server_locations);
-        c.WFA = walg.runAlg(input, size);
-
-
+        c.input = myStates[SigmaLength].Sigma;
+        c.WFA = myStates[SigmaLength].cost;
         buffer.produce(threadID, c);
-        queueLock.lock();
-
-        
-        
+        //update the sigma. increment the last element in the vector, modulo the size of the mspace. Then, if it is 0, increment num_replacements and the second to last element in the vector. Repeat until we reach the end of the vector, or we don't need to increment anymore.
+        int i = SigmaLength;
+        num_replacements = 0;
+        myStates[SigmaLength].Sigma[i] = (myStates[SigmaLength].Sigma[i]+1)%mspace.getSize();
+        num_replacements++;
+        while(i>0 && myStates[SigmaLength].Sigma[i] == 0){
+            i--;
+            myStates[SigmaLength].Sigma[i] = (myStates[SigmaLength].Sigma[i]+1)%mspace.getSize();
+            num_replacements++;
+        }
     }
-    queueLock.unlock();
 }
 
 void consumer_function(int threadID, WriteOutput& writer, Buffer &buffer){
