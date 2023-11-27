@@ -93,13 +93,16 @@ std::condition_variable cv;
 int SigmaLength = 20;
 std::vector <int> current_input;
 
-void producer_function (int threadID, state startState, Buffer &buffer, int k){
+void producer_function (int threadID, state theState, Buffer &buffer, int k){
     //first, we need to compute the FIRST state, and make sure we get the correct cost. then output that, and start the while loop.
     std::vector <state> myStates;
     //for loop, that pushes back each state to myStates increasing the input length each time.
-    myStates.push_back(startState);
-    for(int i = 0;i<SigmaLength;i++){
-        state newState = myStates[i];
+    myStates.push_back(theState);
+    myStates[0].inputLength = 1;
+    myStates[0].Sigma.clear();
+    myStates[0].Sigma.push_back(myStates[0].fullSigma[0]);
+    for(int i = 1;i<SigmaLength;i++){
+        state newState = myStates[i-1];
         newState.inputLength = i+1;
         newState.Sigma.push_back(newState.fullSigma[i]);
         //calculate the cost of this state.
@@ -109,12 +112,15 @@ void producer_function (int threadID, state startState, Buffer &buffer, int k){
     //the initial number of replacements we need is 0
     int num_replacements = 0;
     //now we have the initial states, and we can start the while loop.
-    while(startState.Sigma != startState.endSigma){
+    while(myStates[SigmaLength].Sigma != theState.endSigma){
         //first, run a for loop to replace the correct number of elements from newStates, given the new input sequence.
         for(int i = 0;i<num_replacements;i++){
+            //first, update the fullSigma
+            myStates[SigmaLength-num_replacements+i].fullSigma = myStates[SigmaLength].fullSigma;
             //replace the length of the input -num_replacements +i
             //TODO: TODO: TODO: we are here
         }
+        //myStates[sigmaLength].sigma gets updated at the end
     }
 
     while(startState.Sigma != startState.endSigma){
