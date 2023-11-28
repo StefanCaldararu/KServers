@@ -100,7 +100,7 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
     for(int i = 1;i<SigmaLength+1;i++){
         state newState = myStates[i-1];
         newState.inputLength = i+1;
-        newState.Sigma.push_back(newState.fullSigma[i]);
+        newState.Sigma.push_back(newState.fullSigma[i-1]);
         //calculate the cost of this state.
         runAlg(newState);
         myStates.push_back(newState);
@@ -143,7 +143,7 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
 }
 
 void consumer_function(int threadID, WriteOutput& writer, Buffer &buffer){
-    for(int i = 0;i<num_inputs;i++){
+    for(int i = 0;i<num_inputs-3;i++){
         // std::cout << "write1: " << i << std::endl;
         Out results = buffer.consume(i);
         writer.writeLine("inp:");
@@ -194,7 +194,7 @@ int main(int argc, char ** argv)
     //Now we have the mspace loaded in... get the number of inputs..
     reader.getLine();
     //the number of inputs is size to the power SigmaLength
-    num_inputs = std::pow(size, SigmaLength)-1;
+    num_inputs = std::pow(size, SigmaLength);
     std::vector <int> input;
     std::vector <int> end;
     input.push_back(0);
@@ -244,7 +244,7 @@ int main(int argc, char ** argv)
 
     //create the producer threads....
     std::vector<std::thread> producerThreads;
-    for(int i = 0;i<1;i++)
+    for(int i = 0;i<size;i++)
         producerThreads.emplace_back(producer_function, i, myStates[i], std::ref(buffer), num_servers);
     
     //
