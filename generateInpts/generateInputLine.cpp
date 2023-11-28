@@ -2,7 +2,7 @@
 #include <string.h>
 #include <fstream>
 #include <sstream>
-#include "../RAII_Classes/writeOutput.cpp"
+#include "../cpp/RAII_Classes/writeOutput.cpp"
 #include <cmath>
 using namespace std;
 

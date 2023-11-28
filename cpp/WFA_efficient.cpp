@@ -13,8 +13,6 @@
 //second line is this mspace
 //third line is number of inputs for this metric space
 //following line is each input, until we reach the next mspace, and follows as above.
-#include "ALGS/WFAlg.h"
-
 #include <thread>
 #include <mutex>
 #include <queue>
@@ -89,7 +87,7 @@ int num_inputs;
 std::vector<cost> results;
 std::mutex m;
 std::condition_variable cv;
-int SigmaLength = 20;
+int SigmaLength = 3;
 std::vector <int> current_input;
 
 void producer_function (int threadID, state theState, Buffer &buffer, int k){
@@ -101,7 +99,7 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
     myStates[0].Sigma.clear();
     for(int i = 1;i<SigmaLength+1;i++){
         state newState = myStates[i-1];
-        newState.inputLength = i;
+        newState.inputLength = i+1;
         newState.Sigma.push_back(newState.fullSigma[i]);
         //calculate the cost of this state.
         runAlg(newState);
@@ -196,26 +194,61 @@ int main(int argc, char ** argv)
     reader.getLine();
     //the number of inputs is size to the power SigmaLength
     num_inputs = std::pow(size, SigmaLength);
-    for (int i = 0; i < SigmaLength; i++)
-        current_input.push_back(0);
+    std::vector <int> input;
+    std::vector <int> end;
+    input.push_back(0);
+    end.push_back(size-1);
 
+    for (int i = 0; i < SigmaLength-1; i++){
+        input.push_back(0);
+        end.push_back(size-1);
+    }
 
     //and number of servers...
     reader.getLine();
     int num_servers = std::stoi(reader.line);
     mspace = space;
 
+    std::vector <int> config;
+    for (int i = 0; i < num_servers; i++){
+        config.push_back(i);
+    }
+    std::vector <int> init_config = config;
+
+    //construct the initial state
+    state theState;
+    theState.metricSpace = space;
+    //instantiate sigma to an empty vector
+    theState.Sigma = std::vector<int>();
+    theState.fullSigma = input;
+    theState.endSigma = end;
+    theState.inputLength = 0;
+    theState.k = num_servers;
+    theState.cost = 0;
+    theState.init_config = init_config;
+    theState.config = config;
+    //now, create a vector of states, one for each thread.
+    std::vector <state> myStates;
+    for(int i = 0;i<size;i++){
+        state newState = theState;
+        newState.fullSigma[0] = i;
+        newState.endSigma[0] = i;
+        myStates.push_back(newState);
+    }
+
+
+
 
     Buffer buffer;
 
     //create the producer threads....
     std::vector<std::thread> producerThreads;
-    for(int i = 0;i<20;i++)
-        producerThreads.emplace_back(producer_function, i, std::ref(reader), std::ref(buffer), num_servers);
+    for(int i = 0;i<1;i++)
+        producerThreads.emplace_back(producer_function, i, myStates[i], std::ref(buffer), num_servers);
     
     //
     WriteOutput writer(outputFile);
-    std::thread consumerThread(consumer_function, 20, std::ref(writer), std::ref(buffer));
+    std::thread consumerThread(consumer_function, size, std::ref(writer), std::ref(buffer));
 
     //join the threads...
     for(auto& thread : producerThreads)
