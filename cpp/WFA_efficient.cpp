@@ -114,14 +114,14 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
             //ci for current index
             int ci = SigmaLength-num_replacements+i;
             //first, update the fullSigma
-            myStates[ci].fullSigma = myStates[SigmaLength].fullSigma;
+            myStates[ci+1].fullSigma = myStates[SigmaLength].fullSigma;
             //now, copy the Sigma from the previous state
-            myStates[ci].Sigma = myStates[ci-1].Sigma;
-            myStates[ci].Sigma.push_back(myStates[ci].fullSigma[ci]);
+            myStates[ci+1].Sigma = myStates[ci].Sigma;
+            myStates[ci+1].Sigma.push_back(myStates[ci+1].fullSigma[ci]);
             //copy the cost from the previous state
-            myStates[ci].cost = myStates[ci-1].cost;
+            myStates[ci+1].cost = myStates[ci].cost;
             //now, run the algorithm on this state
-            runAlg(myStates[ci]);
+            runAlg(myStates[ci+1]);
         }
         //now, we have the correct cost. add this to the buffer, and increment the sigma, simultanously updating the num_replacements appropriately.
         struct Out c;
@@ -129,7 +129,7 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
         c.WFA = myStates[SigmaLength].cost;
         buffer.produce(threadID, c);
         //update the sigma. increment the last element in the vector, modulo the size of the mspace. Then, if it is 0, increment num_replacements and the second to last element in the vector. Repeat until we reach the end of the vector, or we don't need to increment anymore.
-        int i = SigmaLength;
+        int i = SigmaLength-1;
         num_replacements = 0;
         myStates[SigmaLength].Sigma[i] = (myStates[SigmaLength].Sigma[i]+1)%mspace.getSize();
         num_replacements++;
@@ -138,6 +138,7 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
             myStates[SigmaLength].Sigma[i] = (myStates[SigmaLength].Sigma[i]+1)%mspace.getSize();
             num_replacements++;
         }
+        myStates[SigmaLength].fullSigma = myStates[SigmaLength].Sigma;
     }
 }
 
@@ -193,7 +194,7 @@ int main(int argc, char ** argv)
     //Now we have the mspace loaded in... get the number of inputs..
     reader.getLine();
     //the number of inputs is size to the power SigmaLength
-    num_inputs = std::pow(size, SigmaLength);
+    num_inputs = std::pow(size, SigmaLength)-1;
     std::vector <int> input;
     std::vector <int> end;
     input.push_back(0);
