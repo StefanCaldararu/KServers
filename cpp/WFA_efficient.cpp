@@ -107,8 +107,11 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
     }
     //the initial number of replacements we need is 0
     int num_replacements = 0;
+    bool run = true;
     //now we have the initial states, and we can start the while loop.
-    while(myStates[SigmaLength].Sigma != theState.endSigma){
+    while(run){
+        if(myStates[SigmaLength].Sigma == theState.endSigma)
+            run = false;
         //first, run a for loop to replace the correct number of elements from newStates, given the new input sequence.
         for(int i = 0;i<num_replacements;i++){
             //ci for current index
@@ -143,7 +146,7 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
 }
 
 void consumer_function(int threadID, WriteOutput& writer, Buffer &buffer){
-    for(int i = 0;i<num_inputs-3;i++){
+    for(int i = 0;i<num_inputs;i++){
         // std::cout << "write1: " << i << std::endl;
         Out results = buffer.consume(i);
         writer.writeLine("inp:");
