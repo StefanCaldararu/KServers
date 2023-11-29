@@ -99,7 +99,7 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
     myStates[0].Sigma.clear();
     for(int i = 1;i<SigmaLength+1;i++){
         state newState = myStates[i-1];
-        newState.inputLength = i+1;
+        newState.inputLength = i;
         newState.Sigma.push_back(newState.fullSigma[i-1]);
         //calculate the cost of this state.
         runAlg(newState);
