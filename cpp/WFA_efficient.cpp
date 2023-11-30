@@ -53,9 +53,9 @@ void runAlg(state &myState)
 {
     Mcfp flowNetwork;
     int serverToMove = flowNetwork.setGraph(myState.metricSpace, myState.Sigma, myState.inputLength, myState.k, myState.init_config, myState.config);
-    myState.cost += myState.metricSpace.getDistance(myState.config[serverToMove], myState.Sigma[myState.inputLength]);
+    myState.cost += myState.metricSpace.getDistance(myState.config[serverToMove], myState.Sigma[myState.inputLength-1]);
     //moveServer(serverToMove, Sigma[i]);
-    myState.config[serverToMove] = myState.Sigma[myState.inputLength];
+    myState.config[serverToMove] = myState.Sigma[myState.inputLength-1];
 }
 
 //This takes in the argv and parses it for the main function. 
@@ -102,7 +102,13 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
         newState.inputLength = i;
         newState.Sigma.push_back(newState.fullSigma[i-1]);
         //calculate the cost of this state.
-        runAlg(newState);
+        //first, check if the next input is in config. If so, skip running
+        bool inConfig = false;
+        for(int j = 0;j<newState.config.size();j++)
+            if(newState.config[j] == newState.Sigma[i-1])
+                inConfig = true;
+        if (!inConfig)
+            runAlg(newState);
         myStates.push_back(newState);
     }
     //the initial number of replacements we need is 0
@@ -123,8 +129,15 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
             myStates[ci+1].Sigma.push_back(myStates[ci+1].fullSigma[ci]);
             //copy the cost from the previous state
             myStates[ci+1].cost = myStates[ci].cost;
+            //copy the config from the previous state
+            myStates[ci+1].config = myStates[ci].config;
             //now, run the algorithm on this state
-            runAlg(myStates[ci+1]);
+            bool inConfig = false;
+            for(int j = 0;j<myStates[ci+1].config.size();j++)
+                if(myStates[ci+1].config[j] == myStates[ci+1].Sigma[ci])
+                    inConfig = true;
+            if (!inConfig)
+                runAlg(myStates[ci+1]);
         }
         //now, we have the correct cost. add this to the buffer, and increment the sigma, simultanously updating the num_replacements appropriately.
         struct Out c;
