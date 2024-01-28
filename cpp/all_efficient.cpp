@@ -1,3 +1,4 @@
+//Similar implementation as in "wfa_efficient.cpp" except for all of the algorithms. memoization approach.
 //autor: Stefan Caldararu
 
 //In this version, we assume there is only ONE MSPACE being input. 
@@ -33,6 +34,9 @@
 
 struct cost{
     int WFA;
+    int greedy;
+    int DC;
+    int KC;
     std::vector<int> input;
 };
 //At each stage of the algorithm, we have a certain "state" we want to keep track of.
@@ -47,9 +51,17 @@ struct state{
     int inputLength;
     int k;
 };
+//Since we have mltiple algorithms, each one needs a different vector of states, to memoize to.
+struct all_states{
+    std::vector <state> WFA;
+    std::vector <state> greedy;
+    std::vector <state> DC;
+    std::vector <state> KC;
+};
 
 
-void runAlg(state &myState)
+
+void runWFA(state &myState)
 {
     Mcfp flowNetwork;
     int serverToMove = flowNetwork.setGraph(myState.metricSpace, myState.Sigma, myState.inputLength, myState.k, myState.init_config, myState.config);
@@ -58,6 +70,15 @@ void runAlg(state &myState)
     myState.config[serverToMove] = myState.Sigma[myState.inputLength-1];
 }
 
+void runGreedy(state &myState){
+    return;
+}
+void runDC(state &myState){
+    return;
+}
+void runKC(state &myState){
+    return;
+}
 //This takes in the argv and parses it for the main function. 
 //gives pointer to input file, output file, and there is an array of which algorithms to run.
 //TODO: probably want to create object for this.
@@ -91,13 +112,25 @@ std::vector <int> current_input;
 
 void producer_function (int threadID, state theState, Buffer &buffer, int k){
     //first, we need to compute the FIRST state, and make sure we get the correct cost. then output that, and start the while loop.
-    std::vector <state> myStates;
+    // std::vector <state> myStates;
+    all_states myStates;
     //for loop, that pushes back each state to myStates increasing the input length each time.
-    myStates.push_back(theState);
-    myStates[0].inputLength = 0;
-    myStates[0].Sigma.clear();
+    myStates.DC.push_back(theState);
+    myStates.greedy.push_back(theState);
+    myStates.KC.push_back(theState);
+    myStates.WFA.push_back(theState);
+    myStates.DC[0].inputLength = 0;
+    myStates.greedy[0].inputLength = 0;
+    myStates.KC[0].inputLength = 0;
+    myStates.WFA[0].inputLength = 0;
+    myStates.DC[0].Sigma.clear();
+    myStates.greedy[0].Sigma.clear();
+    myStates.KC[0].Sigma.clear();
+    myStates.WFA[0].Sigma.clear();
+
     for(int i = 1;i<SigmaLength+1;i++){
-        state newState = myStates[i-1];
+        //WFA
+        state newState = myStates.WFA[i-1];
         newState.inputLength = i;
         newState.Sigma.push_back(newState.fullSigma[i-1]);
         //calculate the cost of this state.
@@ -107,53 +140,155 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
             if(newState.config[j] == newState.Sigma[i-1])
                 inConfig = true;
         if (!inConfig)
-            runAlg(newState);
-        myStates.push_back(newState);
+            runWFA(newState);
+        myStates.WFA.push_back(newState);
+        //greedy
+        newState = myStates.greedy[i-1];
+        newState.inputLength = i;
+        newState.Sigma.push_back(newState.fullSigma[i-1]);
+        //calculate the cost of this state.
+        //first, check if the next input is in config. If so, skip running
+        inConfig = false;
+        for(int j = 0;j<newState.config.size();j++)
+            if(newState.config[j] == newState.Sigma[i-1])
+                inConfig = true;
+        if (!inConfig)
+            runGreedy(newState);
+        myStates.greedy.push_back(newState);
+        //DC
+        newState = myStates.DC[i-1];
+        newState.inputLength = i;
+        newState.Sigma.push_back(newState.fullSigma[i-1]);
+        //calculate the cost of this state.
+        //first, check if the next input is in config. If so, skip running
+        inConfig = false;
+        for(int j = 0;j<newState.config.size();j++)
+            if(newState.config[j] == newState.Sigma[i-1])
+                inConfig = true;
+        if (!inConfig)
+            runDC(newState);
+        myStates.DC.push_back(newState);
+        //KC
+        newState = myStates.KC[i-1];
+        newState.inputLength = i;
+        newState.Sigma.push_back(newState.fullSigma[i-1]);
+        //calculate the cost of this state.
+        //first, check if the next input is in config. If so, skip running
+        inConfig = false;
+        for(int j = 0;j<newState.config.size();j++)
+            if(newState.config[j] == newState.Sigma[i-1])
+                inConfig = true;
+        if (!inConfig)
+            runKC(newState);
+        myStates.KC.push_back(newState);
+
     }
     //the initial number of replacements we need is 0
     int num_replacements = 0;
     bool run = true;
     //now we have the initial states, and we can start the while loop.
     while(run){
-        if(myStates[SigmaLength].Sigma == theState.endSigma)
+        if(myStates.greedy[SigmaLength].Sigma == theState.endSigma)
             run = false;
         //first, run a for loop to replace the correct number of elements from newStates, given the new input sequence.
         for(int i = 0;i<num_replacements;i++){
             //ci for current index
             int ci = SigmaLength-num_replacements+i;
-            //first, update the fullSigma
-            myStates[ci+1].fullSigma = myStates[SigmaLength].fullSigma;
+            //first, update the fullSigma for all algs
+            myStates.DC[ci+1].fullSigma = myStates.DC[SigmaLength].fullSigma;
+            myStates.greedy[ci+1].fullSigma = myStates.greedy[SigmaLength].fullSigma;
+            myStates.KC[ci+1].fullSigma = myStates.KC[SigmaLength].fullSigma;
+            myStates.WFA[ci+1].fullSigma = myStates.WFA[SigmaLength].fullSigma;
             //now, copy the Sigma from the previous state
-            myStates[ci+1].Sigma = myStates[ci].Sigma;
-            myStates[ci+1].Sigma.push_back(myStates[ci+1].fullSigma[ci]);
+            myStates.DC[ci+1].Sigma = myStates.DC[ci].Sigma;
+            myStates.DC[ci+1].Sigma.push_back(myStates.DC[ci+1].fullSigma[ci]);
+            myStates.greedy[ci+1].Sigma = myStates.greedy[ci].Sigma;
+            myStates.greedy[ci+1].Sigma.push_back(myStates.greedy[ci+1].fullSigma[ci]);
+            myStates.KC[ci+1].Sigma = myStates.KC[ci].Sigma;
+            myStates.KC[ci+1].Sigma.push_back(myStates.KC[ci+1].fullSigma[ci]);
+            myStates.WFA[ci+1].Sigma = myStates.WFA[ci].Sigma;
+            myStates.WFA[ci+1].Sigma.push_back(myStates.WFA[ci+1].fullSigma[ci]);
             //copy the cost from the previous state
-            myStates[ci+1].cost = myStates[ci].cost;
+            myStates.DC[ci+1].cost = myStates.DC[ci].cost;
+            myStates.greedy[ci+1].cost = myStates.greedy[ci].cost;
+            myStates.KC[ci+1].cost = myStates.KC[ci].cost;
+            myStates.WFA[ci+1].cost = myStates.WFA[ci].cost;
             //copy the config from the previous state
-            myStates[ci+1].config = myStates[ci].config;
+            myStates.DC[ci+1].config = myStates.DC[ci].config;
+            myStates.greedy[ci+1].config = myStates.greedy[ci].config;
+            myStates.KC[ci+1].config = myStates.KC[ci].config;
+            myStates.WFA[ci+1].config = myStates.WFA[ci].config;
             //now, run the algorithm on this state
             bool inConfig = false;
-            for(int j = 0;j<myStates[ci+1].config.size();j++)
-                if(myStates[ci+1].config[j] == myStates[ci+1].Sigma[ci])
+            for(int j = 0;j<myStates.DC[ci+1].config.size();j++)
+                if(myStates.DC[ci+1].config[j] == myStates.DC[ci+1].Sigma[ci])
                     inConfig = true;
             if (!inConfig)
-                runAlg(myStates[ci+1]);
+                runDC(myStates.DC[ci+1]);
+            inConfig = false;
+            for(int j = 0;j<myStates.greedy[ci+1].config.size();j++)
+                if(myStates.greedy[ci+1].config[j] == myStates.greedy[ci+1].Sigma[ci])
+                    inConfig = true;
+            if (!inConfig)
+                runGreedy(myStates.greedy[ci+1]);
+            inConfig = false;
+            for(int j = 0;j<myStates.KC[ci+1].config.size();j++)
+                if(myStates.KC[ci+1].config[j] == myStates.KC[ci+1].Sigma[ci])
+                    inConfig = true;
+            if (!inConfig)
+                runKC(myStates.KC[ci+1]);
+            inConfig = false;
+            for(int j = 0;j<myStates.WFA[ci+1].config.size();j++)
+                if(myStates.WFA[ci+1].config[j] == myStates.WFA[ci+1].Sigma[ci])
+                    inConfig = true;    
+            if (!inConfig)
+                runWFA(myStates.WFA[ci+1]);
         }
         //now, we have the correct cost. add this to the buffer, and increment the sigma, simultanously updating the num_replacements appropriately.
         struct Out c;
-        c.input = myStates[SigmaLength].Sigma;
-        c.WFA = myStates[SigmaLength].cost;
+        c.input = myStates.WFA[SigmaLength].Sigma;
+        c.WFA = myStates.WFA[SigmaLength].cost;
+        c.greedy = myStates.greedy[SigmaLength].cost;
+        c.DC = myStates.DC[SigmaLength].cost;
+        c.KC = myStates.KC[SigmaLength].cost;
         buffer.produce(threadID, c);
         //update the sigma. increment the last element in the vector, modulo the size of the mspace. Then, if it is 0, increment num_replacements and the second to last element in the vector. Repeat until we reach the end of the vector, or we don't need to increment anymore.
         int i = SigmaLength-1;
         num_replacements = 0;
-        myStates[SigmaLength].Sigma[i] = (myStates[SigmaLength].Sigma[i]+1)%mspace.getSize();
+        myStates.DC[SigmaLength].Sigma[i] = (myStates.DC[SigmaLength].Sigma[i]+1)%mspace.getSize();
         num_replacements++;
-        while(i>0 && myStates[SigmaLength].Sigma[i] == 0){
+        while(i>0 && myStates.DC[SigmaLength].Sigma[i] == 0){
             i--;
-            myStates[SigmaLength].Sigma[i] = (myStates[SigmaLength].Sigma[i]+1)%mspace.getSize();
+            myStates.DC[SigmaLength].Sigma[i] = (myStates.DC[SigmaLength].Sigma[i]+1)%mspace.getSize();
             num_replacements++;
         }
-        myStates[SigmaLength].fullSigma = myStates[SigmaLength].Sigma;
+        myStates.DC[SigmaLength].fullSigma = myStates.DC[SigmaLength].Sigma;
+
+        i = SigmaLength-1;
+        myStates.greedy[SigmaLength].Sigma[i] = (myStates.greedy[SigmaLength].Sigma[i]+1)%mspace.getSize();
+        while(i>0 && myStates.greedy[SigmaLength].Sigma[i] == 0){
+            i--;
+            myStates.greedy[SigmaLength].Sigma[i] = (myStates.greedy[SigmaLength].Sigma[i]+1)%mspace.getSize();
+        }
+        myStates.greedy[SigmaLength].fullSigma = myStates.greedy[SigmaLength].Sigma;
+
+        i = SigmaLength-1;
+        myStates.KC[SigmaLength].Sigma[i] = (myStates.KC[SigmaLength].Sigma[i]+1)%mspace.getSize();
+        while(i>0 && myStates.KC[SigmaLength].Sigma[i] == 0){
+            i--;
+            myStates.KC[SigmaLength].Sigma[i] = (myStates.KC[SigmaLength].Sigma[i]+1)%mspace.getSize();
+        }
+        myStates.KC[SigmaLength].fullSigma = myStates.KC[SigmaLength].Sigma;
+
+        i = SigmaLength-1;
+        myStates.WFA[SigmaLength].Sigma[i] = (myStates.WFA[SigmaLength].Sigma[i]+1)%mspace.getSize();
+        while(i>0 && myStates.WFA[SigmaLength].Sigma[i] == 0){
+            i--;
+            myStates.WFA[SigmaLength].Sigma[i] = (myStates.WFA[SigmaLength].Sigma[i]+1)%mspace.getSize();
+        }
+        myStates.WFA[SigmaLength].fullSigma = myStates.WFA[SigmaLength].Sigma;
+
+
     }
 }
 
@@ -163,7 +298,10 @@ void consumer_function(int threadID, WriteOutput& writer, Buffer &buffer){
         Out results = buffer.consume(i);
         writer.writeLine("inp:");
         writer.writeLine(results.input);
-        writer.writeLine("cost: "+std::to_string(results.WFA));
+        writer.writeLine("WFA: "+std::to_string(results.WFA));
+        writer.writeLine("greedy: "+std::to_string(results.greedy));
+        writer.writeLine("DC: "+std::to_string(results.DC));
+        writer.writeLine("KC: "+std::to_string(results.KC));
     }
 
 }
