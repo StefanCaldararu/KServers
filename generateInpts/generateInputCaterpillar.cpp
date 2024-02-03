@@ -6,7 +6,7 @@
 #include <cmath>
 using namespace std;
 
-int GRAPH_SIZE = 10;
+int GRAPH_SIZE = 3;
 int LINE_LENGTH = 6;
 int NUM_LINES = 1000000;
 int k = 3;
