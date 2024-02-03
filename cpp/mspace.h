@@ -3,6 +3,8 @@
 #define MSPACE
 #include <cstddef>
 #include <vector>
+#include <stack>
+#include <algorithm>
 
 class Mspace
 {
@@ -25,6 +27,7 @@ class Mspace
         int getDistance(int source, int destination);
         //sets the distance between a source and destination
         void setDistance(int source, int destination, int distance);
+        std::vector<int> findTreePathDFS(int source, int destination);
         //resets the graph to have distances of -1 between all points.
         void clear();
         //The destructor

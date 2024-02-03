@@ -59,6 +59,40 @@ void Mspace::setDistance(int source, int destination, int distance)
     graph[source][destination] = distance;
 }
 
+std::vector<int> Mspace::findTreePathDFS(int source, int destination)
+{
+       std::vector<bool> visited(m, false);
+    std::stack<int> s;
+    std::vector<int> path = std::vector<int>(m, -1);
+    s.push(source);
+    visited[source] = true;
+
+    while(!s.empty()){
+        int current = s.top();
+        s.pop();
+        for(int i = 0; i<m; i++){
+            if(graph[current][i] != -1 && !visited[i]){
+                s.push(i);
+                visited[i] = true;
+                path[i] = current;
+                if(i == destination){
+                    int node = destination;
+                    while(node != source){
+                        path.push_back(node);
+                        node = path[node];
+                    }
+                }
+            }
+        }
+    }
+    //add the source to the path
+    path.push_back(source);
+    //reverse the order so that the source is at the beginning
+    std::reverse(path.begin(), path.end());
+    //remove the -1's as well as the extra elements from the vector
+    return path;
+}
+
 void Mspace::clear()
 {
     for(int i = 0; i<m; i++)
