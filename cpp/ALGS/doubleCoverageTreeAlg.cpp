@@ -21,7 +21,7 @@ int DoubleCoverageAlg::runAlg(std::vector <int> Sigma, int inputLength)
                 //get the path between the server and the input, as a vector.
                 paths[j] = metricSpace.findTreePathDFS(config[j], input);
                 for(int l = 1;l<paths[j].size();l++){
-                    if(coverage[paths[j][l]] != -1){
+                    if(coverage[paths[j][l]].size() > 1){
                         //if the node is covered, than we don't want to set the path into the paths variable. otherwise we do
                         paths[j].clear();
                         break;
