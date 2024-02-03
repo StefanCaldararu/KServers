@@ -59,6 +59,13 @@ struct all_states{
     std::vector <state> KC;
 };
 
+bool checkIfCovered(int input, std::vector<int> config){
+    for(int i = 0; i<config.size();i++)
+        if(config[i] == input)
+            return true;
+    return false;
+}
+
 
 
 void runWFA(state &myState)
@@ -71,6 +78,21 @@ void runWFA(state &myState)
 }
 
 void runGreedy(state &myState){
+        int input = myState.Sigma[myState.inputLength-1];
+        if(!checkIfCovered(input, myState.config)){
+            //FIXME: we always move the server w/ smallest ID number to the location in the event of a tie, should we do something else?
+            int closest = 0;
+            int closest_dist = myState.metricSpace.getDistance(input, myState.config[0]);
+            for(int j = 1; j<myState.k; j++){
+                int dist = myState.metricSpace.getDistance(input, myState.config[j]);
+                if(closest_dist>dist){
+                    closest = j;
+                    closest_dist = dist;
+                }
+            }
+            myState.cost += closest_dist;
+            myState.config[closest] = input;    
+        }
     return;
 }
 void runDC(state &myState){
