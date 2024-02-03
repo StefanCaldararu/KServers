@@ -14,7 +14,12 @@ int DoubleCoverageAlg::runAlg(std::vector <int> Sigma, int inputLength)
         if(!checkIfCovered(input)){
             //First find which servers need to be moved, and then move them towards the input. 
             for(int j=0;j<k;j++){
-                
+                //get the path between the server and the input, as a vector.
+                std::vector<int> path;
+                int current = config[j];
+                while(current != input){
+                    
+                }
             }
         }
     }
