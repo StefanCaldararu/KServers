@@ -19,7 +19,7 @@ class Alg
         //The integer location of each server
         std::vector <int> config;
         //The points that are covered have server id, the ones that don't have a -1.
-        std::vector <int> coverage;
+        std::vector <std::vector<int> > coverage;
         //The metric space
         Mspace metricSpace;
         //The constructor

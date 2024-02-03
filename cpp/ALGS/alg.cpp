@@ -25,23 +25,29 @@ void Alg::setServers(int numServers, std::vector <int> c)
     config.reserve(k);
     coverage.reserve(metricSpace.getSize());
     for(int i = 0; i<metricSpace.getSize();i++)
-        coverage.push_back(-1);
+        coverage.push_back(std::vector<int>());
     for(int i = 0; i<k; i++){
         config.push_back(c[i]);
-        coverage[c[i]] = i;
+        coverage[c[i]].push_back(i);
     }
 }
 void Alg::moveServer(int server, int loc)
 {
-    coverage[config[server]] = -1;
+    for(int i = 0;i<coverage[config[server]].size();i++){
+        if(coverage[config[server]][i] == server){
+            coverage[config[server]].erase(coverage[config[server]].begin() + i);
+            break;
+        }
+    }   
     config[server] = loc;
-    coverage[loc] = server;
+
+    coverage[loc].push_back(server);
 }
 
 
 //checks if the location is already covered by a server
 bool Alg::checkIfCovered(int i){
-    if(coverage[i] != -1)
+    if(coverage[i].size()!=0)
         return true;
     else
         return false;
