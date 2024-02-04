@@ -17,17 +17,25 @@ int DoubleCoverageAlg::runAlg(std::vector <int> Sigma, int inputLength)
             for(int j = 0;j<k;j++)
                 paths.push_back(std::vector<int>());
             //First find which servers need to be moved, and then move them towards the input. 
+            //a vector holding the locations that are doubled-up on servers, but already have a server going to the input on them.
+            std::vector<int> doubledUp;
             for(int j=0;j<k;j++){
+                //check if there are two servers at the starting location, and if the location we are in is already in doubledUp. If it is, then we clear this path and move on to the next server. If it is not in doubledUp, then we add it to doubledUp and continue to the next line.
+                if(coverage[config[j]].size() > 1 && std::find(doubledUp.begin(), doubledUp.end(), config[j]) == doubledUp.end()){
+                    doubledUp.push_back(config[j]);
+                }
+                else if(coverage[config[j]].size() > 1){
+                    continue;
+                }
                 //get the path between the server and the input, as a vector.
                 paths[j] = metricSpace.findTreePathDFS(config[j], input);
                 for(int l = 1;l<paths[j].size();l++){
-                    if(coverage[paths[j][l]].size() > 1){
+                    if(coverage[paths[j][l]].size() >= 1){
                         //if the node is covered, than we don't want to set the path into the paths variable. otherwise we do
                         paths[j].clear();
                         break;
                     }
                 }
-                //if the current node we are on has another server on it, then we only want to add one of the two to the paths variable.
             }
             //now we have a list of servers that can be moved towards the input. We want to start moving them towards the input, but we need to recheck that their paths to the input are "clear" after each step.
             int steps = 1;
@@ -36,9 +44,15 @@ int DoubleCoverageAlg::runAlg(std::vector <int> Sigma, int inputLength)
                     if(paths[j].size() == 0)
                         continue;
                     //first, move all the servers one step closer to the input (that have paths)
+                    cost+= metricSpace.getDistance(config[j], paths[j][steps]);
                     moveServer(j, paths[j][steps]);
-                    //add one to the cost
-                    cost++;
+                }
+                //check if there are any servers that are now doubled up. If there are, then we need to remove one of them from the paths, and then continue.
+                for(int j = 0;j<metricSpace.getSize();j++){
+                    while(coverage[j].size() > 1){
+                        paths[coverage[j].back()].clear();
+                        coverage[j].pop_back();
+                    }
                 }
                 steps++;
             }
