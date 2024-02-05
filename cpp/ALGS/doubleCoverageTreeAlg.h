@@ -1,17 +1,17 @@
 //author: Stefan Caldararu
-#ifndef DCALG
-#define DCALG
+#ifndef DCTALG
+#define DCTALG
 #include "alg.h"
 
-class DoubleCoverageAlg : public Alg
+class DoubleCoverageTreeAlg : public Alg
 {
     private:
         std::vector<int> findClosestID(int input);
         int checkMspace();
     public:
-        DoubleCoverageAlg();
+        DoubleCoverageTreeAlg();
         int runAlg(std::vector <int> Sigma, int inputLength);
         
-        ~DoubleCoverageAlg();
+        ~DoubleCoverageTreeAlg();
 };
 #endif

@@ -33,12 +33,13 @@ void Alg::setServers(int numServers, std::vector <int> c)
 }
 void Alg::moveServer(int server, int loc)
 {
-    for(int i = 0;i<coverage[config[server]].size();i++){
-        if(coverage[config[server]][i] == server){
-            coverage[config[server]].erase(coverage[config[server]].begin() + i);
-            break;
-        }
-    }   
+    // for(int i = 0;i<coverage[config[server]].size();i++){
+    //     if(coverage[config[server]][i] == server){
+    //         coverage[config[server]].erase(coverage[config[server]].begin() + i);
+    //         break;
+    //     }
+    // }
+    coverage[config[server]].erase(std::remove(coverage[config[server]].begin(), coverage[config[server]].end(), server), coverage[config[server]].end());  
     config[server] = loc;
 
     coverage[loc].push_back(server);

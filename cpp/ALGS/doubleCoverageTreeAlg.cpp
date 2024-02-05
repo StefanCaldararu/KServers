@@ -1,12 +1,12 @@
 //author: Stefan Caldararu
-#include "doubleCoverageAlg.h"
+#include "doubleCoverageTreeAlg.h"
 #include<cstdlib>
 #include<iostream>
 //NOTE: This algorithm is the **ONLY** one that assumes that the metric space is not fully connected. Here, we are assuming that the metric space is a tree, and that the distances between nodes that are not actually connected are set to -1.
-DoubleCoverageAlg::DoubleCoverageAlg(): Alg()
+DoubleCoverageTreeAlg::DoubleCoverageTreeAlg(): Alg()
 {}
 
-int DoubleCoverageAlg::runAlg(std::vector <int> Sigma, int inputLength)
+int DoubleCoverageTreeAlg::runAlg(std::vector <int> Sigma, int inputLength)
 {
     int cost = 0;
     for(int i = 0;i<inputLength;i++){
@@ -35,6 +35,8 @@ int DoubleCoverageAlg::runAlg(std::vector <int> Sigma, int inputLength)
                         paths[j].clear();
                         break;
                     }
+                    if(paths[j][l] == input)
+                        break;
                 }
             }
             //now we have a list of servers that can be moved towards the input. We want to start moving them towards the input, but we need to recheck that their paths to the input are "clear" after each step.
@@ -48,10 +50,22 @@ int DoubleCoverageAlg::runAlg(std::vector <int> Sigma, int inputLength)
                     moveServer(j, paths[j][steps]);
                 }
                 //check if there are any servers that are now doubled up. If there are, then we need to remove one of them from the paths, and then continue.
-                for(int j = 0;j<metricSpace.getSize();j++){
-                    while(coverage[j].size() > 1){
-                        paths[coverage[j].back()].clear();
-                        coverage[j].pop_back();
+                for(int j = 0;j<metricSpace.getSize();j++)
+                    for(int l = 1;l<coverage[j].size();l++)
+                        paths[coverage[j][l]].clear();
+                //also check if there are any servers that have entered another servers path. If there are, then we need to remove the server from the path, and then continue.
+                for(int j = 0;j<k;j++){
+                    if(paths[j].size() == 0)
+                        continue;
+                    if(paths[j][steps] == input)
+                        break;
+                    for(int l = steps+1;l<paths[j].size();l++){
+                        if(coverage[paths[j][l]].size() >= 1){
+                            paths[j].clear();
+                            break;
+                        }
+                        if(paths[j][l] == input)
+                            break;
                     }
                 }
                 steps++;
@@ -62,7 +76,7 @@ int DoubleCoverageAlg::runAlg(std::vector <int> Sigma, int inputLength)
     return cost;
 }
 
-int DoubleCoverageAlg::checkMspace(){
+int DoubleCoverageTreeAlg::checkMspace(){
     for(int i = 0;i<metricSpace.getSize();i++)
         for(int j = 0;j<metricSpace.getSize();j++)
             if(metricSpace.getDistance(i,j) != abs(i-j))
@@ -70,7 +84,7 @@ int DoubleCoverageAlg::checkMspace(){
     return 0;
 }
 
-std::vector<int> DoubleCoverageAlg::findClosestID(int input){
+std::vector<int> DoubleCoverageTreeAlg::findClosestID(int input){
     std::vector<int> ID = {-1,-1};
     for(int i = 0;i<k;i++){
         if(config[i]<input && (ID[0] == -1 || metricSpace.getDistance(ID[0], input)>metricSpace.getDistance(config[i],input)))
@@ -81,5 +95,5 @@ std::vector<int> DoubleCoverageAlg::findClosestID(int input){
     return ID;
 }
 
-DoubleCoverageAlg::~DoubleCoverageAlg()
+DoubleCoverageTreeAlg::~DoubleCoverageTreeAlg()
 {}
