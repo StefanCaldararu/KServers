@@ -31,6 +31,8 @@
 #include "RAII_Classes/buffer.hpp"
 #include "RAII_Classes/mcfp.cpp"
 #include <chrono>
+#include <algorithm>
+#include "mspace.h"
 
 struct cost{
     int WFA;
@@ -66,6 +68,14 @@ bool checkIfCovered(int input, std::vector<int> config){
     return false;
 }
 
+std::vector <int > getCoverage(std::vector <int> config, int k, int input){
+    std::vector <int> coverage;
+    for(int i = 0; i < k;i++)
+        if(config[i] == input)
+            coverage.push_back(i);
+    return coverage;
+}
+
 
 
 void runWFA(state &myState)
@@ -75,6 +85,64 @@ void runWFA(state &myState)
     myState.cost += myState.metricSpace.getDistance(myState.config[serverToMove], myState.Sigma[myState.inputLength-1]);
     //moveServer(serverToMove, Sigma[i]);
     myState.config[serverToMove] = myState.Sigma[myState.inputLength-1];
+}
+
+void runDCT(state &myState){
+    int input = myState.Sigma[myState.inputLength-1];
+    if(!checkIfCovered(input, myState.config)){
+        std::vector <std::vector<int> > paths;
+        for(int j = 0;j<myState.k;j++)
+            paths.push_back(std::vector<int>());
+        std::vector<int> doubledUp;
+        for(int j = 0;j<myState.k;j++){
+            if(getCoverage(myState.config, myState.k, input).size() > 1 && std::find(doubledUp.begin(), doubledUp.end(), myState.config[j]) == doubledUp.end()){
+                doubledUp.push_back(myState.config[j]);
+            }
+            else if(getCoverage(myState.config, myState.k, input).size() > 1){
+                continue;
+            }
+
+            paths[j] = myState.metricSpace.findTreePathDFS(myState.config[j], input);
+            for(int l = 1;l<paths[j].size();l++){
+                if(getCoverage(myState.config, myState.k, paths[j][l]).size() >= 1){
+                    paths[j].clear();
+                    break;
+                }
+                if(paths[j][l] == input)
+                    break;
+            }
+        }
+        //now we have a list of servers that can be moved towards the input. We want to start moving them towards the input, but we need to recheck that their paths to the input are "clear" after each step.
+        int steps = 1;
+        while(!checkIfCovered(input, myState.config)){
+            for(int j = 0;j<myState.k;j++){
+                if(paths[j].size() == 0)
+                    continue;
+                myState.cost+= myState.metricSpace.getDistance(myState.config[j], paths[j][steps]);
+                myState.config[j] = paths[j][steps];
+            }
+
+            for(int j = 0;j<myState.metricSpace.getSize();j++)
+                for(int l = 1;l<getCoverage(myState.config, myState.k, j).size(); l++)
+                    paths[getCoverage(myState.config, myState.k, j)[l]].clear();
+
+            for(int j = 0;j<myState.k;j++){
+                if(paths[j].size() == 0)
+                    continue;
+                if(paths[j][steps] == input)
+                    break;
+                for(int l = steps+1;l<paths[j].size();l++){
+                    if(getCoverage(myState.config, myState.k, paths[j][l]).size() >= 1){
+                        paths[j].clear();
+                        break;
+                    }
+                    if(paths[j][l] == input)
+                        break;
+                }
+            }
+        }
+    }
+
 }
 
 void runGreedy(state &myState){
