@@ -193,11 +193,11 @@ int parseInput(char* inputFile, char*outputFile, int argc, char** argv)
 }
 
 Mspace mspace;
-int num_inputs;
+double num_inputs;
 std::vector<cost> results;
 std::mutex m;
 std::condition_variable cv;
-int SigmaLength = 8;
+int SigmaLength = 12;
 std::vector <int> current_input;
 
 void producer_function (int threadID, state theState, Buffer &buffer, int k){
@@ -383,7 +383,7 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
 }
 
 void consumer_function(int threadID, WriteOutput& writer, Buffer &buffer){
-    for(int i = 0;i<num_inputs;i++){
+    for(double i = 0;i<num_inputs;i++){
         // std::cout << "write1: " << i << std::endl;
         Out results = buffer.consume(i);
         writer.writeLine("inp:");
