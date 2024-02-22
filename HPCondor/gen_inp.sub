@@ -1,0 +1,13 @@
+#Run job 
+universe = vanilla
+log = gen_inp_$(Cluster).log
+executable = geninp
+arguments = 2 15 2
+output = input.out
+error = input.err
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+request_cpus = 1
+request_memory = 2GB
+request_disk = 8GB
+queue 1
