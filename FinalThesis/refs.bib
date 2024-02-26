@@ -1,117 +1,43 @@
-\documentclass[11pt]{article}
-\usepackage{algorithm}
-\usepackage{algorithmicx}
-\usepackage{algpseudocode}
-\usepackage{amssymb}
-\usepackage{amsthm}
-\usepackage{amsmath}
-\usepackage{bm}
-\usepackage{bbm}
-\usepackage{cite}
-\usepackage{color}
-\usepackage[inline]{enumitem}
-\usepackage[top=1.5in,bottom=1in,right=1in,left=1in]{geometry}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{listings}
-\usepackage{placeins}
-\usepackage{siunitx}
-\usepackage{subfig}
-\usepackage{todonotes}
-\usepackage{wrapfig}
-\usepackage{authblk}
+@book{OnlineComp1998,
+  added-at = {2011-04-21T00:00:00.000+0200},
+  author = {Borodin, Allan and El-Yaniv, Ran},
+  biburl = {https://www.bibsonomy.org/bibtex/27450ee26ea6501f7778c9e3962e52bc8/dblp},
+  interhash = {85c1a0ffa2c60a8aa51af611011854e9},
+  intrahash = {7450ee26ea6501f7778c9e3962e52bc8},
+  isbn = {978-0-521-56392-5},
+  keywords = {dblp},
+  pages = {I-XVIII, 1-414},
+  publisher = {Cambridge University Press},
+  timestamp = {2011-04-29T15:27:06.000+0200},
+  title = {Online computation and competitive analysis.},
+  year = 1998
+}
 
+@article{MAXMAX2005,
+  title={A new measure for the study of on-line algorithms},
+  author={Shai Ben-David and Allan Borodin},
+  journal={Algorithmica},
+  year={2005},
+  volume={11},
+  pages={73-91}
+}
 
-\title{An Analysis of K-Server algorithm performance}
-\author[1]{Stefan Caldararu}
-\author[2]{Marc Renault}
-\affil[1]{Undergraduate Student with Department of Computer Science, UW-Madison}
-\affil[2]{Professor in the Department of Computer Science, UW-Madison}
-\date{\today}                     %% if you don't need date to appear
-\setcounter{Maxaffil}{0}
-\renewcommand\Affilfont{\itshape\small}
+@misc{bij2016,
+      title={Stochastic dominance and the bijective ratio of online algorithms}, 
+      author={Spyros Angelopoulos and Marc P. Renault and Pascal Schweitzer},
+      year={2016},
+      eprint={1607.06132},
+      archivePrefix={arXiv},
+      primaryClass={cs.DS}
+}
 
-
-\newcommand{\comment}[1]{{\color{red}\textbf{#1}}}
-\newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\tiny\bf +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\tiny\bf +} }
-\newcommand{\KS}{$K$-Servers }
-\newcommand{\s}{$\sigma$ }
-
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-
-
-% \title{An Analysis of K-Server algorithm performance}
-% \author[1]{Stefan Caldararu}
-% \author[2]{Marc Renault}
-% \affil[1]{Undergraduate Student with Department of Computer Science, UW-Madison}
-% \affil[2]{Professor in the Department of Computer Science, UW-Madison}
-% \renewcommand\Affilfont{\itshape\small}
-
-\begin{document}
-\maketitle
-% \begin{titlepage}
-% 	\begin{center}
-% 		University of Wisconsin-Madison \\
-% 		\vfill 
-% 		\maketitle
-% 		\vspace{0.2in}
-% 		{\normalsize Department of Computer Science, University of Wisconsin -- Madison}	
-% 		\vfill		
-% 		\today		
-% 	\end{center}
-% \end{titlepage}
-
-% \newpage 
-% \vspace{0.1in}
-\begin{center}
-	Department of Computer Science\\
-	University of Wisconsin -- Madison, USA
-\end{center}
-\vspace{1.5in}
-\begin{abstract} 
-This project focuses on the \KS problem, and uses multiple analysis methods to gauge performance of different \KS algorithms. Through the first part of the course associated with this project, a literature review was conducted, and a set of algorithms was determined. Following this, an implementation in \CC was written, and practical tests were conducted and later analyzed.
-\end{abstract}
-
-{\textbf{Keywords}}: \KS, Online Algorithms, Bijective Analysis
-
-\newpage 
-
-\tableofcontents
-
-\newpage
-
-\section{Introduction}
-\label{sec:intro}
-\input{sections/Introduction.tex}
-
-\section{Background}
-\label{sec:background}
-\input{sections/Background.tex}
-
-\section{Algorithm Description}
-\label{sec:algDescription}
-\input{sections/AlgDescription.tex}
-
-\section{Software implementation details and API}
-\label{sec:implementationDetails}
-\input{sections/SoftwareImplementation.tex}
-
-\section{Numerical Experiments}
-\label{sec:numExperiments}
-\input{sections/NumericalExperiments.tex}
-
-\section{Analysis}
-\label{sec:analysis}
-\input{sections/Analysis.tex}
-
-\section{Conclusion}
-\label{sec:conclusion}
-\input{sections/Conclusion.tex}
-
-
-\bibliographystyle{ieeetr}
-\bibliography{refs.bib}
-
-
-\end{document}          
+@article{WFA2009,
+author = {Rudec, Tomislav and Baumgartner, Alfonzo and Manger, Robert},
+year = {2009},
+month = {01},
+pages = {1-19},
+title = {A fast work function algorithm for solving the k-server problem},
+volume = {21},
+journal = {Central European Journal of Operations Research},
+doi = {10.1007/s10100-011-0222-7}
+}
