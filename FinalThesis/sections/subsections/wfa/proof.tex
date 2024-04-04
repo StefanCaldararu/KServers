@@ -1,1 +1,12 @@
-In this section, we follow the proof showing that the $WFA$ is $2k-1$ competitive from~\cite{OnlineComp1998}, along with some in-depth explanatory details. 
+In this section, we follow the proof showing that the $WFA$ is $2k-1$ competitive from~\cite{OnlineComp1998}, along with some in-depth explanatory details. We start by defining the term $w_{\sigma_i}(C)$, the work done to service a request sequence $\sigma_i$ and end in configuration $C$, assuming an initial starting configuration $C_0$. It is worth noting a basic property of the work, that is:
+
+\begin{equation*}
+    \label{eq:work}
+    w_{\sigma_i r}(C) = min_{x \in C} [w_{\sigma_{i} r}(C - x + r) + d(r, x)] = min_{x \in C} [w_{\sigma_{i}}(C - x + r) + d(r, x)]
+\end{equation*}
+
+The Work done to get into a configuration, assuming with a basic definition for the \textit{offline pseudocost}. That is, 
+
+% \begin{definition}
+%     \label{def:off}
+%     The \textbf{offline pseudocost} $w' (C') - w(C') is the work done to $
