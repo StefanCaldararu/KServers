@@ -1,9 +1,15 @@
-In this section, we follow the proof showing that the $WFA$ is $2k-1$ competitive from~\cite{OnlineComp1998}, along with some in-depth explanatory details. We start by defining the term $w_{\sigma_i}(C)$, the work done to service a request sequence $\sigma_i$ and end in configuration $C$, assuming an initial starting configuration $C_0$. It is worth noting a basic property of the work, that is:
+In this section, we follow the proof showing that the $WFA$ is $2k-1$ competitive from~\cite{OnlineComp1998}, along with some in-depth explanatory details. We start by defining the term $w(C)$, the work done to service a request sequence $\sigma_i$ and end in configuration $C$, assuming an initial starting configuration $C_0$. Additionally, we define $w'(C)$ as the work done to service a request sequence $\sigma_{i+1}$ and end in the configuration $C$. It is worth noting a basic property of the work function:
 
 \begin{equation*}
     \label{eq:work}
-    w_{\sigma_i r}(C) = min_{x \in C} [w_{\sigma_{i} r}(C - x + r) + d(r, x)] = min_{x \in C} [w_{\sigma_{i}}(C - x + r) + d(r, x)]
+    w'(C) = min_{x \in C} [w'(C - x + r) + d(r, x)] = min_{x \in C} [w(C - x + r) + d(r, x)]
 \end{equation*}
+
+The first part of this says that the work done to service a request sequence \textit{including} the next request $r$ for some configuration $C$ is equal to the minimum work done to service the same request sequence, except on the configuration $C$ without the point $x$ and with the point $r$, plus the distance between $r$ and $x$. The set $C-x+r$ is defined as in~\cite{OnlineComp1998}, where there is only one copy of $r$ in this set, whether or not $r$ was originally in $C$. 
+
+The nice part about this is that we now \textit{know} that $r \in C - x + r$, which isn't necessarily true of $C$. This means that the second part of this equation is true, where we can remove the $r$ from the work function, as it is already included in the set. 
+
+We 
 
 The Work done to get into a configuration, assuming with a basic definition for the \textit{offline pseudocost}. That is, 
 
