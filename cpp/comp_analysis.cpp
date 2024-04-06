@@ -33,6 +33,7 @@
 #include <chrono>
 #include <algorithm>
 #include "mspace.h"
+#include "ALGS/optAlg.h"
 
 struct cost{
     int WFA;
@@ -388,12 +389,20 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
     }
 }
 
-void consumer_function(int threadID, Buffer &buffer){
+void consumer_function(int threadID, int k, Buffer &buffer){
     for(double i = 0;i<num_inputs;i++){
         // std::cout << "write1: " << i << std::endl;
         Out results = buffer.consume(i);
+        // finally, have the consumer run OPT for this input, and output the results.
+        OptAlg oalg;
+        oalg.setGraph(mspace);
+        std::vector<int> server_locations;
+        for(int j = 0;j<k;j++)
+            server_locations.push_back(j);
+        oalg.setServers(k, server_locations);
+        results.OPT = oalg.runAlg(results.input, SigmaLength);
         //check if the competitive ratio if this result is larger than the last. If so, update the competitive ratio.
-        std::cout << "WFA: " << static_cast<double>(results.WFA) / static_cast<double>(results.OPT) << std::endl;
+        // std::cout << "KC: " << static_cast<double>(results.KC) / static_cast<double>(results.OPT) << std::endl;
         if(results.OPT != 0 && static_cast<double>(results.WFA) / static_cast<double>(results.OPT) > WFA_CR)
             WFA_CR = static_cast<double>(results.WFA) / static_cast<double>(results.OPT);
         if(results.OPT != 0 && static_cast<double>(results.greedy) / static_cast<double>(results.OPT) > greedy_CR)
@@ -504,7 +513,7 @@ int main(int argc, char ** argv)
     
     //
     WriteOutput writer(outputFile);
-    std::thread consumerThread(consumer_function, size, std::ref(buffer));
+    std::thread consumerThread(consumer_function, size, num_servers, std::ref(buffer));
 
     //join the threads...
     for(auto& thread : producerThreads)
