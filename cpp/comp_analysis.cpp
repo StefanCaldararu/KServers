@@ -263,7 +263,7 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
             if(newState.config[j] == newState.Sigma[i-1])
                 inConfig = true;
         if (!inConfig)
-            runDC(newState);
+            runDCT(newState);
         myStates.DC.push_back(newState);
         //KC
         newState = myStates.KC[i-1];
@@ -321,7 +321,7 @@ void producer_function (int threadID, state theState, Buffer &buffer, int k){
                 if(myStates.DC[ci+1].config[j] == myStates.DC[ci+1].Sigma[ci])
                     inConfig = true;
             if (!inConfig)
-                runDC(myStates.DC[ci+1]);
+                runDCT(myStates.DC[ci+1]);
             inConfig = false;
             for(int j = 0;j<myStates.greedy[ci+1].config.size();j++)
                 if(myStates.greedy[ci+1].config[j] == myStates.greedy[ci+1].Sigma[ci])
