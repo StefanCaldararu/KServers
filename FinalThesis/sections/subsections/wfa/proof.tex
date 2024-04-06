@@ -1,0 +1,39 @@
+In this section, we follow the proof showing that the $WFA$ is $2k-1$ competitive from~\cite{OnlineComp1998}, along with some in-depth explanatory details. We start by defining the term $w(C)$, the work done to service a request sequence $\sigma_i$ and end in configuration $C$, assuming an initial starting configuration $C_0$. Additionally, we define $w'(C)$ as the work done to service a request sequence $\sigma_{i+1}$ and end in the configuration $C$. It is worth noting a basic property of the work function:
+
+\begin{equation*}
+    \label{eq:work}
+    w'(C) = min_{x \in C} [w'(C - x + r) + d(r, x)] = min_{x \in C} [w(C - x + r) + d(r, x)]
+\end{equation*}
+
+The first part of this says that the work done to service a request sequence \textit{including} the next request $r$ for some configuration $C$ is equal to the minimum work done to service the same request sequence, except on the configuration $C$ without the point $x$ and with the point $r$, plus the distance between $r$ and $x$. The set $C-x+r$ is defined as in~\cite{OnlineComp1998}, where there is only one copy of $r$ in this set, whether or not $r$ was originally in $C$. 
+
+The nice part about this is that we now \textit{know} that $r \in C - x + r$, which isn't necessarily true of $C$. This means that the second part of this equation is true, where we can remove the $r$ from the work function, as it is already included in the set. 
+
+\begin{definition}
+    The \textbf{offline pseudocost} $w'(C') - w(C)$ is the work done to service a request sequence $\sigma_{i+1}$ and end in configuration $C'$, minus the work done to service a request sequence $\sigma_i$ and end in configuration $C$.
+\end{definition}
+
+The offline pseudocost is a measure of how much work is done to service the next request in the sequence, given that the current configuration is $C$. If we sum this across all requests on sets $C_0$, $C_1$ ... $C_n$ for the configuration of \textit{OPT}, we will see that this will telescope to $w_{\sigma}(C_n) - w_{\emptyset}(C_0)$, where $w_{\theta}(\centerdot)$ is the work done on request sequence $\theta$ to get into a given configuration. This is equal to the cost $OPT(\sigma)$, as we are subtracting the cost to get into the initial configuration $C_0$ from the final work function $w_\sigma(C_n)$.
+
+\begin{definition}
+    The \textbf{extended cost} is defined as $max_X \{ w'(X) - w(X)\}$.
+\end{definition}
+
+The extended cost represents the worst case configuration we could be in given the next request. That is, the configuration that will maximize the cost incurred to satisfy the next request. The extended cost represents the maximum cost we could incurr by servicing the next request online.
+
+\begin{definition}
+    A work function is \textbf{Quasi-Convex} if for all configurations $X$, $Y$, and for all $x \in X$, the following property holds:
+    \begin{equation*}
+        min_{y \in Y} \{ w(X - x + y) + w(Y - y + x)\} \leq w(X) + w(Y)
+    \end{equation*}
+\end{definition}
+
+Quasi-Convexity essentially says that for every two configurations, the sum of the costs to get into those configurations is greater than or equal to the \textit{best} cost of swapping \textit{some} point $y\in Y$ with $x$. The key point here is that there will be some minimizing configurations $X$ and $Y$.
+
+\begin{lemma}
+
+\end{lemma}
+
+% \begin{definition}
+%     \label{def:off}
+%     The \textbf{offline pseudocost} $w' (C') - w(C') is the work done to $

@@ -20,6 +20,10 @@
 \usepackage{todonotes}
 \usepackage{wrapfig}
 \usepackage{authblk}
+\usepackage[english]{babel}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
 
 
 \title{Title}
@@ -85,9 +89,26 @@ Abstract here.
 \label{sec:intro}
 \input{sections/intro.tex}
 
+\section{Algorithms}
+\label{sec:algos}
+\input{sections/algorithms.tex}
+
 \section{Work Function Algorithm}
 \label{sec:wfa}
 \input{sections/wfa.tex}
+
+\section{Unifying Potential}
+\label{sec:uniPot}
+\input{sections/unifying_potential.tex}
+
+\section{Bijective Analysis}
+\label{sec:bijAna}
+\input{sections/bijective_analysis.tex}
+
+\section{Conclusion}
+\label{sec:con}
+\input{sections/conclusion.tex}
+
 
 \bibliographystyle{ieeetr}
 \bibliography{refs.bib}
