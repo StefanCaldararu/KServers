@@ -2,7 +2,7 @@
 universe = vanilla
 log = gen_inp_$(Cluster).log
 executable = geninp
-arguments = 2 15 2
+arguments = 2 10 2
 output = input.out
 error = input.err
 should_transfer_files = YES
