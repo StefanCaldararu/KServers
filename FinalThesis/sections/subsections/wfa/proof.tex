@@ -22,17 +22,60 @@ The offline pseudocost is a measure of how much work is done to service the next
 The extended cost represents the worst case configuration we could be in given the next request. That is, the configuration that will maximize the cost incurred to satisfy the next request. The extended cost represents the maximum cost we could incurr by servicing the next request online.
 
 \begin{definition}
-    A work function is \textbf{Quasi-Convex} if for all configurations $X$, $Y$, and for all $x \in X$, the following property holds:
+    A work function is \textbf{Quasi-Convex} (QC) if for all configurations $X$, $Y$, and for all $x \in X$, the following property holds:
     \begin{equation*}
         min_{y \in Y} \{ w(X - x + y) + w(Y - y + x)\} \leq w(X) + w(Y)
     \end{equation*}
 \end{definition}
 
-Quasi-Convexity essentially says that for every two configurations, the sum of the costs to get into those configurations is greater than or equal to the \textit{best} cost of swapping \textit{some} point $y\in Y$ with $x$. The key point here is that there will be some minimizing configurations $X$ and $Y$.
+Quasi-Convexity essentially says that for every two configurations, the sum of the costs to get into those configurations is greater than or equal to the \textit{best} cost of swapping \textit{some} point $y\in Y$ with $x$. The key point here is that there will be some minimizing configurations $X$ and $Y$. We can additionally take this a step further with the following definition.
+
+\begin{definition}
+A work function is \textbf{General Quasi-Convex} (GQC) if for every $X$, $Y$, there exists a bijection $X \rightarrow Y$ such that for all partitions of X into $X_1$ and $X_2$, the following property holds:
+
+\begin{equation*}
+    w(X_1 + g(X_2)) + w(g(X_1) + X_2) \leq w(X_1) + w(X_2)
+\end{equation*}
+\end{definition}
+
+It is worth noting that if a work function is GQC, then it is also QC. This is because we can set $X_1 = X-x$ and $y = g(x)$. This will give us the QC property.
 
 \begin{lemma}
-
+    If a bijection $g$ satisfies the GQC property, then there exists a bijection $\tilde{g}$ that satisfies the GQC property such that $\tilde{g}(x) = x$ for all $x \in X \cap Y$.
 \end{lemma}
+\begin{proof}
+    Suppose we have a bijection $g: X \rightarrow Y$ that satisfies the GQC property, and additionally of all such bijections, maps the \textit{maximum} number of elements in $X \cap Y$ to themselves. by contradiction, assume that there exists some $a \in X \cap Y$ such that $g(a) \neq a$. Now, we define $\tilde{g}: X \rightarrow Y$ such that:
+    
+    \begin{equation*}
+        \tilde{g}(x) = \begin{cases}
+            g(x) & \text{if } x \neq a \text{ or } x \neq g^{-1}(a) \\
+            a & \text{if } x = a \\
+            g^{-1}(a) & \text{if } x = g^{-1}(a)
+        \end{cases}
+    \end{equation*}
+    
+    Now, let $(X_1, X_2)$ be a partition of $X$, and without loss of generality, $g^{-1}(a) \in X_1$. If $a \in X_1$, then $g(X_1) = \tilde(g)(X_1)$, and $g(X_2) = \tilde{g}(X_2)$, and so $\tilde(g)$ satisfies the GQC property, which is a contradiction to our second assumption. Therefore, $a \not\in X_1$, and so we have:
+
+    \begin{equation*}
+        w(X) + w(Y) \geq w((X_1+a) \cup g(X_2-a)) + w(g(x_1+a) \cup (X_2-a))
+    \end{equation*}
+
+    By the definition of GQC. Then, since $a, g^{-1}(a) \not \in X_2$, we know that $g(X_2-a) = \tilde(g)(X_2-a)$, by the definition of $\tilde{g}$. Additionally, $g(X_1+a) = \tilde{g}(X_1+a)$, since $a, g^{-1}(a) \in X_1$. Therefore, we have: 
+    
+    \begin{equation*}
+        w((X_1+a) \cup g(X_2-a)) + w(g(x_1+a) \cup (X_2-a)) = w((X_1+a) \cup \tilde{g}(X_2-a)) + w(\tilde{g}(X_1+a) \cup (X_2-a)) = w(X_1 \cup \tilde{g}(X_2)) + w(\tilde{g}(X_1) \cup X_2)
+    \end{equation*}
+
+    We achieve the last equality because $a \in X_1$ and $a \not\in X_2$, so $X_1 - a = X_1$ and $X_2 - a = X_2$. This would mean that $\tilde{g}$ satisfies the GQC property, which is again a contradiction. Therefore, there exists a bijection $\tilde{g}$ that satisfies the GQC property such that $\tilde{g}(x) = x$ for all $x \in X \cap Y$.
+\end{proof}
+\begin{lemma}
+All work functions are GQC, and so are therefore also QC.
+\end{lemma}
+
+\begin{proof}
+    We prove this by induction on the length of the request sequence. Our base case has $i = 0$, where $w_{\emptyset}(X) + w_{\emptyset}(Y) = D(C_0, X) + D(C_0, Y)$. We consider two minimum weight matchings, whose values are $D(C_0, X)$, and $D(C_0, Y)$. Each $c_j \in C_O$ is mapped by $M_X$ to some $x_j \in X$ and by $M_Y$ to some $y_j \in Y$. We show that the bijection $g(x_j) = y_j$ satisfies the GQC property. Because X and Y are minimum weight matchings, $w(X) + w(Y)$ is an upper bound of $D(X, Y)$. By the difinition of $g$, we maintain the indeces of our points when transitioning $X \rightarrow C_0 \rightarrow Y$. By a pointwise approach, we see on the right hand side we have 
+\end{proof}
+
 
 % \begin{definition}
 %     \label{def:off}
