@@ -73,7 +73,9 @@ All work functions are GQC, and so are therefore also QC.
 \end{lemma}
 
 \begin{proof}
-    We prove this by induction on the length of the request sequence. Our base case has $i = 0$, where $w_{\emptyset}(X) + w_{\emptyset}(Y) = D(C_0, X) + D(C_0, Y)$. We consider two minimum weight matchings, whose values are $D(C_0, X)$, and $D(C_0, Y)$. Each $c_j \in C_O$ is mapped by $M_X$ to some $x_j \in X$ and by $M_Y$ to some $y_j \in Y$. We show that the bijection $g(x_j) = y_j$ satisfies the GQC property. Because X and Y are minimum weight matchings, $w(X) + w(Y)$ is an upper bound of $D(X, Y)$. By the difinition of $g$, we maintain the indeces of our points when transitioning $X \rightarrow C_0 \rightarrow Y$. By a pointwise approach, we see on the right hand side we have 
+    We prove this by induction on the length of the request sequence. Our base case has $i = 0$, where $w_{\emptyset}(X) + w_{\emptyset}(Y) = D(C_0, X) + D(C_0, Y)$. We consider two minimum weight matchings, whose values are $D(C_0, X)$, and $D(C_0, Y)$. Each $c_j \in C_O$ is mapped by $M_X$ to some $x_j \in X$ and by $M_Y$ to some $y_j \in Y$. We show that the bijection $g(x_j) = y_j$ satisfies the GQC property. Because X and Y are minimum weight matchings, $w(X) + w(Y)$ is an upper bound of $D(X, Y)$. By the difinition of $g$, we maintain the indeces of our points when transitioning $X \rightarrow C_0 \rightarrow Y$. By a pointwise approach, we see that we satsify the GQC property with equality. We can think of this as doubling the number of servers at locations in $C_0$ and then matching them to the points in $X$ and $Y$. Each point in $X$ and $Y$ will appear exactly once on either side of the equation.
+
+    For the induction step, we assume $w$ satisfies the GQC property, and we now have a new request $r$. We show that $w'$ satisfies GQC. We know that there exists some $x \in X$ such that $w'(X) = w(X-x+r) + d(x,r)$, and similarly there exists some $y \in Y$ such that $w'(Y) = w(Y-y+r) + d(y,r)$. 
 \end{proof}
 
 
