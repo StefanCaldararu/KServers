@@ -63,7 +63,10 @@ It is worth noting that if a work function is GQC, then it is also QC. This is b
     By the definition of GQC. Then, since $a, g^{-1}(a) \not \in X_2$, we know that $g(X_2-a) = \tilde(g)(X_2-a)$, by the definition of $\tilde{g}$. Additionally, $g(X_1+a) = \tilde{g}(X_1+a)$, since $a, g^{-1}(a) \in X_1$. Therefore, we have: 
     
     \begin{equation*}
-        w((X_1+a) \cup g(X_2-a)) + w(g(x_1+a) \cup (X_2-a)) = w((X_1+a) \cup \tilde{g}(X_2-a)) + w(\tilde{g}(X_1+a) \cup (X_2-a)) = w(X_1 \cup \tilde{g}(X_2)) + w(\tilde{g}(X_1) \cup X_2)
+    \begin{gathered}
+        w((X_1+a) \cup g(X_2-a)) + w(g(x_1+a) \cup (X_2-a)) = w((X_1+a) \cup \tilde{g}(X_2-a)) + w(\tilde{g}(X_1+a) \cup (X_2-a)) 
+        \\ = w(X_1 \cup \tilde{g}(X_2)) + w(\tilde{g}(X_1) \cup X_2)
+    \end{gathered}
     \end{equation*}
 
     We achieve the last equality because $a \in X_1$ and $a \not\in X_2$, so $X_1 - a = X_1$ and $X_2 - a = X_2$. This would mean that $\tilde{g}$ satisfies the GQC property, which is again a contradiction. Therefore, there exists a bijection $\tilde{g}$ that satisfies the GQC property such that $\tilde{g}(x) = x$ for all $x \in X \cap Y$.
@@ -75,7 +78,51 @@ All work functions are GQC, and so are therefore also QC.
 \begin{proof}
     We prove this by induction on the length of the request sequence. Our base case has $i = 0$, where $w_{\emptyset}(X) + w_{\emptyset}(Y) = D(C_0, X) + D(C_0, Y)$. We consider two minimum weight matchings, whose values are $D(C_0, X)$, and $D(C_0, Y)$. Each $c_j \in C_O$ is mapped by $M_X$ to some $x_j \in X$ and by $M_Y$ to some $y_j \in Y$. We show that the bijection $g(x_j) = y_j$ satisfies the GQC property. Because X and Y are minimum weight matchings, $w(X) + w(Y)$ is an upper bound of $D(X, Y)$. By the difinition of $g$, we maintain the indeces of our points when transitioning $X \rightarrow C_0 \rightarrow Y$. By a pointwise approach, we see that we satsify the GQC property with equality. We can think of this as doubling the number of servers at locations in $C_0$ and then matching them to the points in $X$ and $Y$. Each point in $X$ and $Y$ will appear exactly once on either side of the equation.
 
-    For the induction step, we assume $w$ satisfies the GQC property, and we now have a new request $r$. We show that $w'$ satisfies GQC. We know that there exists some $x \in X$ such that $w'(X) = w(X-x+r) + d(x,r)$, and similarly there exists some $y \in Y$ such that $w'(Y) = w(Y-y+r) + d(y,r)$. 
+    For the induction step, we assume $w$ satisfies the GQC property, and we now have a new request $r$. We show that $w'$ satisfies GQC. We know that there exists some $x \in X$ such that $w'(X) = w(X-x+r) + d(x,r)$, and similarly there exists some $y \in Y$ such that $w'(Y) = w(Y-y+r) + d(y,r)$. We know there exists a bijectiong $g: (X-x+r) \rightarrow (Y-y+r)$ that satsfies the GQC property, where $g(r) = r$. We define $\tilde{g}: X \rightarrow Y$ as follows:
+
+    \begin{equation*}
+        \tilde{g}(z) = \begin{cases}
+            g(z) & \text{if } z \neq r \\
+            y & \text{if } z = r
+        \end{cases}
+    \end{equation*}
+
+    From here, we will have $X_{xr} = X - x + r$ and $Y_{yr} = Y - y + r$ for easier notation. Without loss of generality, assume that $x \in X_1$ for some partition $X_1, X_2$ of $X$. We have:
+
+    \begin{equation*}
+        \begin{gathered}
+            w'(X) + w'(Y) = w(X_{xr}) + w(Y_{yr}) + d(r, x) + d(r, y) \\
+            = w( (X_1-x+r) \cup g(X_2)) + w(Y_{yr}) + d(r, x) + d(r, y) \\
+            \geq w((X_1-x+r) \cup g(X_2)) + w(g(X_1-x+r) \cup (X_2)) + d{x, r} + d{r, y} \\
+            = w(X_{xr} \cup \tilde{g}(X_2)) + w((\tilde{g}(X_1) -y + r) \cup X_2) + d(x, r) + d(r, y) \\
+            \geq w'(X_1 \cup g'(X_2)) + w'(g'(X_1) \cup X_2) 
+        \end{gathered}
+    \end{equation*}
+\end{proof}
+
+\begin{definition}
+    Let $w$ be the current work function and let $r$ be any point in our metric space. A configuration $A$ is called a \textbf{minimizer of $r$ with respect to $w$} if:
+    \begin{equation*}
+        A = argmin_{(X)} \{ w(X) = \Sigma_{x \in X} d(x,r)\}
+    \end{equation*}
+\end{definition}
+
+\begin{lemma}
+    Let $w$ be the current work function and let $r$ be the next request. If $A$ is a minimizer of $r$ with respect to $w$, then $A$ is also a minimizer of $r$ with respect to $w'$.
+\end{lemma}
+
+\begin{proof}
+    We want to show that for every $B$, $w'(A) - \Sigma_{a \in A} d(a,r) \leq w'(B) - \Sigma_{b \in B} d(b,r)$. Since $A$ is a minimizer of $r$ with respect to $w$:
+
+    \begin{equation*}
+        \begin{gathered}
+            w(A) - \Sigma_{a \in A} d(a,r) \leq w(B-b' + a') - \Sigma_{b \in B - b' + a'} d(b, r) \\ \\
+            w(A) - w(B-b' + a') - \Sigma_{a \in A} d(a,r) \leq -/Sigma_{b \in B} d(b, r) + d(b', r) - d(a', r)
+        \end{gathered}
+    \end{equation*}
+    
+    
+    We know that $min_{a' \in A} \{ w(A - a' + r) + d(a', r)\} \leq min_{b' \in B} \{ w(B - b' + r) + d(b', r)\}$.
 \end{proof}
 
 
