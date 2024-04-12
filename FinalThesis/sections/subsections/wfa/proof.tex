@@ -1,9 +1,9 @@
 In this section, we follow the proof showing that the $WFA$ is $2k-1$ competitive from~\cite{OnlineComp1998}, along with some in-depth explanatory details. We start by defining the term $w(C)$, the work done to service a request sequence $\sigma_i$ and end in configuration $C$, assuming an initial starting configuration $C_0$. Additionally, we define $w'(C)$ as the work done to service a request sequence $\sigma_{i+1}$ and end in the configuration $C$. It is worth noting a basic property of the work function:
 
-\begin{equation*}
+\begin{equation}
     \label{eq:work}
     w'(C) = min_{x \in C} [w'(C - x + r) + d(r, x)] = min_{x \in C} [w(C - x + r) + d(r, x)]
-\end{equation*}
+\end{equation}
 
 The first part of this says that the work done to service a request sequence \textit{including} the next request $r$ for some configuration $C$ is equal to the minimum work done to service the same request sequence, except on the configuration $C$ without the point $x$ and with the point $r$, plus the distance between $r$ and $x$. The set $C-x+r$ is defined as in~\cite{OnlineComp1998}, where there is only one copy of $r$ in this set, whether or not $r$ was originally in $C$. 
 
@@ -112,18 +112,58 @@ All work functions are GQC, and so are therefore also QC.
 \end{lemma}
 
 \begin{proof}
-    We want to show that for every $B$, $w'(A) - \Sigma_{a \in A} d(a,r) \leq w'(B) - \Sigma_{b \in B} d(b,r)$. Since $A$ is a minimizer of $r$ with respect to $w$:
+    We want to show that for every $B$, $w'(A) - \Sigma_{a \in A} d(a,r) \leq w'(B) - \Sigma_{b \in B} d(b,r)$. This is equivalent to showing the following, as per property~\ref{eq:work}:
+    
+    \begin{equation*}
+        \begin{gathered}
+            min_{a' \in A} \{ w(A - a' + r) + d(a', r) - \Sigma_{a \in A} d(a,r)\} \leq min_{b' \in B} \{ w(B - b' + r) + d(b', r) - \Sigma_{b \in B} d(b,r)\}
+        \end{gathered}
+    \end{equation*}
+
+    Since $A$ is a minimizer of $r$ with respect to $w$:
 
     \begin{equation*}
         \begin{gathered}
             w(A) - \Sigma_{a \in A} d(a,r) \leq w(B-b' + a') - \Sigma_{b \in B - b' + a'} d(b, r) \\ \\
-            w(A) - w(B-b' + a') - \Sigma_{a \in A} d(a,r) \leq -/Sigma_{b \in B} d(b, r) + d(b', r) - d(a', r)
+            w(A) - w(B-b' + a') - \Sigma_{a \in A} d(a,r) \leq -\Sigma_{b \in B} d(b, r) + d(b', r) - d(a', r) \\ \\
+            -w(B - b' + a') + w(A) + d(a', r) - \Sigma_{a \in A} d(a,r) \leq -\Sigma_{b \in B} d(b,r) + d(b', r)
         \end{gathered}
     \end{equation*}
-    
-    
-    We know that $min_{a' \in A} \{ w(A - a' + r) + d(a', r)\} \leq min_{b' \in B} \{ w(B - b' + r) + d(b', r)\}$.
+
+    Now, we apply the GQC Lemma, with $X = B -b' + r$, $Y = A$, $x = r$, and $y = a'$. This means that $min_{a' \in A} \{ w(B - b' + a') + w(A -a' + r)\} \leq w(B - b' + r) + w(A)$. We now sum the two sides of this with the previous inequality to get the following equation:
+
+    \begin{equation*}
+        \begin{gathered}
+            min_{a' \in A} \{ w(B - b' + a') + w(A -a' + r) - w(B - b' + a') + w(A) + d(a', r) + \Sigma_{a \in A} d(a, r)\} \\
+            \leq w(B - b' + r) + w(A) + d(b' ,r) - \Sigma_{b \in B} d(b, r)
+        \end{gathered}
+    \end{equation*}
+
+    And after cancelations, we get that for all $b' \in B$:
+
+    \begin{equation*}
+        \begin{gathered}
+            min_{a' \in A} \{ w(A - a' + r) + d(a', r) - \Sigma_{a \in A} d(a,r)\} \leq w(B - b' + r) + d(b', r) - \Sigma_{b \in B} d(b,r)
+        \end{gathered}
+    \end{equation*}
+
+    Since this is true for all $b' \in B$, our property holds for the $b'$ that minimizes the right hand side, completing our proof.
 \end{proof}
+
+\begin{definition}
+    We define the \textbf{extended cost} as the cost of the value achieved by the configuration which is able to maximize the difference between the next work function value and the current work function value:
+    \begin{equation*}
+        max_X \{ w'(X) - w(X)\}
+    \end{equation*}
+\end{definition}
+
+\begin{definition}
+    Additionally, we define a \textbf{maximizer with respect to $w$} as the configuration $A$ which achieves this extended cost value:
+    \begin{equation*}
+        A = argmax_X \{ w'(X) - w(X) \}
+    \end{equation*}
+\end{definition}
+
 
 
 % \begin{definition}
