@@ -103,7 +103,7 @@ All work functions are GQC, and so are therefore also QC.
 \begin{definition}
     Let $w$ be the current work function and let $r$ be any point in our metric space. A configuration $A$ is called a \textbf{minimizer of $r$ with respect to $w$} if:
     \begin{equation*}
-        A = argmin_{(X)} \{ w(X) = \Sigma_{x \in X} d(x,r)\}
+        A = argmin_{(X)} \{ w(X) - \Sigma_{x \in X} d(x,r)\}
     \end{equation*}
 \end{definition}
 
@@ -164,8 +164,79 @@ All work functions are GQC, and so are therefore also QC.
     \end{equation*}
 \end{definition}
 
+\begin{lemma}
+    Any minimizer with respect to $r$ is also a maximizer with respect to $w$.
+\end{lemma}
 
+\begin{proof}
+    Suppose $A$ is a minimizer with respect to $r$. We want to show that for every $B$,
 
+    \begin{equation*}
+        \begin{gathered}
+            w'(B) - w(B) \leq w'(A) - w(A) \\ \\
+            w'(B) + w(A) \leq w'(A) + w(B)
+        \end{gathered}
+    \end{equation*}
+
+    If $r \in B$, then this statement is true, as $w'(B) = w(B)$, and $w(A) \leq w'(A)$ by definition.
+
+    By expanding the above desired equation using eq.~\ref{eq:work}, we get that we want to show:
+
+    \begin{equation*}
+        \begin{gathered}
+            min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq min_{a' \in A} \{ w(A - a' + r) + d(a', r) + w(B)\}
+        \end{gathered}
+    \end{equation*}
+
+    This is equivalent to saying that for all $B$, $a' \in A$: 
+
+    \begin{equation*}
+        \begin{gathered}
+            min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq w(A - a' + r) + d(a', r) + w(B)
+        \end{gathered}
+    \end{equation*}
+
+    To show this, we begin with the statement that $A$ is a minimizer. In particular, this means that:
+
+    \begin{equation*}
+        \begin{gathered}
+            w(A) - \Sigma_{a \in A} d(a,r) \leq w(A -a' + b') - \Sigma_{a \in A - a' + b'} d(a,r) \\ \\
+            w(A) - \Sigma_{a \in A} d(a,r) \leq w(A -a' + b') - \Sigma_{a \in A} d(a,r) + d(a', r) - d(b', r) \\ \\
+            w(A) + d(b', r) - d(a', r) \leq w(A - a' + b')
+        \end{gathered}
+    \end{equation*}
+
+    When we apply the QC property with $X = A - a' + r$, $Y = B$, $x = r$, and $y = b'$, and then substitute in for $w(A - a' + b')$, we get:
+
+    \begin{equation*}
+        \begin{gathered}
+            min_{b' \in B} \{ w(A - a' + b') + w(B - b' + r)\} \leq w(A - a' + r) + w(B) \\ \\
+            min_{b' \in B} \{ w(A) + d(b', r) - d(a', r) + w(B - b' + r)\}\leq w(A - a' + r) + w(B) \\ \\
+            min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq w(A - a' + r) + d(a', r) + w(B)
+        \end{gathered}
+    \end{equation*}
+\end{proof}
+
+\begin{definition}
+    We now define the \textbf{value of a minimizer configuration}, for minimizer $A$ of $r$ with respect to $w$ as: 
+    \begin{equation}
+        MIN_w(r) = w(A) - \Sigma_{a \in A} d(a, r)
+    \end{equation}
+\end{definition}
+
+We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ as the current configuration of $OPT$. We will now have the potential function: $\Phi ( U, w) = \Sigma_{u \in U} MIN_w(u)$. Additionally, suppose that for the next request $r$, $OPT$ services the request with server $u_j$. Then, the next configuration of $OPT$ is $U' = U - u_j + r$.
+
+\begin{lemma}
+    $\Phi ( U', w) - \Phi (U, w) \geq k * d(u_j, r)$
+\end{lemma}
+
+\begin{proof}
+    \begin{equation*}
+        \Phi ( U', w) - \Phi (U, w) = \Sigma_{u \in U'} MIN_w(u) - \Sigma_{u \in U} MIN_w(u) \\ = MIN_w(r) - MIN_w(u_j)
+    \end{equation*}
+
+    Using the triangle inequality, we know that for all $a$, $d(a, r) \leq d(a, u_j) + d(u_j, r)$. 
+\end{proof}
 % \begin{definition}
 %     \label{def:off}
 %     The \textbf{offline pseudocost} $w' (C') - w(C') is the work done to $
