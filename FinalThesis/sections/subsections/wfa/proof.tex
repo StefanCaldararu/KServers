@@ -1,4 +1,4 @@
-In this section, we follow the proof showing that the $WFA$ is $2k-1$ competitive from~\cite{OnlineComp1998}, along with some in-depth explanatory details. We start by defining the term $w(C)$, the work done to service a request sequence $\sigma_i$ and end in configuration $C$, assuming an initial starting configuration $C_0$. Additionally, we define $w'(C)$ as the work done to service a request sequence $\sigma_{i+1}$ and end in the configuration $C$. It is worth noting a few basic property of the work function:
+In this section, we follow the proof showing that the $WFA$ is $2k-1$ competitive from~\cite{OnlineComp1998}, and add some in-depth explanatory details. It is worth noting a few basic property of the work function:
 
 \begin{equation}
     \label{eq:nextwork}
@@ -20,7 +20,7 @@ The nice part about this is that we now \textit{know} that $r \in C - x + r$, wh
     The \textbf{offline pseudocost} $w'(C') - w(C)$ is the work done to service a request sequence $\sigma_{i+1}$ and end in configuration $C'$, minus the work done to service a request sequence $\sigma_i$ and end in configuration $C$.
 \end{definition}
 
-The offline pseudocost is a measure of how much work is done to service the next request in the sequence, given that the current configuration is $C$. If we sum this across all requests on sets $C_0$, $C_1$ ... $C_n$ for the configuration of \textit{OPT}, we will see that this will telescope to $w_{\sigma}(C_n) - w_{\emptyset}(C_0)$, where $w_{\theta}(\centerdot)$ is the work done on request sequence $\theta$ to get into a given configuration. This is equal to the cost $OPT(\sigma)$, as we are subtracting the cost to get into the initial configuration $C_0$ from the final work function $w_\sigma(C_n)$.
+The offline pseudocost is a measure of how much work is done to service the next request in the sequence, given that the current configuration is $C$. If we sum this across all requests on sets $C_0$, $C_1$ ... $C_n$ for the configuration of \textit{OPT}, we will see that this will telescope to $w_{\sigma}(C_n) - w_{\emptyset}(C_0)$, where $\sigma_0 = \emptyset$. This is equal to the cost $OPT(\sigma)$, as we are subtracting the cost to get into the initial configuration $C_0$ from the final work function $w_\sigma(C_n)$.
 
 \begin{definition}
     The \textbf{extended cost} is defined as $max_X \{ w'(X) - w(X)\}$.
@@ -85,7 +85,7 @@ All work functions are GQC, and so are therefore also QC.
 \begin{proof}
     We prove this by induction on the length of the request sequence. Our base case has $i = 0$, where $w_{\emptyset}(X) + w_{\emptyset}(Y) = D(C_0, X) + D(C_0, Y)$. We consider two minimum weight matchings, whose values are $D(C_0, X)$, and $D(C_0, Y)$. Each $c_j \in C_O$ is mapped by $M_X$ to some $x_j \in X$ and by $M_Y$ to some $y_j \in Y$. We show that the bijection $g(x_j) = y_j$ satisfies the GQC property. Because X and Y are minimum weight matchings, $w(X) + w(Y)$ is an upper bound of $D(X, Y)$. By the difinition of $g$, we maintain the indeces of our points when transitioning $X \rightarrow C_0 \rightarrow Y$. By a pointwise approach, we see that we satsify the GQC property with equality. We can think of this as doubling the number of servers at locations in $C_0$ and then matching them to the points in $X$ and $Y$. Each point in $X$ and $Y$ will appear exactly once on either side of the equation.
 
-    For the induction step, we assume $w$ satisfies the GQC property, and we now have a new request $r$. We show that $w'$ satisfies GQC. We know that there exists some $x \in X$ such that $w'(X) = w(X-x+r) + d(x,r)$, and similarly there exists some $y \in Y$ such that $w'(Y) = w(Y-y+r) + d(y,r)$. We know there exists a bijectiong $g: (X-x+r) \rightarrow (Y-y+r)$ that satsfies the GQC property, where $g(r) = r$. We define $\tilde{g}: X \rightarrow Y$ as follows:
+    For the induction step, we assume $w$ satisfies the GQC property, and we now have a new request $r$. We show that $w'$ satisfies GQC. We know that there exists some $x \in X$ such that $w'(X) = w(X-x+r) + d(x,r)$, and similarly there exists some $y \in Y$ such that $w'(Y) = w(Y-y+r) + d(y,r)$. We know there exists a bijection $g: (X-x+r) \rightarrow (Y-y+r)$ that satsfies the GQC property, where $g(r) = r$. We define $\tilde{g}: X \rightarrow Y$ as follows:
 
     \begin{equation*}
         \tilde{g}(z) = \begin{cases}
