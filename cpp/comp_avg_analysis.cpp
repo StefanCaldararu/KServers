@@ -198,7 +198,7 @@ double num_inputs;
 std::vector<cost> results;
 std::mutex m;
 std::condition_variable cv;
-int SigmaLength = 3;
+int SigmaLength = 5;
 std::vector <int> current_input;
 
 //The competitive ratios for each algorithm
@@ -206,6 +206,11 @@ double WFA_CR = 0;
 double greedy_CR = 0;
 double DC_CR = 0;
 double KC_CR = 0;
+//The average case analysis for each algorithm
+long long int WFA_ACA = 0;
+long long int greedy_ACA = 0;
+long long int DC_ACA = 0;
+long long int KC_ACA = 0;
 
 void producer_function (int threadID, state theState, Buffer &buffer, int k){
     //first, we need to compute the FIRST state, and make sure we get the correct cost. then output that, and start the while loop.
@@ -411,6 +416,17 @@ void consumer_function(int threadID, int k, Buffer &buffer){
             DC_CR = static_cast<double>(results.DC) / static_cast<double>(results.OPT);
         if(results.OPT != 0 && static_cast<double>(results.KC) / static_cast<double>(results.OPT) > KC_CR)
             KC_CR = static_cast<double>(results.KC) / static_cast<double>(results.OPT);
+
+        //update the average case analysis variables.
+        WFA_ACA += results.WFA;
+        WFA_ACA -= results.OPT;
+        greedy_ACA += results.greedy;
+        greedy_ACA -= results.OPT;
+        DC_ACA += results.DC;
+        DC_ACA -= results.OPT;
+        KC_ACA += results.KC;
+        KC_ACA -= results.OPT;
+
     }
 
 }
@@ -526,10 +542,25 @@ int main(int argc, char ** argv)
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
     std::cout << duration.count() <<std::endl;
     //output the competitive ratios
+    //output the number of points in the metric space
+    writer.writeLine("Size of metric space: " + std::to_string(size));
+    writer.writeLine("Number of servers: " + std::to_string(num_servers));
+    writer.writeLine("Input Length: " + std::to_string(SigmaLength));
     writer.writeLine("WFA COMP RATIO: " + std::to_string(WFA_CR));
     writer.writeLine("GREEDY COMP RATIO: " + std::to_string(greedy_CR));
     writer.writeLine("DC COMP RATIO: " + std::to_string(DC_CR));
     writer.writeLine("KC COMP RATIO: " + std::to_string(KC_CR));
+
+    //write an empty line
+    writer.writeLine("");
+    //get the total number of requests we had...
+    writer.writeLine("Total number of requests: " + std::to_string(num_inputs));
+    //output the average case analysis
+    writer.writeLine("WFA ACA: " + std::to_string(WFA_ACA));
+    writer.writeLine("GREEDY ACA: " + std::to_string(greedy_ACA));
+    writer.writeLine("DC ACA: " + std::to_string(DC_ACA));
+    writer.writeLine("KC ACA: " + std::to_string(KC_ACA));
+
 
     //TODO: now need to output a file with all of the data!
     
