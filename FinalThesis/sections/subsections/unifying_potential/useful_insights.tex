@@ -1,13 +1,73 @@
-In this section, we provide a couple of useful insights that have been noted while looking at the unifying potential. Additionally, we go over a few of the proofs provided in~\cite{unifyingPotential2021}. 
+In this section, we provide a couple of useful insights that have been noted while looking at the unifying potential. These range from general properties of work functions, to specific properties for the unifying potential. Additionally, we go over a few of the proofs provided in~\cite{unifyingPotential2021}. 
 
-\subsubsection*{$k=2$ is $k$ competitive}
-
-Here, we follow the proof provided in the apendix of~\cite{unifyingPotential2021}.
+\subsubsection*{General Work Properties}
 
 \begin{lemma}
-    For any work function $w$ with $k = 2$ and on any metric space, $\Phi(w) = \Phi_{x_1, r} (w)$, and therefore the WFA is 2 competitive.
+    \label{lem:lip}
+    Work functions are 1-Lipschitz, i.e. for any work function and any two configurations $X$, $Y$ on any metric space, the following property holds: 
+    \begin{equation*}
+        w(X) - w(Y) \leq d(X, Y)
+    \end{equation*} 
 \end{lemma}
 
 \begin{proof}
-    We will show that for any $x_1, x_2 \in M$, $\Phi_{x_1, x_2} (w) \geq min\{ \Phi_{x_1, r}, \Phi_{x_2, r}\}$, proving the lemma.
+    This follows directly from the triangle inequality, and is more self explanatory in the following form: 
+    
+    \begin{equation*}
+        w(X) \leq w(Y) + d(X, Y)
+    \end{equation*}
+
+    This says that the \textit{worst} value for the work done to get into configuration $X$ would be the work done to get into configuraiton $Y$, plus the cost to transfer between the two configurations.
 \end{proof}
+
+\begin{definition}
+    It is said that configuration $Y$ \textbf{supports} $X$ if the following property holds:
+    \begin{equation*}
+        w(X) - w(Y) = d(X,Y)
+    \end{equation*}
+\end{definition}
+
+\begin{lemma}
+    A lazy optimal algorithm $OPT$ has no reason to be in a configuration that is supported by another configuration.
+\end{lemma}
+
+\begin{proof}
+    Suppose $OPT$ is in a configuraiton $X$ that is supported by another configuration $Y$ after servicing some request $r_i$. Suppose points in $X$ and $Y$ are indexed according to their minimum cost matching, i.e. $x_j$ matches with $y_j$ in the matching. We can define a new offline algorithm, $OPT_1$, which ends in configuration $Y$ after servicing $r_i$. Following this, Whenever $OPT$ services a request $r$ with the $j$th server located at $x_j$, $OPT_1$ will service the request with the same server, located at $y_j$. We know that $d(y_j, r) \leq d(y_j, x_j) + d(x_j, r)$, and $OPT$ has already incurred the cost $d(y_j, x_j)$ (by the definition of support). Therefore, the cost incurred by $OPT_1$ will be less than or equal to that incurred by $OPT$.
+\end{proof}
+
+This provides some useful insights, and a new way of looking at this problem. Since at each step, we know that $OPT$ can only be in a limited set of configurations (the set of configurations that are not supported by other configurations), we must only "keep up" with those.
+
+\begin{definition}
+    A \textbf{tree graph} is a set of nodes that are connected by edges which is acyclic (No path of unique edges leads back to the starting node), and satisfies the metric property. Additionally, a \textbf{leaf node} is one that is only connected by \textit{one} edge to the rest of the graph.
+\end{definition}
+
+\begin{lemma}
+    For any metric space $M$ that can be represented as a tree graph, there exists a minimizer $A$ of $r$ with respect to $w$ such that every $x \in A$, $x$ is a leaf node.
+\end{lemma}
+
+\begin{proof}
+    Suppose $A$ is a minimizer of $r$ with respect to $w$, with $x \in A$ such that $x$ is not a leaf node. We will show that for some leaf node $l$, $A-x+l$ is a minimizer of $r$ with respect to $w$. 
+
+    Because $x$ is not a leaf node, it must be connected to at least two other nodes. This means that there exists some node $y$ that is connected to $x$ by an edge, where $d(x,r) + d(x,y) = d(y,r)$. Therefore, we have the following:
+
+    \begin{equation*}
+        \begin{gathered}
+            w(A-x+y) - \Sigma_{a \in A-x+y} d(a,r) = w(A-x+y) - \Sigma_{a \in A} d(a,r) + d(x,r) - d(y,r) \\
+            = w(A-x+y) - \Sigma_{a \in A} d(a,r) + d(x,r) - d(x,r) - d(x,y)\\
+            = w(A-x+y) - \Sigma_{a \in A} d(a,r) - d(x,y) \leq w(A) - \Sigma_{a \in A} d(a,r)
+        \end{gathered}
+    \end{equation*}
+
+    Where the final inequality holds by eq.~\ref{lem:lip}.
+\end{proof}
+% \subsubsection*{$k=2$ is $k$ competitive}
+
+% Here, we follow the proof provided in the apendix of~\cite{unifyingPotential2021}.
+
+% \begin{lemma}
+%     For any work function $w$ with $k = 2$ and on any metric space, $\Phi(w) = \Phi_{x_1, r} (w)$, and therefore the WFA is 2 competitive.
+% \end{lemma}
+
+% \begin{proof}
+%     We will show that for any $x_1, x_2 \in M$, $\Phi_{x_1, x_2} (w) \geq min\{ \Phi_{x_1, r}, \Phi_{x_2, r}\}$, proving the lemma.
+% \end{proof}
