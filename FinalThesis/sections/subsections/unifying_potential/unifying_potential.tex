@@ -1,0 +1,47 @@
+In this section, we describe a unifying potential~\cite{unifyingPotential2021} that is a promising candidate for proving that the $WFA$ is $k$ competitive. This potential is used to show that various subcases (ex. $k=2$, $k=n-1$, $k=n-2$, and various specialized metric spaces) are $k$ competitive. While many of these subcases have been shown to be $k$ competitive in the past~\cite{server1991, server2009, server1996, server2004, server2002}, the novelty of this approach is a \textit{single} potential function that is able to prove all of these cases. The authors of this unifying potential work take this as indication that it may be possible to prove the general $k$ competitiveness for the $WFA$ using this potential.
+
+\begin{definition}
+    The \textbf{diameter} $\Delta$ of a metric space $M$ is defined as the largest distance between any two points in the metric space.
+    \begin{equation*}
+        \Delta = max_{x, y \in M} \{ d(x,y)\}
+    \end{equation*}
+\end{definition}
+
+\begin{definition}
+    A point $\tilde{x} \in M$ is called an \textbf{antipode} of another point $x \in M$ if for every $y \in M$, $d(x,y) + d(y, \tilde{x}) = \Delta$.
+\end{definition}
+
+It is worth noting that every metric space can be easily extended such that every point has an antipode. This is done by defining a copy of the original metric space, $\tilde{M}$, where for every point $x \in M$, we have a copy $\tilde{x} \in \tilde{M}$. We denote the diameter of the original metric space $\Delta$. Distances within $\tilde{M}$ and between the two spaces are defined as follows:
+
+\begin{equation*}
+    \begin{gathered}
+        d(\tilde{x}, \tilde{y}) = d(x,y)\\ \\
+        d(\tilde{x}, y) = 2\Delta - d(x,y)
+    \end{gathered}
+\end{equation*}
+
+It is worth noting that the diameter of this extended metric space will be $2\Delta$, and every point will have an antipode.
+
+\begin{definition}
+    For a metric space $M$ where every point $x \in M$ has an antipode $\tilde{x}$, we define the function \textbf{$\Phi_{x_1, x_2, ..., x_k}$} for a given configuration $x_1, x_2, ..., x_k$ as:
+
+    \begin{equation*}
+        \Phi_{x_1, x_2, ..x_k}(w) := \Sigma_{i=0}^k w(\tilde{x_i}^i, x_{i+1}, ..., x_k)
+    \end{equation*}
+
+    where $x^i$ represents $i$ copies of the point $x$.
+\end{definition}
+
+\begin{definition}
+    We define the \textbf{potential} $\Phi (w)$ as:
+
+    \begin{equation*}
+        \Phi(w) := min_{x_1, x_2, ..., x_k \in M} \Phi_{x_1, x_2..., x_k} (w)
+    \end{equation*}
+\end{definition}
+
+\begin{lemma}
+    For a metric space $M$ where every point has an antipode, If for every request $r \in M$ and for every work function $w_0$, $w_1$, ..., $w_n$ it holds that $\Phi(w) = \Phi_{x_1, x_2, ..., x_k}(w)$ for some $x_1, x_2, ...x_k \in M$ where $x_k = r$, then the $WFA$ is $k$ competitive on the metric space $M$.
+\end{lemma}
+
+While a proof for this is not provided here, we reference~\cite{unifyingPotential2021}, where a complete proof of this lemma is provided. This involves definition of a $n-k$ evader potential $\tilde{\Phi}$, which is the dual to this problem. In this formulation, you have $n-k$ evaders in a metric space that must move away from requested points. It is clear that a solution to the evader problem would yield a $k$ server solution.
