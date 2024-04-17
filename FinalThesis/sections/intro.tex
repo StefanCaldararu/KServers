@@ -22,3 +22,18 @@ Algorithm \textit{ALG} is said to be \textbf{\textit{c}-competitive} if for ever
 Competitive analysis is in some sense similar to "worst case" analysis, where we try to see how poorly an algorithm will ever perform. It is worth noting that some algorithms such as a greedy algorithm may perform very well on the majority of inputs, but given specific inputs may not be competitive at all. That is, given some value $c$, a finite length input can be found such that the algorithm doesn't satisfy the above definition. 
 \\ \\
 Additionally, a lower bound of $k$ has been shown for any online algorithm's competitive ratio. This means that if we are looking at the 3-Servers problem, the best competitive ratio an online algorithm can achieve is 3~\cite{OnlineComp1998}.
+
+\subsection{$k$ competitive lower bound}
+\label{sec:lowerBound}
+
+In this section, we follow a proof for a lower bound of the $k$ server problem, as described in~\cite{server2009}. 
+
+\begin{lemma}
+    For a metric space $M$ where $|M| > k$, no online algorithm $ALG$ can have competitive ratio less than $k$
+\end{lemma}
+
+\begin{proof}
+    We begin by restricting all requests to a sub-metric space which has $k+1$ points. Within this metric space, there are $k+1$ possible configurations of the $k$ servers. We begin by maintaining $k$ offline algorithms (denoted $OPT_1, OPT_2, ..., OPT_k$), where each of these algorithms has a different configuration, and none have the same configuration as $ALG$. We denote the configuration of $ALG$ as $x_1, x_2, ...x_k \in M$. We begin by requesting the point $r \not \in x_1, x_2, ...x_k$. All of the offline algorithms are able to service this request without moving any servers, while $ALG$ must move some server from $x_i$ to service this point. At this point we will have $OPT_i$, the offline algorithm that has no server at $x_i$, move its server from $r$ to $x_i$ preemptively. We then repeat this process.
+
+    This shows that the cost incurred by $ALG$ will be equal to the sum of the costs incurred by all of the offline algorithms, showing that the competitive ratio of $ALG$ will be at least $k$.
+\end{proof}
