@@ -2,11 +2,7 @@
 We begin with a couple of notation definitions for clarity.
 
 \begin{definition}
-    A request sequence $\sigma$ can be broken up into sub-parts, where $\sigma_i$ represents the first $i$ requests from within the request sequence
-\end{definition}
-
-\begin{definition}
-    A set $C$ of k-points from within the metric space $M$ that the $WFA$ is operating in is called a \textbf{configuration}, representing the locations of the servers. Additionally, the initial configuration before any requests have been processed is denoted $C_0$, and the configuration after the WFA has operated on the first $i$ requests is denoted $C_{\sigma_i}$. Additionally, $C$ can be used to denote an arbitrary configuration after servicing some request sequence $\sigma_i$, in which case $C'$ denotes the configuration after servicing the next request, i.e. servicing the request sequence $\sigma_{i+1}$.
+    A set $C$ of k-points from within the metric space $M$ that an algorithm $ALG$ is operating in is called a \textbf{configuration}, representing the locations of the servers. Additionally, the initial configuration before any requests have been processed is denoted $C_0$, and the configuration after $ALG$ has operated on the first $i$ requests is denoted $C_{\sigma_i}$. Additionally, $C$ can be used to denote an arbitrary configuration after servicing some request sequence $\sigma_i$, in which case $C'$ denotes the configuration after servicing the next request, i.e. servicing the request sequence $\sigma_{i+1}$.
 \end{definition}
 
 \begin{definition}
