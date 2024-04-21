@@ -1,0 +1,32 @@
+\begin{definition}
+    A \textbf{Multiray space} is a tree metric space $(X, d)$ wich consists of a central node $c$, and rays that are rooted at $c$. Every node $x \in X - c$ is connected to \textit{at most} two other nodes. This can be thought of as multiple lines with endpoints joined at $c$.
+\end{definition}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/multiray.png}
+    \caption{An example multiray space}
+\end{figure}
+
+\begin{definition}
+    A \textbf{General Caterpillar Graph} is a tree metric space $(X, d)$ consisting of a central line path, and multiple legs extending from the central path. Each central path node can have 0, 1, or 2 legs attached to it. Each leg is a line segment. The multiray space can be thought of as a compression of a general caterpillar graph, where the distance between nodes on the central line path is 0.
+\end{definition}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/generalCaterpillar.png}
+    \caption{An example general caterpillar graph}
+\end{figure}
+
+\begin{definition}
+    A \textbf{Reduced Caterpillar Graph} is a General Caterpillar Graph where the distances between nodes on the central path are all equal to 1. Additionally, all body nodes have exactly 2 legs attached to them, and each leg has exactly 1 node on it. The reduced caterpillar graph is a special case of the general caterpillar graph.
+\end{definition}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/reducedCaterpillar.png}
+    \caption{An example reduced caterpillar graph}
+\end{figure}
+
+In this section, we will be primarily considering the smallest possible reduced caterpillar graph, consisting of 6 nodes. A unifying potential proof has been shown for multiray spaces, and we will present some notes on the extension of this proof to this highly reduced caterpillar graph. It is worth noting that the $WFA$ can already be shown to be $k$ competitive on this space with a variety of proofs. That is, 2 servers have been shown to be 2 competitive on general metric spaces, and 3 servers have been shown to be 3 competitive on trees. 4 servers on this space is a metric space with $k-2$ points, and 5 servers is a metric space of $k-1$ points, which has yet again been shown to be $k$ competitive~\cite{unifyingPotential2021}.
+

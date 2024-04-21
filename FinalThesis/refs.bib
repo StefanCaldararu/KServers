@@ -136,3 +136,121 @@ pages = {1-19}
     year = 2008,
     url = {http://www.openmp.org/mp-documents/spec30.pdf}
 }
+
+@inproceedings{KS1988,
+author = {Manasse, Mark and McGeoch, Lyle and Sleator, Daniel},
+title = {Competitive algorithms for on-line problems},
+year = {1988},
+isbn = {0897912640},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/62212.62243},
+doi = {10.1145/62212.62243},
+abstract = {An on-line problem is one in which an algorithm must handle a sequence of requests, satisfying each request without knowledge of the future requests. Examples of on-line problems include scheduling the motion of elevators, finding routes in networks, allocating cache memory, and maintaining dynamic data structures. A competitive algorithm for an on-line problem has the property that its performance on any sequence of requests is within a constant factor of the performance of any other algorithm on the same sequence. This paper presents several general results concerning competitive algorithms, as well as results on specific on-line problems.},
+booktitle = {Proceedings of the Twentieth Annual ACM Symposium on Theory of Computing},
+pages = {322–333},
+numpages = {12},
+location = {Chicago, Illinois, USA},
+series = {STOC '88}
+}
+
+@article{KS1990,
+title = {Competitive algorithms for server problems},
+journal = {Journal of Algorithms},
+volume = {11},
+number = {2},
+pages = {208-230},
+year = {1990},
+issn = {0196-6774},
+doi = {https://doi.org/10.1016/0196-6774(90)90003-W},
+url = {https://www.sciencedirect.com/science/article/pii/019667749090003W},
+author = {Mark S Manasse and Lyle A McGeoch and Daniel D Sleator},
+abstract = {The k-server problem is that of planning the motion of k mobile servers on the vertices of a graph under a sequence of requests for service. Each request consists of the name of a vertex, and is satisfied by placing a server at the requested vertex. The requests must be satisfied in their order of occurrence. The cost of satisfying a sequence of requests is the distance moved by the servers. In this paper we study on-line algorithms for this problem from the competitive point of view. That is, we seek to develop on-line algorithms whose performance on any sequence of requests is as close as possible to the performance of the optimum off-line algorithm. We obtain optimally competitive algorithms for several important cases. Because of the flexibility in choosing the distances in the graph and the number of servers, the k-server problem can be used to model a number of important paging and caching problems. It can also be used as a building block for solving more general problems. We show how server algorithms can be used to solve a seemingly more general class of problems known as task systems.}
+}
+
+@article{MP2002,
+title = {The 3-server problem in the plane},
+journal = {Theoretical Computer Science},
+volume = {289},
+number = {1},
+pages = {335-354},
+year = {2002},
+issn = {0304-3975},
+doi = {https://doi.org/10.1016/S0304-3975(01)00305-X},
+url = {https://www.sciencedirect.com/science/article/pii/S030439750100305X},
+author = {Wolfgang W. Bein and Marek Chrobak and Lawrence L. Larmore},
+abstract = {In the k-server problem we wish to minimize, in an online fashion, the movement cost of k servers in response to a sequence of requests (we assume that k⩾2). The request issued at each step is specified by a point r in a given metric space M. To serve this request, one of the k servers must move to r. It is known that if M has at least k+1 points then no online algorithm for the k-server problem in M has competitive ratio smaller than k. The best known upper bound on the competitive ratio in arbitrary metric spaces, by Koutsoupias and Papadimitriou (J. ACM 42 (1995) 971), is 2k−1. There are only a few special cases for which k-competitive algorithms are known: for k=2, when M is a tree, or when M has at most k+2 points. We prove that the Work Function Algorithm is 3-competitive for the 3-server problem in the Manhattan plane. As a corollary, we obtain a 4.243-competitive algorithm for 3 servers in the Euclidean plane. The best previously known competitive ratio for 3 servers in these metric spaces was 5.}
+}
+
+@article{harm2000,
+author = {Bartal, Yair and Grove, Eddie},
+title = {The harmonic k-server algorithm is competitive},
+year = {2000},
+issue_date = {Jan. 2000},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {47},
+number = {1},
+issn = {0004-5411},
+url = {https://doi.org/10.1145/331605.331606},
+doi = {10.1145/331605.331606},
+abstract = {The k-server problem is a generalization of the paging problems, and is the most studied problem in the area of competive online problems. The Harmonic algorithm is a very natural and simple randomized algorithm for the k-server problem. We give a simple proof that the Harmonic k-server algorithm is competitive. The competitive ratio we prove is the best currently known fo the algorithm. The Harmonic algorithm is memoryless and time-efficient. This is the only such algorithm known to be competitive for the k-server problem.},
+journal = {J. ACM},
+month = {jan},
+pages = {1–15},
+numpages = {15}
+}
+
+@article{new1991,
+author = {Chrobak, M. and Karloof, H. and Payne, T. and Vishwnathan, S.},
+title = {New Ressults on Server Problems},
+journal = {SIAM Journal on Discrete Mathematics},
+volume = {4},
+number = {2},
+pages = {172-181},
+year = {1991},
+doi = {10.1137/0404017},
+
+URL = {https://doi.org/10.1137/0404017},
+eprint = {https://doi.org/10.1137/0404017}
+}
+
+@article{tree1991,
+author = {Chrobak, Marek and Larmore, Lawrence L.},
+title = {An Optimal On-Line Algorithm for K Servers on Trees},
+journal = {SIAM Journal on Computing},
+volume = {20},
+number = {1},
+pages = {144-148},
+year = {1991},
+doi = {10.1137/0220008},
+URL = {https://doi.org/10.1137/0220008},
+eprint = {https://doi.org/10.1137/0220008}
+}
+
+@article{evader1996,
+title = {The 2-evader problem},
+journal = {Information Processing Letters},
+volume = {57},
+number = {5},
+pages = {249-252},
+year = {1996},
+issn = {0020-0190},
+doi = {https://doi.org/10.1016/0020-0190(96)00010-5},
+url = {https://www.sciencedirect.com/science/article/pii/0020019096000105},
+author = {Elias Koutsoupias and Christos Papadimitriou},
+keywords = {On-line algorithms, Analysis of algorithms, Server problem},
+abstract = {It is shown that the work function algorithm for the 2-evader problem has competitive ratio m − 2 for all metric spaces with m points. This settles the k-server conjecture for metric spaces with k + 2 points.}
+}
+
+@article{advice2015,
+title = {On Online Algorithms with Advice for the K-Server Problem},
+journal = {Theory of Computing Systems},
+volume = {56},
+number = {1},
+pages = {3-21},
+author = {Renault, Marc P. and Ros\'en, Adi},
+year = {2015},
+url = {https://doi.org/10.1007/s00224-012-9434-z},
+doi = {10.1007/s00224-012-9434-z}
+}
