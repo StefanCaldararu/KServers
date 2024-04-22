@@ -24,3 +24,13 @@ The \texttt{csv\_parser\_parralel2} implements a producer-consumer framework wit
 The final implementation uses a memoization approach to increase efficiency. This is possisble due to the nature of the \KS problem. For a request sequence of length $i$, any online algorithm $ALG$ will have the exact same result (with the exception of \texttt{randAlg}) for the first $i-1$ inputs, regardless of the $i$th input. this means that for a metric space consisting of 10 points, we are computing costs for request sequences of length $i-1$ 10 times more than we actually need to! The \texttt{all\_efficient} saves multiple configuration / request sequence states for each algorithm in memory, allowing it to reuse the results of previous runs. THis allows for a significant speedup in the computation of the costs for each algorithm, with the use of slightly more memory.
 
 Additionally, example \texttt{.sub} scripts are provided for use on a High Throughput Cluster using Condor. This allows for easy submission of multiple jobs to the cluster~\cite{htcondor}. 
+
+\subsubsection*{Input Generation}
+
+There are various files provided dedicated to generating different inputs. Each file behaves very similarly, with variance in the type of metric space generated. Additionally, some files may be outdated and generate additional information that is hard-coded in the more recent analysis implementations. All of these assume unit lengths between any two connected nodes. The \texttt{generateInputLine} and \texttt{generateInputCircle} are the most basic input generation mechanisms, which generate metric spaces for lines and circles. These both have the parameters hard-coded in the files, and must be manually modified to get various numbers of poitns on the line and servers.
+
+The \texttt{generateStar} and \texttt{generateStar1} files each generate Multiray spaces, with the \texttt{generateStar1} having the restriction that each node other than $c$ is connected \textit{only} to $c$, with a unit length. These must also have the parameters modified within the files.
+
+Finally, the \texttt{generateInputCaterpillar} file will generate a reduced caterpillar graph as described above. It takes three parameters as input when run as an exectuable: the number of nodes on the central path, the number of requests per request sequence, and the number of servers to run with. 
+
+It is worth noting that for the most advanced analysis methods, some variables such as the input request sequence lengths and number of servers are hard-coded within the analysis tool. Earlier versions take these as input along with the metric space.
