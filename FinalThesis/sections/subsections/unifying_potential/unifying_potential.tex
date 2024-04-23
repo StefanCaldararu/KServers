@@ -8,25 +8,25 @@ In this section, we describe a unifying potential~\cite{unifyingPotential2021} t
 \end{definition}
 
 \begin{definition}
-    A point $\tilde{x} \in M$ is called an \textbf{antipode} of another point $x \in M$ if for every $y \in M$, $d(x,y) + d(y, \tilde{x}) = \Delta$.
+    A point $\bar{x} \in M$ is called an \textbf{antipode} of another point $x \in M$ if for every $y \in M$, $d(x,y) + d(y, \bar{x}) = \Delta$.
 \end{definition}
 
-It is worth noting that every metric space can be easily extended such that every point has an antipode. This is done by defining a copy of the original metric space, $\tilde{M}$, where for every point $x \in M$, we have a copy $\tilde{x} \in \tilde{M}$. We denote the diameter of the original metric space $\Delta$. Distances within $\tilde{M}$ and between the two spaces are defined as follows:
+It is worth noting that every metric space can be easily extended such that every point has an antipode. This is done by defining a copy of the original metric space, $\bar{M}$, where for every point $x \in M$, we have a copy $\bar{x} \in \bar{M}$. We denote the diameter of the original metric space $\Delta$. Distances within $\bar{M}$ and between the two spaces are defined as follows:
 
 \begin{equation*}
     \begin{gathered}
-        d(\tilde{x}, \tilde{y}) = d(x,y)\\ \\
-        d(\tilde{x}, y) = 2\Delta - d(x,y)
+        d(\bar{x}, \bar{y}) = d(x,y)\\ \\
+        d(\bar{x}, y) = 2\Delta - d(x,y)
     \end{gathered}
 \end{equation*}
 
-It is worth noting that the diameter of this extended metric space will be $2\Delta$, and every point will have an antipode. Additionallay, on an extended metric space $M \cup \tilde{M}$ where every point $p \in M$ has an antipode $\tilde{p} \in \tilde{M}$, for any point $q \in M$ and any point $\tilde{r} \in \tilde{M}$, $d(p,q) \leq d(p,\tilde{r})$. This just states that the cost for traversing to a node on the current subgraph you are on is \textit{always} less than or equal to the cost of traversing to the other subgraph.
+It is worth noting that the diameter of this extended metric space will be $2\Delta$, and every point will have an antipode. Additionallay, on an extended metric space $M \cup \bar{M}$ where every point $p \in M$ has an antipode $\bar{p} \in \bar{M}$, for any point $q \in M$ and any point $\bar{r} \in \bar{M}$, $d(p,q) \leq d(p,\bar{r})$. This just states that the cost for traversing to a node on the current subgraph you are on is \textit{always} less than or equal to the cost of traversing to the other subgraph.
 
 \begin{definition}
-    For a metric space $M$ where every point $x \in M$ has an antipode $\tilde{x}$, we define the function \textbf{$\Phi_{x_1, x_2, ..., x_k}$} for a given configuration $x_1, x_2, ..., x_k$ as:
+    For a metric space $M$ where every point $x \in M$ has an antipode $\bar{x}$, we define the function \textbf{$\Phi_{x_1, x_2, ..., x_k}$} for a given configuration $x_1, x_2, ..., x_k$ as:
 
     \begin{equation*}
-        \Phi_{x_1, x_2, ..x_k}(w) := \Sigma_{i=0}^k w(\tilde{x_i}^i, x_{i+1}, ..., x_k)
+        \Phi_{x_1, x_2, ..x_k}(w) := \Sigma_{i=0}^k w(\bar{x_i}^i, x_{i+1}, ..., x_k)
     \end{equation*}
 
     where $x^i$ represents $i$ copies of the point $x$.
@@ -44,4 +44,4 @@ It is worth noting that the diameter of this extended metric space will be $2\De
     For a metric space $M$ where every point has an antipode, If for every request $r \in M$ and for every work function $w_0$, $w_1$, ..., $w_n$ it holds that $\Phi(w) = \Phi_{x_1, x_2, ..., x_k}(w)$ for some $x_1, x_2, ...x_k \in M$ where $x_k = r$, then the $WFA$ is $k$ competitive on the metric space $M$.
 \end{lemma}
 
-While a proof for this is not provided here, we reference~\cite{unifyingPotential2021}, where a complete proof of this lemma is provided. This involves definition of a $n-k$ evader potential $\tilde{\Phi}$, which is the dual to this problem. In this formulation, you have $n-k$ evaders in a metric space that must move away from requested points. It is clear that a solution to the evader problem would yield a $k$ server solution.
+While a proof for this is not provided here, we reference~\cite{unifyingPotential2021}, where a complete proof of this lemma is provided. This involves definition of a $n-k$ evader potential $\bar{\Phi}$, which is the dual to this problem. In this formulation, you have $n-k$ evaders in a metric space that must move away from requested points. It is clear that a solution to the evader problem would yield a $k$ server solution.

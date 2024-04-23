@@ -38,10 +38,11 @@ In this section, we provide a couple of useful insights that have been noted whi
 This provides some useful insights, and a new way of looking at this problem. Since at each step, we know that $OPT$ can only be in a limited set of configurations (the set of configurations that are not supported by other configurations), we must only "keep up" with those.
 
 \begin{definition}
-    A \textbf{tree graph} is a set of nodes that are connected by edges which is acyclic (No path of unique edges leads back to the starting node), and satisfies the metric property. Additionally, a \textbf{leaf node} is one that is only connected by \textit{one} edge to the rest of the graph.
+    A \textbf{tree graph} is a set of nodes that are connected by edges which is acyclic (No path of unique edges leads back to the starting node), and satisfies the metric property. Additionally, a \textbf{leaf node} is one that is only connected by \textit{one} edge to the rest of the graph. The set of all leaf nodes for a graph is denoted $L$.
 \end{definition}
 
 \begin{lemma}
+    \label{lem:leaf}
     For any metric space $M$ that can be represented as a tree graph, there exists a minimizer $A$ of $r$ with respect to $w$ such that every $x \in A$, $x$ is a leaf node.
 \end{lemma}
 

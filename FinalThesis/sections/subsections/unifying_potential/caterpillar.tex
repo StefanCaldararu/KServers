@@ -30,3 +30,133 @@
 
 In this section, we will be primarily considering the smallest possible reduced caterpillar graph, consisting of 6 nodes. A unifying potential proof has been shown for multiray spaces, and we will present some notes on the extension of this proof to this highly reduced caterpillar graph. It is worth noting that the $WFA$ can already be shown to be $k$ competitive on this space with a variety of proofs. That is, 2 servers have been shown to be 2 competitive on general metric spaces, and 3 servers have been shown to be 3 competitive on trees. 4 servers on this space is a metric space with $k-2$ points, and 5 servers is a metric space of $k-1$ points, which has yet again been shown to be $k$ competitive~\cite{unifyingPotential2021}.
 
+\subsubsection*{Symetry property of the potential function for the Multiray Space}
+
+The following definitions and lemmas are drawn directly from~\cite{unifyingPotential2021}, which lead to a proof of $k$ competitiveness for the $WFA$ on the Multiray metric space. We include some explanatory details. In the following section, we will demonstrate some attempts at extending these proofs to the reduced caterpillar graph.
+
+\begin{definition}
+    We define $m_w(X)$ for a configuration $X$ as:
+    \begin{equation*}
+        m_w(X) = w(X) - \Sigma_{i=1} ^ k d(c, x_i)
+    \end{equation*}
+\end{definition}
+
+\begin{lemma}
+    There exists leaves $l_1, l_2, ..., l_k$ such that: 
+    \begin{equation*}
+        min_X m_w(X) = m_w (l_1, l_2, ..., l_k)
+    \end{equation*}
+\end{lemma}
+
+\begin{proof}
+    This follows in a similar manner to lemma~\ref{lem:leaf}. Suppose we have some $X$ that minimizes the above quantity, with some $x \not \in L$. Now, suppose we slide $x$ away from $C$ towards a leaf node. $d(c, x)$ will increase by the distance moved, and $w(X)$ will increase by at most the distance moved. Therefore, we can always find a leaf node that minimizes this quantity.
+\end{proof}
+
+\begin{lemma}
+    For any w, a leaf $l$, and a configuration $x_1, x_2 ... x_k \in M$, 
+    \begin{equation*}
+        \begin{gathered}
+            w(\bar{l^i}, x_{i+1}, ..., x_k) = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ m_w(X) + i(\Delta - d(c, l)) + \Sigma_{j=i+1} ^ k d(c, x_j)\}
+        \end{gathered}
+    \end{equation*}
+\end{lemma}
+
+\begin{proof}
+    \begin{equation*}
+        \begin{gathered}
+            w(\bar{l^i}, x_{i+1}, ..., x_k) = min_{x_{i+1}, ..., x_k \subseteq X} w(X) + \Sigma_{j=1}^i d(x_j, \bar{l}) \\
+            = min_{x_{i+1}, ..., x_k \subseteq X} w(X) + i\Delta - \Sigma_{j=1}^i d(x_j, l)
+        \end{gathered}
+    \end{equation*}
+
+    The first part of the above equation follows directly because there will never be any requests to the antipodal points, so the configuration $\bar{l^i}, x_{i+1} ..., x_k$ is supported by the configuration $X$. the second part of this equation follows from the definition of the antipodal points. Next, we claim that the minimum for this quantity is achieved by some $X$ such that $X - x_{i+1} ..., x_k \subseteq L - l$. Suppose some $x \in X - x_{i+1} ..., x_k$ but $x \not \in L - l$. If we slide $x$ away from $l$ towards some other leaf node, then $\Sigma_{j=1}^i d(x_j, \bar{l})$ will increase by the distance moved, and w(X) increases by at most the distance moved. this is similar to the proof of lemma~\ref{lem:leaf}. Additionally, we know that every distance $\Sigma_{j = 1}^i d(x_j, l)$ must pass through the center node, as the distance from any leaf node to any other leaf node goes through the center. Therefore, for each $x_j\in X - x_{i+1} ..., x_k$, $d(x_j, l)  = d(c, x_j) + d(c, l)$. This allows us to rewrite the above equation as:
+
+    \begin{equation*}
+        \begin{gathered}
+            min_{x_{i+1}, ..., x_k \subseteq X} w(X) + i\Delta - \Sigma_{j=1}^i d(x_j, \bar{l^i}) \\
+            = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i * d(c, l) - \Sigma_{j=1} ^ i d(c, x_j)\}\\
+             = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i * d(c, l) - \Sigma_{j=1} ^ i d(c, x_j) + \Sigma_{j=i+1}^k d(c, x_j) - \Sigma_{j=1}^k d(c, x_j)\} \\
+             = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) - \Sigma_{j=1} ^ k d(c, x_j) + i \Delta  - i * d(c, l)+\Sigma_{j=i+1}^k d(c, x_j)\} \\
+             = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ m_w(X) + i(\Delta - d(c, l)) + \Sigma_{j=i+1} ^ k d(c, x_j)\}
+        \end{gathered}
+    \end{equation*}
+\end{proof}
+
+We can now rewrite our potential function as follows: 
+
+\begin{equation*}
+    \begin{gathered}
+        \Phi_{l_1, ..., l_k} (w) = \Sigma_{i=0}^k w(\bar{l_i}^i, l_{i+1}, ..., l_k) \\
+        = \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) + i(\Delta - d(c, l_i)) + \Sigma_{j=i+1}^k d(c, l_j)\} \\
+        = \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) \} + \Sigma_{i=0}^k \{i(\Delta - d(c, l_i)) + \Sigma_{j=i+1}^k d(c, l_j)\} \\
+        = \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) \} + \frac{k(k+1)}{2}\Delta + \Sigma_{i=0}^k \Sigma_{j=i+1}^k \{d(c, l_j) - i d(c, l_i)\} \\
+        = \frac{k(k+1)}{2}\Delta + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\}
+    \end{gathered}
+\end{equation*}
+
+As the last terms in the second to last line get canceled out. This is written compactly in the following equation:
+
+\begin{equation}
+    \begin{gathered}
+        \label{eq:repotential}
+        \Phi_{l_1, ..., l_k} (w) = \frac{k(k+1)}{2}\Delta + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\}
+    \end{gathered}
+\end{equation}
+
+\begin{lemma}
+    Suppose we have some $w$ and $l_1, ..., l_k$ such that $m_w(l_1, ..., l_k) = min_X m_w(X)$. Then $\Phi_{l_1, l_2, ..., l_k}(w)$ is constant under permutations of $l_1, l_2, ..., l_k$.
+\end{lemma}
+
+\begin{proof}
+    For this proof, we will use induction on $k$. For the base case $k=1$, the above lemma follows trivially. For the induction step, we would like to show that if $\Phi_{l_1, l_2, ..., l_{k-1}}(w)$ is constant under permutations of $l_1, l_2, ..., l_{k-1}$, then $\Phi_{l_1, l_2, ..., l_k}(w)$ is constant under permutations of $l_1, l_2, ..., l_k$. To show this, we must just show that $\Phi_{l_1, l_2, ..., l_{k-1}, l_k}(w) = \Phi_{l_1, l_2, ..., l_k, l_{k-1}}(w)$, as the other permutations follow from the induction hypothesis combined with this result. We begin with the following: 
+
+    \begin{equation*}
+        \begin{gathered}
+            \Phi_{l_1, l_2, ..., l_{k-1}, l_k}(w) = \frac{k(k+1)}{2} \Delta + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_{k-1}, l_k \subseteq X_i : X_i - l_{i+1}, ..., l_{k-1}, l_k \subseteq L - l_i} m_w(X_i) \\ \\
+            \Phi_{l_1, l_2, ..., l_k, l_{k-1}}(w) = \frac{k(k+1)}{2} \Delta + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k, l_{k-1} \subseteq X_i : X_i - l_{i+1}, ..., l_k, l_{k-1} \subseteq L - l_i} m_w(X_i)
+        \end{gathered}
+    \end{equation*}
+
+    We note that the \textit{only} two terms that differ between these two equations are the last two, relating to the $X_{k-1}$ and $X_k$ configurations. We can therefore rewrite our two potentials by defining the following term:
+    
+    \begin{equation*}
+        \begin{gathered}
+            \Gamma_{x_1, ..., x_{k-2}}(w) := \frac{k(k+1)}{2} \Delta + \Sigma_{i=0}^{k-2} min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} m_w(X_i)
+        \end{gathered}
+    \end{equation*}
+
+    And we rewrite the potentials as: 
+
+    \begin{equation*}
+        \begin{gathered}
+            \Phi_{l_1, l_2, ..., l_{k-1}, l_k}(w) = \Gamma_{l_1, ..., l_{k-2}}(w) \\
+            + min_{l_{k-1}, l_k \subseteq X_{k-1} : X_{k-1} - l_{k-1} - l_k \subseteq L - l_i} m_w(X_{k-1}) +  min_{l_k \subseteq X_k : X_k - l_k \subseteq L - l_i} m_w(X_{k}) \\ \\
+            \Phi_{l_1, l_2, ..., l_{k}, l_{k-1}}(w) = \Gamma_{l_1, ..., l_{k-2}}(w) \\
+            + min_{l_{k-1}, l_k \subseteq X_{k} : X_{k} - l_{k-1} - l_k \subseteq L - l_i} m_w(X_{k}) +  min_{l_{k-1} \subseteq X_{k-1} : X_{k-1} - l_{k-1} \subseteq L - l_i} m_w(X_{k-1})
+        \end{gathered}
+    \end{equation*}
+    
+    We now define the following for any two leaves $y$ and $z$: 
+
+    \begin{equation*}
+        f(y, z) := min_{z \in Y : Y - z \subseteq L-y} \{ m_w(Y)\} + min_{Z \subseteq L-z} \{ m_w(Z)\}
+    \end{equation*}
+
+    By showing that $f(l_{k-1}, l_k) = f(l_k, l_{k-1})$ we complete the proof.
+    Assume that $l_{k-1} \neq l_k$, as otherwise the lemma would have followed trivially. 
+
+    \begin{equation*}
+        \begin{gathered}
+        f(l_{k-1}, l_k) - f(l_k, l_{k-1})\\
+        = min_{l_k \in Y_1 : Y_1 - l_k \subseteq L - l_{k-1}} \{ m_w(Y_1)\} + min_{Z_1 \subseteq L - l_k} \{ m_w(Z_1)\} \\
+        - min_{l_{k-1} \in Y_2 : Y_2 - l_{k-1} \subseteq L - l_k} \{ m_w(Y_2)\} - min_{Z_2 \subseteq L - l_{k-1}} \{ m_w(Z_2)\} \\
+        = \{ min_{l_k \in Y_1 : Y_1 - l_k \subseteq L - l_{k-1}} \{ m_w(Y_1)\} - min_{Z_2 \subseteq L - l_{k-1}} \{ m_w(Z_2)\}\}\\
+        + \{min_{Z_1 \subseteq L - l_k} \{ m_w(Z_1)\} - min_{l_{k-1} \in Y_2 : Y_2 - l_{k-1} \subseteq L - l_k} \{ m_w(Y_2)\}\} \\ 
+        = 0
+        \end{gathered}
+    \end{equation*}
+\end{proof}
+
+\subsubsection*{Notes on the Symetry property of the potential function for the Multiray Space}
+
+The above lemmas show that the potential function for the Multiray space is symmetric under permutations of the leaf nodes. This is a powerful property, that helps lead to a proof of $k$ competitiveness of the $WFA$ on the Multiray space. In this section, we present various attempts at extending these proofs to the smallest reduced caterpillar graph, which ahs only 6 nodes.
