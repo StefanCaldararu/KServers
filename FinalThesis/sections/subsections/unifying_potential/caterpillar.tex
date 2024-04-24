@@ -30,11 +30,12 @@
 
 In this section, we will be primarily considering the smallest possible reduced caterpillar graph, consisting of 6 nodes. A unifying potential proof has been shown for multiray spaces, and we will present some notes on the extension of this proof to this highly reduced caterpillar graph. It is worth noting that the $WFA$ can already be shown to be $k$ competitive on this space with a variety of proofs. That is, 2 servers have been shown to be 2 competitive on general metric spaces, and 3 servers have been shown to be 3 competitive on trees. 4 servers on this space is a metric space with $k-2$ points, and 5 servers is a metric space of $k-1$ points, which has yet again been shown to be $k$ competitive~\cite{unifyingPotential2021}.
 
-\subsubsection*{Symetry property of the potential function for the Multiray Space}
+\subsubsection*{Symmetry property of the potential function for the Multiray Space}
 
 The following definitions and lemmas are drawn directly from~\cite{unifyingPotential2021}, which lead to a proof of $k$ competitiveness for the $WFA$ on the Multiray metric space. We include some explanatory details. In the following section, we will demonstrate some attempts at extending these proofs to the reduced caterpillar graph.
 
 \begin{definition}
+    \label{def:mw}
     We define $m_w(X)$ for a configuration $X$ as:
     \begin{equation*}
         m_w(X) = w(X) - \Sigma_{i=1} ^ k d(c, x_i)
@@ -42,6 +43,7 @@ The following definitions and lemmas are drawn directly from~\cite{unifyingPoten
 \end{definition}
 
 \begin{lemma}
+    \label{lem:leaf2}
     There exists leaves $l_1, l_2, ..., l_k$ such that: 
     \begin{equation*}
         min_X m_w(X) = m_w (l_1, l_2, ..., l_k)
@@ -157,6 +159,53 @@ As the last terms in the second to last line get canceled out. This is written c
     \end{equation*}
 \end{proof}
 
-\subsubsection*{Notes on the Symetry property of the potential function for the Multiray Space}
+\subsubsection*{Notes on the Symmetry property of the potential function for the Reduced Caterpillar Graph}
 
 The above lemmas show that the potential function for the Multiray space is symmetric under permutations of the leaf nodes. This is a powerful property, that helps lead to a proof of $k$ competitiveness of the $WFA$ on the Multiray space. In this section, we present various attempts at extending these proofs to the smallest reduced caterpillar graph, which ahs only 6 nodes.
+
+Our first problems arise from attempting to write a parallel definition to $m_w(X)$~\ref{def:mw}. We have two options in this scenario. We can either consider the entire body of the Caterpillar graph as the "center", or we can add a new node at the middle of the body. These two cases are shown in fig.~\ref{fig:smallcat}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/center.png}
+    \caption{Two possible representations for the reduced caterpillar graph}
+    \label{fig:smallcat}
+\end{figure}
+
+When considering the case where we define the center as all points on the body of the caterpillar graph, we arrive at the following definitions:
+
+\begin{definition}
+     We define the \textbf{center body} of a reduced caterpillar graph as the following set:
+        \begin{equation*}
+            C := M - L
+        \end{equation*}
+\end{definition}
+
+\begin{definition}
+    We define $m'_w(X)$ for a configuration $X$ as:
+    \begin{equation*}
+        m'_w(X) := w(X) - \Sigma_{i=1} ^ k min_{c \in C} d(c, x_i)
+    \end{equation*}
+\end{definition}
+
+If we add a central node to the caterpillar graph, we arrive at the following definitions:
+
+\begin{definition}
+    We define the \textbf{center node} of a reduced caterpillar graph as an additional node that receives no requests, and is labeled $c'$. Additionally, it is connected only to nodes on in the center body of the graph, with weights of $0.5$.
+\end{definition}
+
+\begin{definition}
+    We define $m''_w(X)$ for a configuration $X$ as:
+    \begin{equation*}
+        m''_w(X) := w(X) - \Sigma_{i=1} ^ k d(c', x_i)
+    \end{equation*}
+\end{definition}
+
+We now attempt to rewrite the potential, as is done for the Multiray space. The parallel to lemma~\ref{lem:leaf2} follows in a similar manner, as for both $m'_w(X)$ and $m''_w(X)$ we can always push a point $x \in X$ to a leaf, by increasing the work done by at most the distance to the center.
+
+We can now attempt to rewrite the potential function using these two interpretations of the "center". We will first consider the case where the center is the entire body of the caterpillar graph. We have:
+
+\begin{equation*}
+    w()
+\end{equation*}
+
