@@ -206,6 +206,17 @@ We now attempt to rewrite the potential, as is done for the Multiray space. The 
 We can now attempt to rewrite the potential function using these two interpretations of the "center". We will first consider the case where the center is the entire body of the caterpillar graph. We have:
 
 \begin{equation*}
-    w()
+    \begin{gathered}
+    w(\bar{l^i}, x_{i+1}, ..., x_k) = min_{x_{i+1}, ..., x_k \subseteq X_i} w(X) + \Sigma_{j=1}^i d(x_j, \bar{l})\\
+    = min_{x_{i+1}, ..., x_k \subseteq X_i} w(X) + i\Delta - \Sigma_{j=1}^i d(x_j, l)
+    \end{gathered}
 \end{equation*}
+
+We can again achieve this minimum with $X-x_{i+1}, ..., x_k\subseteq L-l$. We now must say something about the distance between the specific leaf node $l$ and the arbitrary leaf node $x_j$. The issue we encounter is that the distance between any two leaf nodes is not constant, as it is in the Multiray space. We know that $2 \leq d(l, x_j) \leq 3$, but we cannot say anything more specific. If we attempt to have the center point be in the middle of the body, then we run into earlier issues as there is no requirement for the path between two leaf nodes to pass through the center node. This is demonstrated in the following figure:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/center2.png}
+    \caption{An example reduced caterpillar graph with a central node}
+\end{figure}
 
