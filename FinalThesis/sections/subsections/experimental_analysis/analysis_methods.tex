@@ -23,3 +23,12 @@ The bijective ratio is similar to using direct analysis, except we allow for a b
 \end{definition}
 
 It is important to note that this definition doesn't only compare the ratio of an algorithm to the optimal, but can also be used to compare between two different online algorithms. This can be used to prove an online algorithms optimality~\cite{bij2016}, and allows for some interesting test-case results found in sec.~\ref{sec:analysis}.
+
+\subsubsection*{Average Case Analysis}
+\label{sec:Avg}
+The average case analysis compares the average cost of two algorithms across a set of request sequences to each other. This is useful for comparing algorithms in practice, and additionally allows us to compare two algorithsm without storing their output for every input, which helps with both memory usage and storage usage.
+
+\begin{definition}
+    \label{def:avg}
+    For a given input space $I_n$, we say that algorithm \textit{A} has an average case ratio $c$ with respect to algorithm \textit{B} if the average cost of \textit{A} is at most $c$ times the average cost of \textit{B} over all inputs of length $n$.
+\end{definition}

@@ -220,3 +220,12 @@ We can again achieve this minimum with $X-x_{i+1}, ..., x_k\subseteq L-l$. We no
     \caption{An example reduced caterpillar graph with a central node}
 \end{figure}
 
+We can therefore get an inequality for our potential function, but this breaks any symetry proof we might have. We can write the potential function as follows:
+
+\begin{equation*}
+    \begin{gathered}
+        k^2 + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\} \\
+        \leq \Phi_{l_1, ..., l_k} (w) \leq  \\
+        \frac{k(3k+1)}{2} + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\}
+    \end{gathered}
+\end{equation*}
