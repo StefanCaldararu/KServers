@@ -1,6 +1,14 @@
 \subsection{Outline}
 \label{sec:out}
-In this paper, we consider the \KS problem in a variety of contexts. First, we provide a description of the \KS problem, and an in-depth proof of the $2k-1$ competitiveness of the Work Function Algorithm (WFA). Following this a literature review is provided, focusing on the Unifying Potential for the WFA~\cite{unifyingPotential2021}. We then have an analysis of~\cite{unifyingPotential2021}, and provide some thoughts into a potential extension of this work for caterpillar graphs. Following this, we transition to an analysis of other algorithms focusing on the bijective analysis of these algorithms, and describe a \CC environment provided for practical testing of a variety of these algorithms. We provide some experimental analysis of the algorithms within the testing suite, extending the work done in~\cite{independantStudy2023}.
+In this paper, we consider the \KS problem in a variety of contexts. First, we provide a description of the \KS problem, along with a literature review of historically relavent works. We end the introductory section demonstrating a proof of a lower bound for the problem, additionally introducing the infamous \KS conjecture~\cite{KS1988}. 
+
+In section~\ref{sec:algos}, we provide a brief description of various algorithms that have been proposed and analyzed for the \KS problem. We provide a brief historical background on some of these algorithms, and formal definitions for how the algorithms run.
+
+In section~\ref{sec:wfa}, we focus on the Work Function Algorithm, which has shown promise to be the algorithm that satisfies the \KS conjecture. We then provide and an in-depth proof of the $2k-1$ competitiveness of the Work Function Algorithm ($WFA$), and describe a reduction of the $WFA$ to an efficient implementation leveraging a Min-Cut Max-Flow computation.
+
+Following this an in-depth literature review is provided of the Unifying Potential for the WFA~\cite{unifyingPotential2021}. Additionally, we provide some useful insights into a potential extension of this work for caterpillar graphs. 
+
+Finally, we transition to an analysis of the algorithms described in section~\ref{sec:algos}, focusing on various other forms of analysis. We describe a \CC environment provided for practical testing of these algorithms. Finally, we provide some experimental analysis of the algorithms within the testing suite, extending the work done in~\cite{independantStudy2023}.
 
 \subsection{Notations and Definitions}
 
@@ -18,9 +26,17 @@ We provide a few definitions of notation that will be used throughout the paper 
     An instance of the \KS problem consists of a metric space $M = (X,d)$, a number of servers $k >1$, an algorithm $ALG$, and a request sequence $\sigma = \{ r_1, r_2, ... r_n\}$. The \textbf{cost} inccured on this instance of the \KS problem is denoted as $ALG(\sigma)$.
 \end{definition}
 
+\begin{definition}
+    A set $C$ of $k$ points from within the metric space $M$ that an algorithm $ALG$ is operating in is called a \textbf{configuration}, representing the locations of the servers. Additionally, the initial configuration before any requests have been processed is denoted $C_0$, and the configuration after $ALG$ has operated on the first $i$ requests is denoted $C_{\sigma_i}$. Additionally, $C$ can be used to denote an arbitrary configuration after servicing some request sequence $\sigma_i$, in which case $C'$ denotes the configuration after servicing the next request, i.e. servicing the request sequence $\sigma_{i+1}$.
+\end{definition}
+
+\begin{definition}
+    The distance between two configurations $A$ and $B$ can be computed as the minimum weight matching between the two sets, denoted $D(A, B)$.
+\end{definition}
+
 \subsection{Problem Description}
 \label{sec:desc}
-An instance of the \KS problem can be described by a metric space $M = (X, d)$, a number of servers $k>1$, and an input sequence $\sigma = (r_1, r_2, r_3, ..., r_n)$, where each $r_i$ corresponds to a point in the metric space. Each of the $k$ servers is assigned an initial starting location within the metric space (generally this is assumed to be the first $k$ requests of the input sequence). Following this, The sequence of reqeusts is processed one at a time. When a request comes in, the given algorithm $ALG$ must decide on one of the servers to service the request. It must then move said server from it's current location $x$ to the request $r_i$. This incurs a cost of $c = d(x, r_i)$. The costs are then summed across the request sequence, giving the final cost incurred by the algorithm $ALG(\Sigma)$. The goal is to have $ALG$ incur the smallest possible cost while servicing all of the requests in the sequence~\cite{OnlineComp1998}.
+As described above, an instance of the \KS problem can be described by a metric space $M = (X, d)$, a number of servers $k>1$, and an input sequence $\sigma = (r_1, r_2, r_3, ..., r_n)$, where each $r_i$ corresponds to a point in the metric space. Each of the $k$ servers is assigned an initial starting location within the metric space (generally this is assumed to be the first $k$ requests of the input sequence). Following this, The sequence of requests is processed one at a time. When a request comes in, the given algorithm $ALG$ must decide on one of the servers to service the request. It must then move said server from it's current location $x$ to the request $r_i$. This incurs a cost of $c = d(x, r_i)$. The costs are then summed across the request sequence, giving the final cost incurred by the algorithm $ALG(\sigma)$. The goal is to have $ALG$ incur the smallest possible cost while servicing all of the requests in the sequence~\cite{OnlineComp1998}.
 \\ \\
 There are two major distinctions to be made between different classes of algorithms. The first is the classification of a "lazy" algorithm - one that only moves a server in order to service the current request. Non-lazy algorithms will process a request, and then potentially also move other servers preemptively in order to prepare for future requests. 
 
@@ -35,12 +51,12 @@ There are two major distinctions to be made between different classes of algorit
 The second major distinction is between "online" and "offline" algorithms. An offline algorithm receives the entire request sequence at once, and so as a result is able to make decisions on what server to use for the current request based off of future requests. In contrast, an online algorithm receives the request one at a time, and so is only able to make decisions based off of past requests, the current server configuration, and the current request. While online algorithms are at a severe disadvantage due to this, real world applications often rely on the performance of these algorithms. Applications range from disk access optimization, such as the two headed-disk problem~\cite{OnlineComp1998}, to police or firetruck servicing. In the context of this work, we will only consider an optimal offline algorithm $OPT$ as a comparison to the online algorithms we are analyzing.
 
 \begin{definition}
-Any optimal offline algorithm is denoted as $OPT$.
+    Any optimal offline algorithm is denoted as $OPT$.
 \end{definition}
 
 \subsection{Competitive Analysis}
 \label{sec:compAna}
-The most popular method for analyzing the performance of online algorithms for a problem is competitive analysis. Here, we assume a "malicious adversary", who is attempting to make our algorithm $ALG$ perform as poorly as possible in relation to the performance of the optimal algorithm $OPT$. The malicious adversary is allowed to come up with any finite input, and our competitive ratio is determined by this. If for any finite input, we are able to guaruntee that $ALG$ has a cost within a certain ratio $c$ of $OPT$ (allowing for a constant additive factor), then we say that our algorithm is $c$-competitive~\cite{OnlineComp1998}. So, if we define $ALG(\sigma)$ as the cost $ALG$ incurs while processing request $\sigma$, then we have the following definition: 
+The most popular method for analyzing the performance of online algorithms for a problem is competitive analysis. Here, we assume a "malicious adversary", who is attempting to make our algorithm $ALG$ perform as poorly as possible in relation to the performance of the optimal algorithm $OPT$. The malicious adversary is allowed to come up with any finite input, and our competitive ratio is determined by this. If for any finite input, we are able to guaruntee that $ALG$ has a cost within a certain ratio $c$ of $OPT$ (allowing for a constant additive factor), then we say that our algorithm is $c$-competitive~\cite{OnlineComp1998}. So, then we have the following definition: 
 
 \begin{definition}
 \label{def:comp}
@@ -53,29 +69,29 @@ Competitive analysis is in some sense similar to "worst case" analysis, where we
 
 The \KS problem originally arose as an abstraction of the paging problem, where the goal is to minimize the number of page faults in a cache as new memory access requests come in. It was originally proposed by Manasse, McGeoch, and Sleator~\cite{KS1988}, where they also showed a 2 competitive 2 server algorithm for any metric space. They additionally demonstrated a $k$ competitive algorithm for metric spaces with $k+1$ points. Two years later they wrote a paper showing generally competitive algorithms and some applications~\cite{KS1990}. Manasse, McGeoch and Sleator additionally proposed the $k$ server conjecture: that is, that there exists a $k$ competitive algorithm for any metric space with $k$ servers. 
 
-Following this, various algorithms were proposed with improving competitive ratios~\cite{MP1990, harm2000}. Koutsoupias and Papadimitriou~\cite{KS1990} showed that the Work Function Algorithm is $2k-1$ competitive in 1994, which to-date remains the best competitive ratio for the \KS problem for generic metric spaces.
+Following this, various algorithms were proposed with improving competitive ratios~\cite{KS1990, harm2000}. Koutsoupias and Papadimitriou~\cite{KS1990} showed that the Work Function Algorithm is $2k-1$ competitive in 1994, which to-date remains the best competitive ratio for the \KS problem for generic metric spaces.
 
-Various other algorithms have been constructed for special metric spaces, most notably including the double coverage algorithm for line metric spaces~\cite{new1991}. This algorithm was later generalized to a $k$ competitive algorithm for trees~\cite{tree1991}.
+Various other algorithms have been constructed for special metric spaces, most notably including the Double Coverage algorithm for line metric spaces~\cite{new1991}. This algorithm was later generalized to a $k$ competitive algorithm for trees~\cite{tree1991}.
 
-The work function algorithm remains the strongest candidate for a $k$ competitive algorithm for the \KS problem. Various improvements have been made, includinga proof that the work function algorithm is $k$ competitive on various classes of the problem. These include line metric spaces, metric spaces with $k+1$ points, metric spaces with $k+2$ points, multiray spaces (where there is a single "center" point, with rays extending out from it, i.e. only one node is connected to more than 2 other nodes), on tree graphs for $k=3$~\cite{unifyingPotential2021}, and on the Manhattan Plane for $k=3$~\cite{MP2002}. 
+The work function algorithm remains the strongest candidate for a $k$ competitive algorithm for the \KS problem. Various improvements have been made, including a proof that the work function algorithm is $k$ competitive on various classes of the problem. These include line metric spaces, metric spaces with $k+1$ points, metric spaces with $k+2$ points, multiray spaces (where there is a single "center" point, with rays extending out from it, i.e. only one node is connected to more than 2 other nodes), on tree graphs for $k=3$~\cite{unifyingPotential2021}, and on the Manhattan Plane for $k=3$~\cite{MP2002}. 
 
 Most recently, in 2021 a paper by Coester and Koutsoupias proposes a new potential function for proving the competitiveness of the work function algorithm~\cite{unifyingPotential2021}. This paper proposes a \textit{unifying potential} that can be used to prove various subcases of $k$ competitiveness for the \KS problem. This shows promise as previous proofs relied on a variety of different potential functions, that were often non-generalizable to other cases.
 %other forms of analysis / other results.
-Additionally, other forms of analysis and modifications to the \KS problem have been proposed. Analysis methods include Direct analysis where the cost of the algorithm is directly compared to the cost of the optimal algorithm on a given request sequence, and Max-Max ratios where the maximum cost of an algorithm on a set of inputs is compared to the maximum cost of another on the same set~\cite{MAXMAX2005}. Additionally, Bijective Analysis and its generalization (Stochatic Dominance) have been proposed as methods for comparing algorithms that favor algorithms that are able to consistently outperform other algorithms on a given set of inputs~\cite{bij2016}. 
+Additionally, other forms of analysis and modifications to the \KS problem have been proposed. Analysis methods include Direct Analysis where the cost of the algorithm is directly compared to the cost of the optimal algorithm on a given request sequence, and Max-Max ratios where the maximum cost of an algorithm on a set of inputs is compared to the maximum cost of another on the same set~\cite{MAXMAX2005}. Bijective Analysis and its generalization (Stochatic Dominance) have been proposed as methods for comparing algorithms that favor algorithms that are able to consistently outperform other algorithms on a given set of inputs~\cite{bij2016}. 
 
 Modifications to the \KS problem primarily include randomized algorithms, where the algorithm is allowed to make random decisions in order to improve its average case performance~\cite{OnlineComp1998}. Additional modifications include adding advice or lookahead for the algorithm. Great improvemenets can be made in an algorithms competitive ratio if it is able to get some sort of information, either about the current configuration of $OPT$, or about where the next few requests will be~\cite{advice2015}.
 
 \subsection{$k$ competitive lower bound}
 \label{sec:lowerBound}
 
-In this section, we follow a proof for a lower bound of the $k$ server problem, as described in~\cite{server2009}. Additional modifications include the \KS problem with lookahead~\cite{}
+In this section, we follow a proof for a lower bound of the $k$ server problem, as described in~\cite{server2009}.
 
 \begin{lemma}
     For a metric space $M$ where $|M| > k$, no online algorithm $ALG$ can have competitive ratio less than $k$
 \end{lemma}
 
 \begin{proof}
-    We begin by restricting all requests to a sub-metric space which has $k+1$ points. Within this metric space, there are $k+1$ possible configurations of the $k$ servers. We begin by maintaining $k$ offline algorithms (denoted $OPT_1, OPT_2, ..., OPT_k$), where each of these algorithms has a different configuration, and none have the same configuration as $ALG$. We denote the configuration of $ALG$ as $x_1, x_2, ...x_k \in M$. We begin by requesting the point $r \not \in x_1, x_2, ...x_k$. All of the offline algorithms are able to service this request without moving any servers, while $ALG$ must move some server from $x_i$ to service this point. At this point we will have $OPT_i$, the offline algorithm that has no server at $x_i$, move its server from $r$ to $x_i$ preemptively. We then repeat this process.
+    We begin by restricting all requests to a sub-metric space which has $k+1$ points. Within this metric space, there are $k+1$ possible configurations of the $k$ servers. We begin by maintaining $k$ offline algorithms (denoted $OPT_1, OPT_2, ..., OPT_k$), where each of these algorithms has a different configuration, and none have the same configuration as $ALG$. We denote the configuration of $ALG$ as $C = \{ x_1, x_2, ...x_k \} \in M$. We begin by requesting the point $r \not \in C$. All of the offline algorithms are able to service this request without moving any servers, while $ALG$ must move some server from $x_i$ to service this point. At this point we will have $OPT_i$, the offline algorithm that has no server at $x_i$, move its server from $r$ to $x_i$ preemptively. We then repeat this process.
 
     This shows that the cost incurred by $ALG$ will be equal to the sum of the costs incurred by all of the offline algorithms, showing that the competitive ratio of $ALG$ will be at least $k$.
 \end{proof}
