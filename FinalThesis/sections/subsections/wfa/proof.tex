@@ -242,7 +242,7 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
 
 \begin{lemma}
     \label{lem:ep1}
-    $\Phi ( U', w) - \Phi (U, w) \geq k * d(u_j, r)$
+    $\Phi ( U', w) - \Phi (U, w) \geq k \cdot d(u_j, r)$
 \end{lemma}
 
 \begin{proof}
@@ -251,8 +251,8 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
     \begin{equation*}
         \begin{gathered}
             MIN_w(r) = min_A \{ w(A) - \Sigma_{a \in A} d(a, r)\} \\
-            \geq min_A \{ w(A) - \Sigma_{a \in A} [d(a, u_j) + d(u_j, r)]\} = MIN_w(u_j) - k*d(u_j, r) \\ \\
-            \Phi ( U', w) - \Phi (U, w) = \Sigma_{u \in U'} MIN_w(u) - \Sigma_{u \in U} MIN_w(u) \\ = MIN_w(r) - MIN_w(u_j) \geq MIN_w(u_j) - k * d(u_j, r) - MIN_w(u_j) = -k*d(u_j, r)
+            \geq min_A \{ w(A) - \Sigma_{a \in A} [d(a, u_j) + d(u_j, r)]\} = MIN_w(u_j) - k\cdot d(u_j, r) \\ \\
+            \Phi ( U', w) - \Phi (U, w) = \Sigma_{u \in U'} MIN_w(u) - \Sigma_{u \in U} MIN_w(u) \\ = MIN_w(r) - MIN_w(u_j) \geq MIN_w(u_j) - k \cdot  d(u_j, r) - MIN_w(u_j) = -k\cdot d(u_j, r)
         \end{gathered}
     \end{equation*}
 \end{proof}
@@ -292,7 +292,7 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
 
 \begin{lemma}
     \label{lem:er1}
-    $\Phi(U_\sigma, w_\sigma) \leq K * OPT(\sigma)$
+    $\Phi(U_\sigma, w_\sigma) \leq K \cdot  OPT(\sigma)$
 \end{lemma}
 
 \begin{proof}
@@ -313,7 +313,7 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
      When we sum over all $u \in U_\sigma$, we complete the lemma by the definition of $\Phi$
      
      \begin{equation*}
-        \Phi(U_\sigma, w_\sigma) = \Sigma_{i=1}^k MIN_{w_\sigma}(u_i) \leq K * OPT(\sigma)
+        \Phi(U_\sigma, w_\sigma) = \Sigma_{i=1}^k MIN_{w_\sigma}(u_i) \leq K \cdot  OPT(\sigma)
      \end{equation*}
 \end{proof}
 
@@ -354,36 +354,36 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
 \begin{lemma}
     If the following property holds for some constant $\alpha$ independent of $\sigma$, then WFA is $c$-competitive:
     \begin{equation*}
-        TEC \leq (c+1) * OPT(\sigma) + \alpha
+        TEC \leq (c+1) \cdot  OPT(\sigma) + \alpha
     \end{equation*}
 \end{lemma}
 
 The above lemma follows directly by the provided definitions, because the total extended cost bouds the cost incurred by the work function algorithm. This lemma means that we are now only required to show the following:
 
 \begin{lemma}
-    $TEC \leq 2k * OPT(\sigma) + \alpha$, and therefore the $WFA$ is $2k-1$ competitive.
+    $TEC \leq 2k \cdot  OPT(\sigma) + \alpha$, and therefore the $WFA$ is $2k-1$ competitive.
 \end{lemma}
 
 \begin{proof}
     By putting together lemmas~\ref{lem:ep1} and~\ref{lem:ep2}, we get:
 
     \begin{equation*}
-        \Phi(U', w') - \Phi(U, w) \geq max_X\{ w'(X) - w(X)\} -k * d(u_j, r)
+        \Phi(U', w') - \Phi(U, w) \geq max_X\{ w'(X) - w(X)\} -k \cdot  d(u_j, r)
     \end{equation*}
 
     When we sum across all requests in the request sequence, we get the telescoping sum:
 
     \begin{equation*}
-        \Phi(U_\sigma, w_\sigma) - \Phi(U_\emptyset, w_\emptyset) \geq TEC - k*OPT(\sigma)
+        \Phi(U_\sigma, w_\sigma) - \Phi(U_\emptyset, w_\emptyset) \geq TEC - k\cdot OPT(\sigma)
     \end{equation*}
 
     By using lemmas~\ref{lem:er1} and~\ref{lem:er2}, we get:
 
     \begin{equation*}
         \begin{gathered}
-            k * OPT(\sigma)+ \Sigma_{a, b \in C_0} d(a, b) \geq \Phi(U_\sigma, w_\sigma) + \Sigma_{a, b \in C_0} d(a, b) \\
-            \geq \Phi(U_\sigma, w_\sigma) - \Phi(U_\emptyset, w_\emptyset) \geq TEC - k*OPT(\sigma)\\ \\
-            TEC \leq 2k * OPT(\sigma) + \Sigma_{a, b \in C_0} d(a, b) = 2k * OPT(\sigma) + \alpha
+            k \cdot  OPT(\sigma)+ \Sigma_{a, b \in C_0} d(a, b) \geq \Phi(U_\sigma, w_\sigma) + \Sigma_{a, b \in C_0} d(a, b) \\
+            \geq \Phi(U_\sigma, w_\sigma) - \Phi(U_\emptyset, w_\emptyset) \geq TEC - k\cdot OPT(\sigma)\\ \\
+            TEC \leq 2k \cdot  OPT(\sigma) + \Sigma_{a, b \in C_0} d(a, b) = 2k \cdot OPT(\sigma) + \alpha
         \end{gathered}
     \end{equation*}
 \end{proof}

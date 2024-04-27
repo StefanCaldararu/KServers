@@ -76,9 +76,9 @@ The following definitions and lemmas are drawn directly from~\cite{unifyingPoten
     \begin{equation*}
         \begin{gathered}
             min_{x_{i+1}, ..., x_k \subseteq X} w(X) + i\Delta - \Sigma_{j=1}^i d(x_j, \bar{l^i}) \\
-            = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i * d(c, l) - \Sigma_{j=1} ^ i d(c, x_j)\}\\
-             = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i * d(c, l) - \Sigma_{j=1} ^ i d(c, x_j) + \Sigma_{j=i+1}^k d(c, x_j) - \Sigma_{j=1}^k d(c, x_j)\} \\
-             = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) - \Sigma_{j=1} ^ k d(c, x_j) + i \Delta  - i * d(c, l)+\Sigma_{j=i+1}^k d(c, x_j)\} \\
+            = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i \cdot d(c, l) - \Sigma_{j=1} ^ i d(c, x_j)\}\\
+             = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i \cdot d(c, l) - \Sigma_{j=1} ^ i d(c, x_j) + \Sigma_{j=i+1}^k d(c, x_j) - \Sigma_{j=1}^k d(c, x_j)\} \\
+             = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) - \Sigma_{j=1} ^ k d(c, x_j) + i \Delta  - i \cdot d(c, l)+\Sigma_{j=i+1}^k d(c, x_j)\} \\
              = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ m_w(X) + i(\Delta - d(c, l)) + \Sigma_{j=i+1} ^ k d(c, x_j)\}
         \end{gathered}
     \end{equation*}
