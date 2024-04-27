@@ -1,4 +1,4 @@
-In this section, we provide a couple of useful insights that have been noted while looking at the unifying potential. These range from general properties of work functions, to specific properties for the unifying potential. Additionally, we go over a few of the proofs provided in~\cite{unifyingPotential2021}. 
+In this section, we provide a couple of useful insights that have been noted while looking at the unifying potential. These range from general properties of work functions, to specific properties for the unifying potential. Additionally, we go over a few of the proofs taken directly from~\cite{unifyingPotential2021}. 
 
 \subsubsection*{General Work Properties}
 
@@ -35,7 +35,7 @@ In this section, we provide a couple of useful insights that have been noted whi
     Suppose $OPT$ is in a configuraiton $X$ that is supported by another configuration $Y$ after servicing some request $r_i$. Suppose points in $X$ and $Y$ are indexed according to their minimum cost matching, i.e. $x_j$ matches with $y_j$ in the matching. We can define a new offline algorithm, $OPT_1$, which ends in configuration $Y$ after servicing $r_i$. Following this, Whenever $OPT$ services a request $r$ with the $j$th server located at $x_j$, $OPT_1$ will service the request with the same server, located at $y_j$. We know that $d(y_j, r) \leq d(y_j, x_j) + d(x_j, r)$, and $OPT$ has already incurred the cost $d(y_j, x_j)$ (by the definition of support). Therefore, the cost incurred by $OPT_1$ will be less than or equal to that incurred by $OPT$.
 \end{proof}
 
-This provides some useful insights, and a new way of looking at this problem. Since at each step, we know that $OPT$ can only be in a limited set of configurations (the set of configurations that are not supported by other configurations), we must only "keep up" with those.
+Since at each step, we know that $OPT$ can only be in a limited set of configurations (the set of configurations that are not supported by other configurations), we must only "keep up" with those. This is used as the basis for proving the competitive ratio of the WFA.
 
 \begin{definition}
     A \textbf{tree graph} is a set of nodes that are connected by edges which is acyclic (No path of unique edges leads back to the starting node), and satisfies the metric property. Additionally, a \textbf{leaf node} is one that is only connected by \textit{one} edge to the rest of the graph. The set of all leaf nodes for a graph is denoted $L$.

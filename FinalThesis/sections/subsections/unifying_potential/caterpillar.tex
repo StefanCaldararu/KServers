@@ -1,3 +1,4 @@
+We begin by defining various specific metric spaces that will be used in this section.
 \begin{definition}
     A \textbf{Multiray space} is a tree metric space $(X, d)$ wich consists of a central node $c$, and rays that are rooted at $c$. Every node $x \in X - c$ is connected to \textit{at most} two other nodes. This can be thought of as multiple lines with endpoints joined at $c$.
 \end{definition}
@@ -28,11 +29,11 @@
     \caption{An example reduced caterpillar graph}
 \end{figure}
 
-In this section, we will be primarily considering the smallest possible reduced caterpillar graph, consisting of 6 nodes. A unifying potential proof has been shown for multiray spaces, and we will present some notes on the extension of this proof to this highly reduced caterpillar graph. It is worth noting that the $WFA$ can already be shown to be $k$ competitive on this space with a variety of proofs. That is, 2 servers have been shown to be 2 competitive on general metric spaces, and 3 servers have been shown to be 3 competitive on trees. 4 servers on this space is a metric space with $k-2$ points, and 5 servers is a metric space of $k-1$ points, which has yet again been shown to be $k$ competitive~\cite{unifyingPotential2021}.
+In this section, we will be primarily considering the smallest possible reduced caterpillar graph, consisting of 6 nodes. A unifying potential proof has been shown for multiray spaces. We present recitations of the beginning of this proof, and attempt to extend these to the smallest reduced caterpillar graph. It is worth noting that the $WFA$ can already be shown to be $k$ competitive on the reduced caterpillar graph with a variety of seperate proofs. That is, 2 servers have been shown to be 2 competitive on general metric spaces, and 3 servers have been shown to be 3 competitive on trees. 4 servers on this space is a metric space with $k-2$ points, and 5 servers is a metric space of $k-1$ points, which has yet again been shown to be $k$ competitive~\cite{unifyingPotential2021}.
 
 \subsubsection*{Symmetry property of the potential function for the Multiray Space}
 
-The following definitions and lemmas are drawn directly from~\cite{unifyingPotential2021}, which lead to a proof of $k$ competitiveness for the $WFA$ on the Multiray metric space. We include some explanatory details. In the following section, we will demonstrate some attempts at extending these proofs to the reduced caterpillar graph.
+The following definitions and lemmas are drawn directly from~\cite{unifyingPotential2021}, which lead to a proof of $k$ competitiveness for the $WFA$ on the Multiray metric space. We include some addtiional explanatory details.
 
 \begin{definition}
     \label{def:mw}
@@ -40,6 +41,7 @@ The following definitions and lemmas are drawn directly from~\cite{unifyingPoten
     \begin{equation*}
         m_w(X) = w(X) - \Sigma_{i=1} ^ k d(c, x_i)
     \end{equation*}
+    where $c$ is the center of the multiray space.
 \end{definition}
 
 \begin{lemma}
@@ -84,19 +86,25 @@ The following definitions and lemmas are drawn directly from~\cite{unifyingPoten
     \end{equation*}
 \end{proof}
 
-We can now rewrite our potential function as follows: 
+We can now rewrite our potential function operating on exclusively leaf nodes as follows: 
 
 \begin{equation*}
     \begin{gathered}
         \Phi_{l_1, ..., l_k} (w) = \Sigma_{i=0}^k w(\bar{l_i}^i, l_{i+1}, ..., l_k) \\
         = \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) + i(\Delta - d(c, l_i)) + \Sigma_{j=i+1}^k d(c, l_j)\} \\
         = \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) \} + \Sigma_{i=0}^k \{i(\Delta - d(c, l_i)) + \Sigma_{j=i+1}^k d(c, l_j)\} \\
-        = \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) \} + \frac{k(k+1)}{2}\Delta + \Sigma_{i=0}^k \Sigma_{j=i+1}^k \{d(c, l_j) - i d(c, l_i)\} \\
+        = \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) \} + \frac{k(k+1)}{2}\Delta + \Sigma_{i=0}^k [- i d(c, l_i) + \Sigma_{j=i+1}^k \{d(c, l_j)\}] \\
         = \frac{k(k+1)}{2}\Delta + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\}
     \end{gathered}
 \end{equation*}
 
-As the last terms in the second to last line get canceled out. This is written compactly in the following equation:
+The last terms in the second line get canceled out:
+
+\begin{equation*}
+    \Sigma_{i=0}^k [- i d(c, l_i) + \Sigma_{j=i+1}^k \{d(c, l_j)\}] = 0
+\end{equation*}
+
+The potential is therefore written compactly in the following equation:
 
 \begin{equation}
     \begin{gathered}
@@ -159,9 +167,11 @@ As the last terms in the second to last line get canceled out. This is written c
     \end{equation*}
 \end{proof}
 
+The above lemmas show that the potential function for the Multiray space is symmetric under permutations of the leaf nodes. This is a powerful property, that helps lead to a proof of $k$ competitiveness of the $WFA$ on the Multiray space.
+
 \subsubsection*{Notes on the Symmetry property of the potential function for the Reduced Caterpillar Graph}
 
-The above lemmas show that the potential function for the Multiray space is symmetric under permutations of the leaf nodes. This is a powerful property, that helps lead to a proof of $k$ competitiveness of the $WFA$ on the Multiray space. In this section, we present various attempts at extending these proofs to the smallest reduced caterpillar graph, which ahs only 6 nodes.
+In this section, we present various attempts at extending these proofs to the smallest reduced caterpillar graph, which has only 6 nodes.
 
 Our first problems arise from attempting to write a parallel definition to $m_w(X)$~\ref{def:mw}. We have two options in this scenario. We can either consider the entire body of the Caterpillar graph as the "center", or we can add a new node at the middle of the body. These two cases are shown in fig.~\ref{fig:smallcat}
 
@@ -184,7 +194,7 @@ When considering the case where we define the center as all points on the body o
 \begin{definition}
     We define $m'_w(X)$ for a configuration $X$ as:
     \begin{equation*}
-        m'_w(X) := w(X) - \Sigma_{i=1} ^ k min_{c \in C} d(c, x_i)
+        m'_w(X) := w(X) - \Sigma_{i=1} ^ k min_{a \in C} d(c, x_i)
     \end{equation*}
 \end{definition}
 
@@ -203,7 +213,7 @@ If we add a central node to the caterpillar graph, we arrive at the following de
 
 We now attempt to rewrite the potential, as is done for the Multiray space. The parallel to lemma~\ref{lem:leaf2} follows in a similar manner, as for both $m'_w(X)$ and $m''_w(X)$ we can always push a point $x \in X$ to a leaf, by increasing the work done by at most the distance to the center.
 
-We can now attempt to rewrite the potential function using these two interpretations of the "center". We will first consider the case where the center is the entire body of the caterpillar graph. We have:
+We can now attempt to rewrite the potential function using these two interpretations of the "center". We consider the case where the center is the entire body of the caterpillar graph. We have:
 
 \begin{equation*}
     \begin{gathered}
@@ -212,7 +222,9 @@ We can now attempt to rewrite the potential function using these two interpretat
     \end{gathered}
 \end{equation*}
 
-We can again achieve this minimum with $X-x_{i+1}, ..., x_k\subseteq L-l$. We now must say something about the distance between the specific leaf node $l$ and the arbitrary leaf node $x_j$. The issue we encounter is that the distance between any two leaf nodes is not constant, as it is in the Multiray space. We know that $2 \leq d(l, x_j) \leq 3$, but we cannot say anything more specific. If we attempt to have the center point be in the middle of the body, then we run into earlier issues as there is no requirement for the path between two leaf nodes to pass through the center node. This is demonstrated in the following figure:
+We can again achieve this minimum with $X-x_{i+1}, ..., x_k\subseteq L-l$. We now must say something about the distance between the specific leaf node $l$ and the arbitrary leaf node $x_j$. The issue we encounter is that the distance between any two leaf nodes is not constant, as it is in the Multiray space. We know that $2 \leq d(l, x_j) \leq 3$, but we cannot say anything more specific. 
+
+If we attempt to have the center point be in the middle of the body, then we run into earlier issues as there is no requirement for the path between two leaf nodes to pass through the center node. This is demonstrated in the following figure:
 
 \begin{figure}[H]
     \centering
@@ -220,7 +232,7 @@ We can again achieve this minimum with $X-x_{i+1}, ..., x_k\subseteq L-l$. We no
     \caption{An example reduced caterpillar graph with a central node}
 \end{figure}
 
-We can therefore get an inequality for our potential function, but this breaks any symetry proof we might have. We can write the potential function as follows:
+Reverting to the case where the entire body is considered as the center, we can therefore get an inequality for our potential function, but this breaks any symetry proof we might have. We can write the potential function as follows:
 
 \begin{equation*}
     \begin{gathered}
@@ -229,3 +241,5 @@ We can therefore get an inequality for our potential function, but this breaks a
         \frac{k(3k+1)}{2} + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\}
     \end{gathered}
 \end{equation*}
+
+Continuing the proof from here yields no useful results, as we have been unable to show that the potential function is symmetric under permutations of the leaf nodes.

@@ -1,4 +1,6 @@
-In this section, we describe a unifying potential~\cite{unifyingPotential2021} that is a promising candidate for proving that the $WFA$ is $k$ competitive. This potential is used to show that various subcases (ex. $k=2$, $k=n-1$, $k=n-2$, and various specialized metric spaces) are $k$ competitive. While many of these subcases have been shown to be $k$ competitive in the past~\cite{server1991, server2009, server1996, server2004, server2002}, the novelty of this approach is a \textit{single} potential function that is able to prove all of these cases. The authors of this unifying potential work take this as indication that it may be possible to prove the general $k$ competitiveness for the $WFA$ using this potential.
+In this section, we describe a unifying potential~\cite{unifyingPotential2021} that is a promising candidate for proving that the $WFA$ is $k$ competitive. Once again, we describe definitions and theorems taken directly from~\cite{unifyingPotential2021}. In section~\ref{sec:usefulInsights}, we provide some explanatory details of a few of the lemmas from the original paper, along with the proofs taken from the original work. In seciton~\ref{sec:cat}, we attempt to extend the work done in the original paper to a highly confined metric space.
+
+The unifying potential is used to show that various subcases (ex. $k=2$, $k=n-1$, $k=n-2$, and various specialized metric spaces) are $k$ competitive. While many of these subcases have been shown to be $k$ competitive in the past~\cite{server1991, server2009, server1996, server2004, server2002}, the novelty of this approach is a \textit{single} potential function that is able to prove all of these cases. The authors of this unifying potential work take this as indication that it may be possible to prove the general $k$ competitiveness for the $WFA$ using this potential.
 
 \begin{definition}
     We define the notation $x^i$ to represent $i$ copies of the point $x$. That is, $w(x^k)$ represents the work done ending in the configuration where all $k$ servers are at the point $x$.
@@ -24,7 +26,7 @@ It is worth noting that every metric space can be easily extended such that ever
     \end{gathered}
 \end{equation*}
 
-It is worth noting that the diameter of this extended metric space will be $2\Delta$, and every point will have an antipode. Additionallay, on an extended metric space $M \cup \bar{M}$ where every point $p \in M$ has an antipode $\bar{p} \in \bar{M}$, for any point $q \in M$ and any point $\bar{r} \in \bar{M}$, $d(p,q) \leq d(p,\bar{r})$. This just states that the cost for traversing to a node on the current subgraph you are on is \textit{always} less than or equal to the cost of traversing to the other subgraph.
+The diameter of this extended metric space will be $2\Delta$, and every point will have an antipode. On an extended metric space $M \cup \bar{M}$ where every point $p \in M$ has an antipode $\bar{p} \in \bar{M}$, for any point $q \in M$ and any point $\bar{r} \in \bar{M}$, $d(p,q) \leq d(p,\bar{r})$. This just states that the cost for traversing to a node on the current subgraph you are on is \textit{always} less than or equal to the cost of traversing to the other subgraph.
 
 \begin{definition}
     For a metric space $M$ where every point $x \in M$ has an antipode $\bar{x}$, we define the function \textbf{$\Phi_{x_1, x_2, ..., x_k}$} for a given configuration $x_1, x_2, ..., x_k$ as:
@@ -32,8 +34,6 @@ It is worth noting that the diameter of this extended metric space will be $2\De
     \begin{equation*}
         \Phi_{x_1, x_2, ..x_k}(w) := \Sigma_{i=0}^k w(\bar{x_i}^i, x_{i+1}, ..., x_k)
     \end{equation*}
-
-    where $x^i$ represents $i$ copies of the point $x$.
 \end{definition}
 
 \begin{definition}
@@ -48,4 +48,4 @@ It is worth noting that the diameter of this extended metric space will be $2\De
     For a metric space $M$ where every point has an antipode, If for every request $r \in M$ and for every work function $w_0$, $w_1$, ..., $w_n$ it holds that $\Phi(w) = \Phi_{x_1, x_2, ..., x_k}(w)$ for some $x_1, x_2, ...x_k \in M$ where $x_k = r$, then the $WFA$ is $k$ competitive on the metric space $M$.
 \end{lemma}
 
-While a proof for this is not provided here, we reference~\cite{unifyingPotential2021}, where a complete proof of this lemma is provided. This involves definition of a $n-k$ evader potential $\bar{\Phi}$, which is the dual to this problem. In this formulation, you have $n-k$ evaders in a metric space that must move away from requested points. It is clear that a solution to the evader problem would yield a $k$ server solution.
+While a proof for this is not provided here, we reference~\cite{unifyingPotential2021}, where a complete proof of this lemma is provided. This involves definition of a $n-k$ evader potential $\bar{\Phi}$, which is the dual to this problem. In this formulation, you have $n-k$ evaders in a metric space that must move away from requested points rather than towards them. It is clear that a solution to the evader problem would yield a parallel $k$ server solution.

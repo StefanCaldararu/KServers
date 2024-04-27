@@ -1,4 +1,4 @@
-In this section, we present a few additional methods for analysis on algorithms other than competitive analysis. These methods are useful for comparing algorithms to each other, and can be used to demonstrate an algorithms efficiency outside of the "worst-case" considered by competitive analysis. Competitive analysis considers all requests of finite length. For each of these methods described below, we take an experimental-based approach. That is, each analysis method will be considerind the performance of an algorithm on a given request sequence length, and so can therefore be directly calculated in practice.
+In this section, we present a few additional methods for analysis on algorithms other than competitive analysis. These methods are useful for comparing algorithms to each other, and can be used to demonstrate an algorithms efficiency outside of the "worst-case" considered by competitive analysis. Competitive analysis considers all requests of finite length. For each of these methods described below, we take an experimental-based approach. That is, each analysis method will be considering the performance of an algorithm on a given request sequence length, and so can therefore be directly calculated in practice.
 
 \subsubsection*{Direct Analysis}
 \label{sec:Direct}
@@ -22,7 +22,7 @@ The bijective ratio is similar to using direct analysis, except we allow for a b
     For a given input space $I_n$, we say that algorithm \textit{A} has bijective ratio $c$ with respect to algorithm \textit{B} if there exists a bijection $\pi:I_n \rightarrow I_n$ such that $A(\sigma) \leq c\cdot B(\pi(\sigma))$, $\forall \sigma \in I_n$. 
 \end{definition}
 
-It is important to note that this definition doesn't only compare the ratio of an algorithm to the optimal, but can also be used to compare between two different online algorithms. This can be used to prove an online algorithms optimality~\cite{bij2016}, and allows for some interesting test-case results found in sec.~\ref{sec:analysis}.
+It is important to note that this definition doesn't only compare the ratio of an algorithm to the optimal, but can also be used to compare between two different online algorithms. This can be used to prove an online algorithms optimality~\cite{bij2016}.
 
 \subsubsection*{Average Case Analysis}
 \label{sec:Avg}
