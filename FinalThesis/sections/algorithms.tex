@@ -31,7 +31,7 @@ Any optimal offline algorithm is simply defined as an algorithm that will have t
 The Work-Function Algorithm $WFA$ is considered to be one of the most promising algorithms in terms of the competitive ratio, as it has been proven to be $(2k-1)$-competitive, and is believed to be $k$-competitive. Given a certain starting server configuration, current configuration, and previous input request sequence, $WFA$ balances between which server an $OPT$ algorithm would likely move and a $GREEDY$ policy, while also ensuring that $k-1$ of the servers end up in the current server configuration. This final server is then used to service the current request. It is able to do this by computing a \textbf{work function} for the current request, given the previous request sequence and the current server configuration.
 
 \begin{definition}
-    The \textbf{work function}, denoted $w_\sigma(C)$ computes the minimum value required to begin in configuration $C_0$, service all requests in $\sigma$, and end with servers in configuration $C$. The work function has similar notation to configurations($w_{\sigma_i}$, $w$, and $w'$), except the work function value on an empty request sequence is denoted $w_\emptyset$. Additionally, the work function can be computed as follows:
+    The \textbf{work function}, denoted $w_\sigma(C)$ computes the minimum value required to begin in configuration $C_0$, service all requests in $\sigma$, and end with servers in configuration $C$. The work function has similar notation to configurations($w_{\sigma_i}$, $w$, and $w'$), except the work function value on an empty request sequence is denoted $w_\emptyset$, and the work done on the $i$th request sequence is denoted with the abreviated request sequence in the subscript. Additionally, the work function can be computed as follows:
     \begin{equation*}
         \begin{gathered}
             w_\emptyset(C) = D(C_0, C) \\
@@ -40,8 +40,6 @@ The Work-Function Algorithm $WFA$ is considered to be one of the most promising 
     \end{equation*}
 \end{definition}
 
-A similar reduction to the $WFA$ computation can be used to find this server~\cite{WFA2009}. This means that the $WFA$ must compute a Min Cost Max Flow for each request, making it much more expensive than $OPT$, and all of the other algorithms. Additionally, it is also worth noting that this is not a finite memory algorithm, as the WFA must remember all of the previous requests~\cite{MAXMAX2005}. 
-
 \begin{definition}
     The $WFA$ moves the server currently at point $s$ at each step, incurring a cost $d(s,r)$. This server is determined as follows:
     \begin{equation*}
@@ -49,9 +47,11 @@ A similar reduction to the $WFA$ computation can be used to find this server~\ci
     \end{equation*}
 \end{definition}
 
+A similar reduction to the $WFA$ computation can be used to find this server~\cite{WFA2009}. This means that the $WFA$ must compute a Min Cost Max Flow for each request, making it much more expensive than $OPT$, and all of the other algorithms. Additionally, it is also worth noting that this is not a finite memory algorithm, as the WFA must remember all of the previous requests~\cite{MAXMAX2005}. 
+
 \subsection{Double Coverage Algorithm}
 \label{sec:DC}
-The Double Coverage algorithm is a $k$-competitive algorithm defined only on the line metric space. If the request is to the left of all of our current server locations, then we just move the left most server to service the request. If the server is to the right of all of the current locations, we use the rightmost server. Otherwise, the request will be between two servers. In this case, we move the two closest servers towards the request at the same rate, until one of the servers reaches the request location. A proof of this algorithms competitiveness can be found in~\cite{OnlineComp1998}. It is also important to note that this is not a lazy algorithm, as it does move more than one server at a time. 
+The Double Coverage algorithm is a $k$-competitive algorithm defined only on the line metric space. If the request is to the left of all of our current server locations, then we just move the left most server to service the request. If the request is to the right of all of the current locations, we use the rightmost server. Otherwise, the request will be between two servers. In this case, we move the two closest servers towards the request at the same rate, until one of the servers reaches the request location. A proof of this algorithms competitiveness can be found in~\cite{OnlineComp1998}. It is also important to note that this is not a lazy algorithm, as it does move more than one server at a time. 
 
 \begin{definition}
     If the request is not currently covered by the configuration and the request is further left or further right than any of the servers, then $DC$ moves the leftmost or rightmost server (respectively) to the service point. Otherwise, $DC$ selects the closest server on either side of the request $x$ and $y$, and moves them both a distance $p = argmin_{v \in \{x, y\}} d(v, r)$.

@@ -43,7 +43,7 @@ Quasi-Convexity essentially says that for every two configurations, the sum of t
 A work function is \textbf{General Quasi-Convex} (GQC) if for every $X$, $Y$, there exists a bijection $g: X \rightarrow Y$ such that for all partitions of X into $X_1$ and $X_2$, the following property holds:
 
 \begin{equation*}
-    w(X_1 + g(X_2)) + w(g(X_1) + X_2) \leq w(X_1) + w(X_2)
+    w(X_1 + g(X_2)) + w(g(X_1) + X_2) \leq w(X) + w(Y)
 \end{equation*}
 \end{definition}
 
@@ -69,17 +69,17 @@ It is worth noting that if a work function is GQC, then it is also QC. This is b
         w(X) + w(Y) \geq w((X_1+a) \cup g(X_2-a)) + w(g(x_1+a) \cup (X_2-a))
     \end{equation*}
 
-    By the definition of GQC. Then, since $a\not \in X_2$ and $g^{-1}(a) \not \in X_2$, we know that $g(X_2-a) = \tilde{g}(X_2-a)$, by the definition of $\tilde{g}$. Additionally, $g(X_1+a) = \tilde{g}(X_1+a)$, since $a, g^{-1}(a) \in X_1$. Therefore, we have: 
+    By the definition of GQC. Then, since $a\not \in X_2-a$ and $g^{-1}(a) \not \in X_2-a$, we know that $g(X_2-a) = \tilde{g}(X_2-a)$, by the definition of $\tilde{g}$. Additionally, $g(X_1+a) = \tilde{g}(X_1+a)$, since $a \in X_1 + a$, and $g^{-1}(a) \in X_1+a$. Therefore, we have: 
     
     \begin{equation*}
         \begin{gathered}
-            w((X_1+a) \cup g(X_2-a)) + w(g(x_1+a) \cup (X_2-a)) \\
+            w((X_1+a) \cup g(X_2-a)) + w(g(X_1+a) \cup (X_2-a)) \\
             = w((X_1+a) \cup \tilde{g}(X_2-a)) + w(\tilde{g}(X_1+a) \cup (X_2-a)) \\ 
             = w(X_1 \cup \tilde{g}(X_2)) + w(\tilde{g}(X_1) \cup X_2)
         \end{gathered}
     \end{equation*}
 
-    We achieve the last equality because $a \in X_1$ and $a \not\in X_2$, so $X_1 - a = X_1$ and $X_2 - a = X_2$. This would mean that $\tilde{g}$ satisfies the GQC property, which is again a contradiction. Therefore, there exists a bijection $\tilde{g}$ that satisfies the GQC property such that $\tilde{g}(x) = x$ for all $x \in X \cap Y$.
+    We achieve the last equality by the definition of $\tilde{g}$. Because $\tilde{g}(a) = a$, we can swap $a$ with $\tilde{g}(a)$ between the two sets within the two work functions. This would mean that $\tilde{g}$ satisfies the GQC property, which is again a contradiction. Therefore, there exists a bijection $\tilde{g}$ that satisfies the GQC property such that $\tilde{g}(x) = x$ for all $x \in X \cap Y$.
 \end{proof}
 
 \begin{lemma}
@@ -93,8 +93,8 @@ All work functions are GQC, and so are therefore also QC.
 
     \begin{equation*}
         \tilde{g}(z) = \begin{cases}
-            g(z) & \text{if } z \neq r \\
-            y & \text{if } z = r
+            g(z) & \text{if } z \neq x \\
+            y & \text{if } z = x
         \end{cases}
     \end{equation*}
 
@@ -103,8 +103,7 @@ All work functions are GQC, and so are therefore also QC.
     \begin{equation*}
         \begin{gathered}
             w'(X) + w'(Y) = w(X_{xr}) + w(Y_{yr}) + d(r, x) + d(r, y) \\
-            = w( (X_1-x+r) \cup g(X_2)) + w(Y_{yr}) + d(r, x) + d(r, y) \\
-            \geq w((X_1-x+r) \cup g(X_2)) + w(g(X_1-x+r) \cup (X_2)) + d{x, r} + d{r, y} \\
+            \geq w((X_1-x+r) \cup g(X_2)) + w(g(X_1-x+r) \cup (X_2)) + d(x, r) + d(r, y) \\
             = w(X_{xr} \cup \tilde{g}(X_2)) + w((\tilde{g}(X_1) -y + r) \cup X_2) + d(x, r) + d(r, y) \\
             \geq w'(X_1 \cup g'(X_2)) + w'(g'(X_1) \cup X_2) 
         \end{gathered}
@@ -142,11 +141,11 @@ All work functions are GQC, and so are therefore also QC.
         \end{gathered}
     \end{equation*}
 
-    Now, we apply the GQC Lemma, with $X = B -b' + r$, $Y = A$, $x = r$, and $y = a'$. This means that $min_{a' \in A} \{ w(B - b' + a') + w(A -a' + r)\} \leq w(B - b' + r) + w(A)$. We now sum the two sides of this with the previous inequality to get the following equation:
+    Now, we apply the QC Lemma, with $X = B -b' + r$, $Y = A$, $x = r$, and $y = a'$. This means that $min_{a' \in A} \{ w(B - b' + a') + w(A -a' + r)\} \leq w(B - b' + r) + w(A)$. We now sum the two sides of this with the previous inequality to get the following equation:
 
     \begin{equation*}
         \begin{gathered}
-            min_{a' \in A} \{ w(B - b' + a') + w(A -a' + r) - w(B - b' + a') + w(A) + d(a', r) + \Sigma_{a \in A} d(a, r)\} \\
+            min_{a' \in A} \{ w(B - b' + a') + w(A -a' + r) - w(B - b' + a') + w(A) + d(a', r) - \Sigma_{a \in A} d(a, r)\} \\
             \leq w(B - b' + r) + w(A) + d(b' ,r) - \Sigma_{b \in B} d(b, r)
         \end{gathered}
     \end{equation*}
@@ -201,7 +200,7 @@ All work functions are GQC, and so are therefore also QC.
         \end{gathered}
     \end{equation*}
 
-    This is equivalent to saying that for all $B$, $a' \in A$: 
+    This is equivalent to saying that for all $B$, and all $a' \in A$: 
 
     \begin{equation*}
         \begin{gathered}
@@ -242,11 +241,11 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
 
 \begin{lemma}
     \label{lem:ep1}
-    $\Phi ( U', w) - \Phi (U, w) \geq k \cdot d(u_j, r)$
+    $\Phi ( U', w) - \Phi (U, w) \geq k \cdot -d(u_j, r)$
 \end{lemma}
 
 \begin{proof}
-    Using the triangle inequality, we know that for all $a$, $d(a, r) \leq d(a, u_j) + d(u_j, r)$. Putting the value of a minimizer together with this, we get:
+    Using the triangle inequality, we know that for all $a$: $d(a, r) \leq d(a, u_j) + d(u_j, r)$. Putting the value of a minimizer together with this, we get:
 
     \begin{equation*}
         \begin{gathered}
@@ -263,7 +262,7 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
 \end{lemma}
 
 \begin{proof}
-    Let $A$ be a minimizer of $r$ with respect to $w$. Again, we know that $w'(X) \geq w(X)$ for all $X$, as any sequence of moves that would service $\sigma r$ and end in configuration $X$ would also service requests $\sigma$ and be able to end in $X$ with the same or lesser distance traveled. Therefore, for any point $p$, we have: 
+    Let $A$ be a minimizer of $r$ with respect to $w$. Again, we know that $w'(X) \geq w(X)$ for all $X$, as any sequence of moves that would service $\sigma_i r$ and end in configuration $X$ would also service requests $\sigma_i$ and be able to end in $X$ with the same or lesser distance traveled. Therefore, for any point $p$, we have: 
 
     \begin{equation*}
         MIN_{w'}(p) = min_{X} \{w'(X) - \Sigma_{x \in X} d(p,X) \} \geq min_{X} \{w(X) - \Sigma_{x \in X} d(p,X)  \} = MIN_w(p)
@@ -296,17 +295,17 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
 \end{lemma}
 
 \begin{proof}
-     By the definition of $MIN$, we have:
+     By the definition of $MIN$, the following holds for all $u \in U_\sigma$:
      \begin{equation*}
-        MIN_{w_\sigma}(u) = \leq min_{y \not \in U_\sigma} \{ w_\sigma(U - u + y) - \Sigma_{x \in U - u + y} d(x, u)\}
+        MIN_{w_\sigma}(u) \leq min_{y \not \in U_\sigma} \{ w_\sigma(U_\sigma - u + y) - \Sigma_{x \in U_\sigma - u + y} d(x, u)\}
      \end{equation*}
 
-     As the configuration $U$ with $u \in U$ minimizes the terms inside of the minimization on the right hand side. Suppose $y^*$ is a valid $y$ that minimizes the right hand side of the above equation. We have:
+     As the configuration $U$ with $u \in U_\sigma$ minimizes the terms inside of the minimization on the right hand side. Suppose $y^*$ is a valid $y$ that minimizes the right hand side of the above equation. We have:
      
      \begin{equation*}
         \begin{gathered}
-            MIN_{w_\sigma}(u) \leq w_\sigma(U - u + y^*) - \Sigma_{x \in U - u + y^*} d(x, u) \\
-        \leq w_\sigma(U - u + y^*) - d(y^*, u) \leq w_\sigma(U_\sigma) = OPT(\sigma)
+            MIN_{w_\sigma}(u) \leq w_\sigma(U_\sigma - u + y^*) - \Sigma_{x \in U_\sigma - u + y^*} d(x, u) \\
+        \leq w_\sigma(U_\sigma - u + y^*) - d(y^*, u) \leq w_\sigma(U_\sigma) = OPT(\sigma)
         \end{gathered}
      \end{equation*}
 
@@ -358,7 +357,7 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
     \end{equation*}
 \end{lemma}
 
-The above lemma follows directly by the provided definitions, because the total extended cost bouds the cost incurred by the work function algorithm. This lemma means that we are now only required to show the following:
+The above lemma follows directly by the provided definitions, because the total extended cost bounds the cost incurred by the work function algorithm. This lemma means that we are now only required to show the following:
 
 \begin{lemma}
     $TEC \leq 2k \cdot  OPT(\sigma) + \alpha$, and therefore the $WFA$ is $2k-1$ competitive.
@@ -387,3 +386,15 @@ The above lemma follows directly by the provided definitions, because the total 
         \end{gathered}
     \end{equation*}
 \end{proof}
+
+
+
+
+%hiphan for k-competitive
+% use align environment
+% $k$-server
+% use & for equations
+% When referencing an equation that is numbered, use \eqref{}
+% put iff for equivalece equations
+% WHen using ALG, OPT, MIN... mathsc (math small caps), or \text. Want it to render all as one workd, not as individaul variables. TEC as well.
+% input number to input ID 
