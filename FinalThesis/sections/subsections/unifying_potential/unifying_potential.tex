@@ -1,4 +1,4 @@
-In this section, we describe a unifying potential~\cite{unifyingPotential2021} that is a promising candidate for proving that the $\mathrm{WFA}$ is $k$-competitive. Once again, we describe definitions and theorems taken directly from~\cite{unifyingPotential2021}. In section~\ref{sec:usefulInsights}, we provide some explanatory details of a few of the lemmas from the original paper, along with the proofs taken from the original work. In seciton~\ref{sec:cat}, we attempt to extend the work done in the original paper to a highly confined metric space - the reduced caterpillar graph.
+In this section, we describe a unifying potential~\cite{unifyingPotential2021} that is a promising candidate for proving that the $\mathrm{WFA}$ is $k$-competitive. Once again, we describe definitions and theorems taken directly from~\cite{unifyingPotential2021}. In section~\ref{sec:usefulInsights}, we provide some explanatory details of a few of the lemmas from the original paper, along with the proofs taken from the original work. In seciton~\ref{sec:cat}, we attempt to extend the work done in the original paper~\cite{unifyingPotential2021} to a highly confined metric space - the reduced caterpillar graph.
 
 The unifying potential is used to show that various subcases (ex. $k=2$, $k=n-1$, $k=n-2$, and various specialized metric spaces) are $k$-competitive. While many of these subcases have been shown to be $k$-competitive in the past~\cite{server1991, server2009, server1996, server2004, server2002}, the novelty of this approach is a \textit{single} potential function that is able to prove all of these cases. The authors of this unifying potential work take this as indication that it may be possible to prove the general $k$-competitiveness for the $\mathrm{WFA}$ using this potential function.
 
@@ -17,7 +17,7 @@ The unifying potential is used to show that various subcases (ex. $k=2$, $k=n-1$
     A point $\bar{x} \in M$ is called an \textbf{antipode} of another point $x \in M$ if for every $y \in M$, $d(x,y) + d(y, \bar{x}) = \Delta$.
 \end{definition}
 
-It is worth noting that every metric space can be easily extended such that every point has an antipode. This is done by defining a copy of the original metric space, $\bar{M}$, where for every point $x \in M$, we have a copy $\bar{x} \in \bar{M}$. We denote the diameter of the original metric space $\Delta$. Distances within $\bar{M}$ and between the two spaces are defined as follows:
+It is worth noting that every metric space can be extended such that every point has an antipode. This is done by defining a copy of the original metric space, $\widebar{M}$, where for every point $x \in M$, we have a copy $\bar{x} \in \widebar{M}$. We denote the diameter of the original metric space $\Delta$. Distances within $\widebar{M}$ and between the two spaces are defined as follows:
 
 \begin{equation*}
     \begin{gathered}
@@ -26,7 +26,7 @@ It is worth noting that every metric space can be easily extended such that ever
     \end{gathered}
 \end{equation*}
 
-The diameter of this extended metric space will be $2\Delta$, and every point will have an antipode. On an extended metric space $M \cup \bar{M}$ where every point $p \in M$ has an antipode $\bar{p} \in \bar{M}$, for any point $q \in M$ and any point $\bar{r} \in \bar{M}$, $d(p,q) \leq d(p,\bar{r})$. This just states that the cost for traversing to a node on the current subgraph you are on is \textit{always} less than or equal to the cost of traversing to the other subgraph.
+The diameter of this extended metric space will be $2\Delta$, and every point will have an antipode. On an extended metric space $M \cup \widebar{M}$ where every point $p \in M$ has an antipode $\bar{p} \in \widebar{M}$, for any point $q \in M$ and any point $\bar{r} \in \widebar{M}$, $d(p,q) \leq d(p,\bar{r})$. This just states that the cost for traversing to a node on the current subgraph you are on is \textit{always} less than or equal to the cost of traversing to the other subgraph.
 
 \begin{definition}
     For a metric space $M$ where every point $x \in M$ has an antipode $\bar{x}$, we define the function \textbf{$\Phi_{x_1, x_2, ..., x_k}$} for a given configuration $x_1, x_2, ..., x_k$ as:
@@ -48,4 +48,4 @@ The diameter of this extended metric space will be $2\Delta$, and every point wi
     For a metric space $M$ where every point has an antipode, If for every request $r \in M$ and for every work function $w_0$, $w_1$, ..., $w_n$ it holds that $\Phi(w) = \Phi_{x_1, x_2, ..., x_k}(w)$ for some $x_1, x_2, ...x_k \in M$ where $x_k = r$, then the $\mathrm{WFA}$ is $k$-competitive on the metric space $M$.
 \end{lemma}
 
-While a proof for this is not provided here, we reference~\cite{unifyingPotential2021}, where a complete proof of this lemma is provided. This involves definition of a $n-k$ evader potential $\bar{\Phi}$, which is the dual to this problem. In this formulation, you have $n-k$ evaders in a metric space that must move away from requested points rather than towards them. It is clear that a solution to the evader problem would yield a parallel $k$ server solution.
+While a proof for this is not provided here, we reference~\cite{unifyingPotential2021}, where a complete proof of this lemma is provided. This involves definition of a $n-k$ evader potential $\bar{\Phi}$, which is the dual to this problem. In this formulation, you have $n-k$ evaders in a metric space that must move away from requested points rather than towards them. A solution to the evader problem would yield a parallel $k$ server solution, as whenever there none of the $n-k$ evaders is on the request, this would mean one of the $k$ servers would be on the requested location.

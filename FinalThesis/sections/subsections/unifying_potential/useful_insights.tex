@@ -21,29 +21,29 @@ In this section, we provide a couple of useful insights that have been noted whi
 \end{proof}
 
 \begin{definition}
-    It is said that configuration $Y$ \textbf{supports} $X$ if the following property holds:
+    Configuration $Y$ \textbf{supports} $X$ if the following property holds:
     \begin{equation*}
         w(X) - w(Y) = D(X,Y)
     \end{equation*}
 \end{definition}
 
 \begin{lemma}
-    A lazy optimal algorithm $\mathrm{OPT}$ has no reason to be in a configuration that is supported by another configuration.
+    There exists a lazy optimal algorithm $\mathrm{OPT}$ that will never be in a configuration that is supported by another configuration.
 \end{lemma}
 
 \begin{proof}
     Suppose $\mathrm{OPT}$ is in a configuraiton $X$ that is supported by another configuration $Y$ after servicing some request $r_i$. Suppose points in $X$ and $Y$ are indexed according to their minimum cost matching, i.e. $x_j$ matches with $y_j$ in the matching. We can define a new offline algorithm, $\mathrm{OPT}_1$, which ends in configuration $Y$ after servicing $r_i$. Following this, Whenever $\mathrm{OPT}$ services a request $r$ with the $j$th server located at $x_j$, $\mathrm{OPT}_1$ will service the request with the same server, located at $y_j$. We know that $d(y_j, r) \leq d(y_j, x_j) + d(x_j, r)$, and $\mathrm{OPT}$ has already incurred the cost $d(y_j, x_j)$ (by the definition of support). Therefore, the cost incurred by $\mathrm{OPT}_1$ will be less than or equal to that incurred by $\mathrm{OPT}$.
 \end{proof}
 
-Since at each step, we know that $\mathrm{OPT}$ can only be in a limited set of configurations (the set of configurations that are not supported by other configurations), we must only "keep up" with those. This is used as the basis for proving the competitive ratio of the $\mathrm{WFA}$.
+Since at each step, we know that $\mathrm{OPT}$ can only be in a limited set of configurations (the set of configurations that are not supported by other configurations), we must only ``keep up" with those. This is used as the basis for proving the competitive ratio of the $\mathrm{WFA}$.
 
 \begin{definition}
-    A \textbf{tree graph} is a set of nodes that are connected by edges which is acyclic (No path of unique edges leads back to the starting node), and satisfies the metric property. Additionally, a \textbf{leaf node} is one that is only connected by \textit{one} edge to the rest of the graph. The set of all leaf nodes for a graph is denoted $L$.
+    A \textbf{tree metric} is a set of nodes that are connected by edges which is acyclic (No path of unique edges leads back to the starting node), and satisfies the metric property. Additionally, a \textbf{leaf node} is one that is only connected by \textit{one} edge to the rest of the graph. The set of all leaf nodes for a graph is denoted $L$.
 \end{definition}
 
 \begin{lemma}
     \label{lem:leaf}
-    For any metric space $M$ that can be represented as a tree graph, there exists a minimizer $A$ of $r$ with respect to $w$ such that every $x \in A$, $x$ is a leaf node.
+    For any metric space $M$ that can be represented as a tree metric, there exists a minimizer $A$ of $r$ with respect to $w$ such that every $x \in A$, $x$ is a leaf node~\cite{unifyingPotential2021}.
 \end{lemma}
 
 \begin{proof}

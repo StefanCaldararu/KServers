@@ -1,6 +1,6 @@
 We begin by defining various specific metric spaces that will be used in this section.
 \begin{definition}
-    A \textbf{Multiray space} is a tree metric space $(X, d)$ wich consists of a central node $c$, and rays that are rooted at $c$. Every node $x \in X - c$ is connected to \textit{at most} two other nodes. This can be thought of as multiple lines with endpoints joined at $c$.
+    A \textbf{multiray space} is a tree metric space $(X, d)$ wich consists of a central node $c$, and rays that are rooted at $c$. Every node $x \in X - c$ is connected to \textit{at most} two other nodes. This can be thought of as multiple lines with endpoints joined at $c$.
 \end{definition}
 
 \begin{figure}[H]
@@ -10,7 +10,7 @@ We begin by defining various specific metric spaces that will be used in this se
 \end{figure}
 
 \begin{definition}
-    A \textbf{General Caterpillar Graph} is a tree metric space $(X, d)$ consisting of a central line path, and multiple legs extending from the central path. Each central path node can have 0, 1, or 2 legs attached to it. Each leg is a line segment. The multiray space can be thought of as a compression of a general caterpillar graph, where the distance between nodes on the central line path is 0.
+    A \textbf{general caterpillar graph} is a tree metric space $(X, d)$ consisting of a central line path, and multiple legs extending from the central path. Each central path node can have 0, 1, or 2 legs attached to it. Each leg is a line segment. The multiray space can be thought of as a compression of a general caterpillar graph, where the distance between nodes on the central line path is 0.
 \end{definition}
 
 \begin{figure}[H]
@@ -20,7 +20,7 @@ We begin by defining various specific metric spaces that will be used in this se
 \end{figure}
 
 \begin{definition}
-    A \textbf{Reduced Caterpillar Graph} is a General Caterpillar Graph where the distances between nodes on the central path are all equal to 1. Additionally, all body nodes have exactly 2 legs attached to them, and each leg has exactly 1 node on it. The reduced caterpillar graph is a special case of the general caterpillar graph.
+    A \textbf{reduced caterpillar graph} is a general caterpillar graph where the distances between nodes on the central path are all equal to 1. Additionally, all body nodes have exactly 2 legs attached to them, and each leg has exactly 1 node on it. The reduced caterpillar graph is a special case of the general caterpillar graph.
 \end{definition}
 
 \begin{figure}[H]
@@ -29,11 +29,11 @@ We begin by defining various specific metric spaces that will be used in this se
     \caption{An example reduced caterpillar graph}
 \end{figure}
 
-In this section, we will be primarily considering the smallest possible reduced caterpillar graph, consisting of 6 nodes. A unifying potential proof has been shown for multiray spaces. We present recitations of the beginning of this proof, and attempt to extend these to the smallest reduced caterpillar graph. It is worth noting that the $\mathrm{WFA}$ can already be shown to be $k$-competitive on the reduced caterpillar graph with a variety of seperate proofs. That is, 2 servers have been shown to be 2 competitive on general metric spaces, and 3 servers have been shown to be $3$-competitive on trees. 4 servers on this space is a metric space with $k-2$ points, and 5 servers is a metric space of $k-1$ points, which has yet again been shown to be $k$ competitive~\cite{unifyingPotential2021}.
+In this section, we will be primarily considering metric spaces that can be represented by the smallest possible reduced caterpillar graph, consisting of 6 nodes. A unifying potential proof has been shown for multiray spaces. We present recitations of the beginning of this proof, and attempt to extend these to the smallest reduced caterpillar graph. It is worth noting that the $\mathrm{WFA}$ can already be shown to be $k$-competitive on the reduced caterpillar graph with a variety of seperate proofs. That is, 2 servers have been shown to be 2 competitive on general metric spaces, and 3 servers have been shown to be $3$-competitive on trees. 4 servers on this space is a metric space with $k-2$ points, and 5 servers is a metric space of $k-1$ points, which has yet again been shown to be $k$ competitive~\cite{unifyingPotential2021}.
 
 \subsubsection*{Symmetry property of the potential function for the Multiray Space}
 
-The following definitions and lemmas are drawn directly from~\cite{unifyingPotential2021}, which lead to a proof of $k$ competitiveness for the $\mathrm{WFA}$ on the Multiray metric space. We include some addtiional explanatory details.
+The following definitions and lemmas are drawn directly from~\cite{unifyingPotential2021}, which lead to a proof of $k$ competitiveness for the $\mathrm{WFA}$ on the Multiray metric space. We include some additional explanatory details.
 
 \begin{definition}
     \label{def:mw}
@@ -163,13 +163,13 @@ The potential is therefore written compactly in the following equation:
     \end{equation*}
 \end{proof}
 
-The above lemmas show that the potential function for the Multiray space is symmetric under permutations of the leaf nodes. This is a powerful property, that helps lead to a proof of $k$ competitiveness of the $\mathrm{WFA}$ on the Multiray space.
+The above lemmas show that the potential function for the Multiray space is symmetric under permutations of the leaf nodes. This is a powerful property, that helps lead to a proof of $k$ competitiveness of the $\mathrm{WFA}$ on the multiray space. While the rest of the proof is not provided here, it can be referenced in~\cite{unifyingPotential2021}.
 
-\subsubsection*{Notes on the Symmetry property of the potential function for the Reduced Caterpillar Graph}
+\subsubsection*{Notes on the symmetry property of the potential function for the reduced caterpillar graph}
 
 In this section, we present various attempts at extending these proofs to the smallest reduced caterpillar graph, which has only 6 nodes.
 
-Our first problems arise from attempting to write a parallel definition to $m_w(X)$~\ref{def:mw}. We have two options in this scenario. We can either consider the entire body of the Caterpillar graph as the "center", or we can add a new node at the middle of the body. These two cases are shown in fig.~\ref{fig:smallcat}
+Our first problems arise from attempting to write a parallel definition to $m_w(X)$~\ref{def:mw}. We consider two options in this scenario. We can either consider the entire body of the Caterpillar graph as the ``center", or we can add a new node at the middle of the body. These two cases are shown in fig.~\ref{fig:smallcat}
 
 \begin{figure}[H]
     \centering
@@ -209,7 +209,7 @@ If we add a central node to the caterpillar graph, we arrive at the following de
 
 We now attempt to rewrite the potential, as is done for the Multiray space. The parallel to lemma~\ref{lem:leaf2} follows in a similar manner, as for both $m'_w(X)$ and $m''_w(X)$ we can always push a point $x \in X$ to a leaf, by increasing the work done by at most the distance to the center.
 
-We can now attempt to rewrite the potential function using these two interpretations of the "center". We consider the case where the center is the entire body of the caterpillar graph. We have:
+We can now attempt to rewrite the potential function using these two interpretations of the ``center". We consider the case where the center is the entire body of the caterpillar graph. We have:
 
 \begin{equation*}
     \begin{split}
@@ -238,4 +238,4 @@ Reverting to the case where the entire body is considered as the center, we can 
     \end{split}
 \end{equation*}
 
-Continuing the proof from here yields no useful results, as we have been unable to show that the potential function is symmetric under permutations of the leaf nodes.
+Continuing the proof from here has yielded no useful results, as we have been unable to show that the potential function is symmetric under permutations of the leaf nodes. Proving this would require an explicit representation of the potential function in the form above, which we have been unable to achieve.

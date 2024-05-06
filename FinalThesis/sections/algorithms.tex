@@ -1,7 +1,7 @@
 
 \subsection{Random Algorithm}
 \label{sec:rand}
-The random algorithm is the most basic of all of the online algorithms, and has little practical use. If the request is not currently covered by a server, then $\mathrm{RAND}$ randomly selects one of it's servers, and moves the selected server to the service point. This algorithm is mostly just used as a baseline, as we would hope that none of the other algorithms will perform worse than random.
+If the request is not currently covered by a server, then the random algorithm $\mathrm{RAND}$ randomly selects one of it's servers, and moves the selected server to the service point. We use this algorithm as a baseline, as we would hope that none of the other algorithms will perform worse than random.
 
 \begin{definition}
     If the request is not currently covered by the configuration, $\mathrm{RAND}$ selects a server uniformly at random, and moves that server to the service point.
@@ -9,7 +9,7 @@ The random algorithm is the most basic of all of the online algorithms, and has 
 
 \subsection{Greedy Algorithm}
 \label{sec:greedy}
-The greedy algorithm is also a computationally inexpensive online algorithm, but which has many practical uses. This algorithm checks the distance that each server would have to travel to get to the service point, and selects the server which would incur the smallest cost. While this algorithm has very good performance for the majority of practical application inputs, it is surprisingly not a competitive algorithm~\cite{OnlineComp1998}. The greedy algorithm is often looked over due to it's non-competitiveness, but still performs very well in practice - especially when compared via other methods.
+The greedy algorithm is also a computationally inexpensive online algorithm, but which has many practical uses. This algorithm checks the distance that each server would have to travel to get to the service point, and selects the server which would incur the smallest cost. While this algorithm has very good performance for the majority of practical application inputs, it is surprisingly not a competitive algorithm~\cite{OnlineComp1998}. The greedy algorithm is often looked over due to it's non-competitiveness, but still performs very well in practice - especially when compared via other methods~\cite{bij2016, MAXMAX2005}.
 
 \begin{definition}
     If the request is not currently covered by the configuration, $\mathrm{GREEDY}$ selects the server $x$ to move according to the following policy:
@@ -20,15 +20,15 @@ The greedy algorithm is also a computationally inexpensive online algorithm, but
 
 \subsection{Optimal Algorithm}
 \label{sec:OPT}
-Any optimal offline algorithm is simply defined as an algorithm that will have the smallest possible cost for any request sequence. Computationally, the fastest implementations leverage a reduction to a Min Cost Max Flow problem, similar to the one described for the $\mathrm{WFA}$ in section~\ref{sec:wfalg}. This reduction can be further studied in~\cite{WFA2009}. This still ends up being a good bit more computationally expensive than the previous algorithms, but is needed to be used as a metric to compare algorithms against, as most algorithms are compared to the optimal when determining their strenghts.
+Any optimal offline algorithm is simply defined as an algorithm that will have the smallest possible cost for every request sequence. Computationally, the fastest implementations leverage a reduction to a Min Cost Max Flow problem, similar to the one described for the $\mathrm{WFA}$ in section~\ref{sec:wfalg}. This reduction can be further studied in~\cite{WFA2009}. This still ends up being a good bit more computationally expensive than the previous algorithms, but is needed to be used as a metric to compare algorithms against, as most algorithms are compared to the optimal when determining their strenghts.
 
 \begin{definition}
-    The optimal algorithm $\mathrm{OPT}$ is defined as the offline algorithm that will have the smallest possible cost for any request sequence.
+    The optimal algorithm $\mathrm{OPT}$ is defined as the offline algorithm that will have the smallest possible cost for every request sequence.
 \end{definition}
 
 \subsection{Work-Function Algorithm}
 \label{sec:WFA}
-The Work-Function Algorithm $\mathrm{WFA}$ is considered to be one of the most promising algorithms in terms of the competitive ratio, as it has been proven to be $(2k-1)$-competitive, and is believed to be $k$-competitive. Given a certain starting server configuration, current configuration, and previous input request sequence, $\mathrm{WFA}$ balances between which server an $\mathrm{OPT}$ algorithm would likely move and a $\mathrm{GREEDY}$ policy, while also ensuring that $k-1$ of the servers end up in the current server configuration. This final server is then used to service the current request. It is able to do this by computing a \textbf{work function} for the current request, given the previous request sequence and the current server configuration.
+The Work-Function Algorithm ($\mathrm{WFA}$) is considered to be one of the most promising algorithms in terms of the competitive ratio, as it has been proven to be $(2k-1)$-competitive, and is believed to be $k$-competitive. Given a certain starting server configuration, current configuration, and previous input request sequence, $\mathrm{WFA}$ balances between which server an $\mathrm{OPT}$ algorithm would likely move and a $\mathrm{GREEDY}$ policy, while also ensuring that $k-1$ of the servers end up in the current server configuration. This final server is then used to service the current request. It is able to do this by computing a \textbf{work function} for the current request, given the previous request sequence and the current server configuration.
 
 \begin{definition}
     The \textbf{work function}, denoted $w_\sigma(C)$ computes the minimum value required to begin in configuration $C_0$, service all requests in $\sigma$, and end with servers in configuration $C$. The work function has similar notation to configurations($w_{\sigma_i}$, $w$, and $w'$), except the work function value on an empty request sequence is denoted $w_\emptyset$, and the work done on the $i$th request sequence is denoted with the abreviated request sequence in the subscript. Additionally, the work function can be computed as follows:
@@ -47,11 +47,11 @@ The Work-Function Algorithm $\mathrm{WFA}$ is considered to be one of the most p
     \end{equation*}
 \end{definition}
 
-A similar reduction to the $\mathrm{WFA}$ computation can be used to find this server~\cite{WFA2009}. This means that the $\mathrm{WFA}$ must compute a Min Cost Max Flow for each request, making it much more expensive than $\mathrm{OPT}$, and all of the other algorithms. Additionally, it is also worth noting that this is not a finite memory algorithm, as the $\mathrm{WFA}$ must remember all of the previous requests~\cite{MAXMAX2005}. 
+A similar reduction to the $\mathrm{WFA}$ computation can be used to find this server~\cite{WFA2009}. This means that the $\mathrm{WFA}$ must compute a Min-Cost Max-Flow for each request, making it much more expensive than $\mathrm{OPT}$, and all of the other algorithms. Additionally, it is also worth noting that this is not a finite memory algorithm, as the $\mathrm{WFA}$ must remember all of the previous requests~\cite{MAXMAX2005}. 
 
 \subsection{Double Coverage Algorithm}
 \label{sec:DC}
-The Double Coverage algorithm is a $k$-competitive algorithm defined only on the line metric space. If the request is to the left of all of our current server locations, then we just move the left most server to service the request. If the request is to the right of all of the current locations, we use the rightmost server. Otherwise, the request will be between two servers. In this case, we move the two closest servers towards the request at the same rate, until one of the servers reaches the request location. A proof of this algorithms competitiveness can be found in~\cite{OnlineComp1998}. It is also important to note that this is not a lazy algorithm, as it does move more than one server at a time. 
+The Double Coverage algorithm ($\mathrm{DC}$) is a $k$-competitive algorithm defined only on the line metric space. If the request is to the left of all of our current server locations, then we just move the left most server to service the request. If the request is to the right of all of the current locations, we use the rightmost server. Otherwise, the request will be between two servers. In this case, we move the two closest servers towards the request at the same rate, until one of the servers reaches the request location. A proof of this algorithms competitiveness can be found in~\cite{OnlineComp1998}. It is also important to note that this is not a lazy algorithm, as it does move more than one server at a time. 
 
 \begin{definition}
     If the request is not currently covered by the configuration and the request is further left or further right than any of the servers, then $\mathrm{DC}$ moves the leftmost or rightmost server (respectively) to the service point. Otherwise, $\mathrm{DC}$ selects the closest server on either side of the request $x$ and $y$, and moves them both a distance $p = \mathrm{argmin}_{v \in \{x, y\}} d(v, r)$.
@@ -61,12 +61,12 @@ The Double Coverage algorithm is a $k$-competitive algorithm defined only on the
 Additionally, we can generalize the Double Coverage Algorithm to tree metric spaces. 
 
 \begin{definition}
-    $\mathrm{DCT}$ does a search for all servers that have a path to the request, where no other server lies on this path. It then moves all servers that satsify this condition towards the request, and rechecks the condition each time servers reach a new node. It proceeds in this manner until the request is serviced.
+    $\mathrm{DCT}$ does a search for all servers that have a path to the request, where no other server lies on this path. It then moves all servers that satsify this condition towards the request at the same speed, and rechecks the condition each time servers reach a new node. It proceeds in this manner until the request is serviced.
 \end{definition}
 
 \subsection{$k$-Centers Algorithm}
 \label{sec:KC}
-The $k$-Centers algorithm divides the metric space into $k$ sections, and assigns each server a section of the space to operate in. Implementations of this algorithm can either have the server return to the center of it's operating space after servicing the request in a non-lazy fashion, or just remember the bounds of each operating space, and service each request with the appropriate server~\cite{bij2016}. This algorithm will vary depending on how the metric space is divided, so we only provide an intuitive definition for the line segment metric space.
+The $k$-Centers algorithm ($\mathrm{KC}$)divides the metric space into $k$ sections, and assigns each server a section of the space to operate in. Implementations of this algorithm can either have the server return to the center of it's operating space after servicing the request in a non-lazy fashion, or just remember the bounds of each operating space, and service each request with the appropriate server~\cite{bij2016}. This algorithm will vary depending on how the metric space is divided, so we only provide an intuitive definition for the line segment metric space.
 
 \begin{definition}
     The $\mathrm{KC}$ algorithm divides the line segment it operates on into $k$ equal sections. Each server is assigned a section to operate in. Whenever a request is not currently covered by a server, the server assigned to the section that the request is in will move to service the request.
