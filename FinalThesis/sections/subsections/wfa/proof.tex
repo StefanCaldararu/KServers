@@ -1,4 +1,4 @@
-In this section, we follow the proof showing that the $WFA$ is $2k-1$ competitive from~\cite{OnlineComp1998}, and add some in-depth explanatory details. The general outline of this proof directly follows~\cite{OnlineComp1998}, and the definitions and lemmas follow essentially the exact same structure. There are a few details and computations that are not provided in the proof, but are explained in-detail in this section.
+In this section, we follow the proof showing that the $WFA$ is $2k-1$-competitive from~\cite{OnlineComp1998}, and add some in-depth explanatory details. The general outline of this proof directly follows~\cite{OnlineComp1998}, and the definitions and lemmas follow essentially the exact same structure. There are a few details and computations that are not provided in the proof, but are explained in-detail in this section.
 
 It is worth noting a few basic property of the work function:
 
@@ -12,9 +12,9 @@ It is worth noting a few basic property of the work function:
     w'(C) = min_{x \in C} [w'(C - x + r) + d(r, x)] = min_{x \in C} [w(C - x + r) + d(r, x)]
 \end{equation}
 
-The first part of property~\ref{eq:nextwork} follows because $r \in C'$. The second part assumes that $s$ is the point from which the server that moved to service $r$, and follows from the definition of the WFA.
+The first part of property~\eqref{eq:nextwork} follows because $r \in C'$. The second part assumes that $s$ is the point from which the server that moved to service $r$, and follows from the definition of the WFA.
 
-The first part of~\ref{eq:work} says that the work done to service a request sequence \textit{including} the next request $r$ for some configuration $C$ is equal to the minimum work done to service the same request sequence, except on the configuration $C$ without the point $x$ and with the point $r$, plus the distance between $r$ and $x$. The set $C-x+r$ is defined as in~\cite{OnlineComp1998}, where there is only one copy of $r$ in this set, whether or not $r$ was originally in $C$. 
+The first part of~\eqref{eq:work} says that the work done to service a request sequence \textit{including} the next request $r$ for some configuration $C$ is equal to the minimum work done to service the same request sequence, except on the configuration $C$ without the point $x$ and with the point $r$, plus the distance between $r$ and $x$. The set $C-x+r$ is defined as in~\cite{OnlineComp1998}, where there is only one copy of $r$ in this set, whether or not $r$ was originally in $C$. 
 
 The nice part about this is that we now \textit{know} that $r \in C - x + r$, which isn't necessarily true of $C$. This means that the second part of this equation is true, where we can remove the $r$ from the work function, as it is already included in the set. If $r \in C$, then the minimum is achieved by having $x = r$, because $d(r,x) = 0$ and therefore $w'(C) = w(C)$.
 
@@ -123,7 +123,7 @@ All work functions are GQC, and so are therefore also QC.
 \end{lemma}
 
 \begin{proof}
-    We want to show that for every $B$, $w'(A) - \Sigma_{a \in A} d(a,r) \leq w'(B) - \Sigma_{b \in B} d(b,r)$. This is equivalent to showing the following, as per property~\ref{eq:work}:
+    We want to show that for every $B$, $w'(A) - \Sigma_{a \in A} d(a,r) \leq w'(B) - \Sigma_{b \in B} d(b,r)$. This is equivalent to showing the following, as per property~\eqref{eq:work}:
     
     \begin{equation*}
         \begin{split}
@@ -190,7 +190,7 @@ All work functions are GQC, and so are therefore also QC.
 
     If $r \in B$, then this statement is true, as $w'(B) = w(B)$, and $w(A) \leq w'(A)$ by definition.
 
-    By expanding the above desired equation using eq.~\ref{eq:work}, we get that we want to show:
+    By expanding the above desired equation using eq.~\eqref{eq:work}, we get that we want to show:
 
     \begin{equation*}
         min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq min_{a' \in A} \{ w(A - a' + r) + d(a', r) + w(B)\}
@@ -357,7 +357,7 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
 The above lemma follows directly by the provided definitions, because the total extended cost bounds the cost incurred by the work function algorithm. This lemma means that we are now only required to show the following:
 
 \begin{lemma}
-    $TEC \leq 2k \cdot  OPT(\sigma) + \alpha$, and therefore the $WFA$ is $2k-1$ competitive.
+    $TEC \leq 2k \cdot  OPT(\sigma) + \alpha$, and therefore the $WFA$ is $2k-1$-competitive.
 \end{lemma}
 
 \begin{proof}
@@ -388,10 +388,5 @@ The above lemma follows directly by the provided definitions, because the total 
 
 
 %hiphan for k-competitive
-% use align environment
 % $k$-server
-% use & for equations
-% When referencing an equation that is numbered, use \eqref{}
-% put iff for equivalece equations
 % WHen using ALG, OPT, MIN... mathsc (math small caps), or \text. Want it to render all as one workd, not as individaul variables. TEC as well.
-% input number to input ID 
