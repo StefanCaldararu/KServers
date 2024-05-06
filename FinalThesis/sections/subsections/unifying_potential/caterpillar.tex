@@ -29,11 +29,11 @@ We begin by defining various specific metric spaces that will be used in this se
     \caption{An example reduced caterpillar graph}
 \end{figure}
 
-In this section, we will be primarily considering the smallest possible reduced caterpillar graph, consisting of 6 nodes. A unifying potential proof has been shown for multiray spaces. We present recitations of the beginning of this proof, and attempt to extend these to the smallest reduced caterpillar graph. It is worth noting that the $WFA$ can already be shown to be $k$-competitive on the reduced caterpillar graph with a variety of seperate proofs. That is, 2 servers have been shown to be 2 competitive on general metric spaces, and 3 servers have been shown to be $3$-competitive on trees. 4 servers on this space is a metric space with $k-2$ points, and 5 servers is a metric space of $k-1$ points, which has yet again been shown to be $k$ competitive~\cite{unifyingPotential2021}.
+In this section, we will be primarily considering the smallest possible reduced caterpillar graph, consisting of 6 nodes. A unifying potential proof has been shown for multiray spaces. We present recitations of the beginning of this proof, and attempt to extend these to the smallest reduced caterpillar graph. It is worth noting that the $\mathrm{WFA}$ can already be shown to be $k$-competitive on the reduced caterpillar graph with a variety of seperate proofs. That is, 2 servers have been shown to be 2 competitive on general metric spaces, and 3 servers have been shown to be $3$-competitive on trees. 4 servers on this space is a metric space with $k-2$ points, and 5 servers is a metric space of $k-1$ points, which has yet again been shown to be $k$ competitive~\cite{unifyingPotential2021}.
 
 \subsubsection*{Symmetry property of the potential function for the Multiray Space}
 
-The following definitions and lemmas are drawn directly from~\cite{unifyingPotential2021}, which lead to a proof of $k$ competitiveness for the $WFA$ on the Multiray metric space. We include some addtiional explanatory details.
+The following definitions and lemmas are drawn directly from~\cite{unifyingPotential2021}, which lead to a proof of $k$ competitiveness for the $\mathrm{WFA}$ on the Multiray metric space. We include some addtiional explanatory details.
 
 \begin{definition}
     \label{def:mw}
@@ -48,7 +48,7 @@ The following definitions and lemmas are drawn directly from~\cite{unifyingPoten
     \label{lem:leaf2}
     There exists leaves $l_1, l_2, ..., l_k$ such that: 
     \begin{equation*}
-        min_X m_w(X) = m_w (l_1, l_2, ..., l_k)
+        \mathrm{min}_X m_w(X) = m_w (l_1, l_2, ..., l_k)
     \end{equation*}
 \end{lemma}
 
@@ -68,8 +68,8 @@ The following definitions and lemmas are drawn directly from~\cite{unifyingPoten
 
     \begin{equation*}
         \begin{split}
-            w(\bar{l^i}, x_{i+1}, ..., x_k) &= min_{x_{i+1}, ..., x_k \subseteq X} w(X) + \Sigma_{j=1}^i d(x_j, \bar{l}) \\
-            &= min_{x_{i+1}, ..., x_k \subseteq X} w(X) + i\Delta - \Sigma_{j=1}^i d(x_j, l)
+            w(\bar{l^i}, x_{i+1}, ..., x_k) &= \mathrm{min}_{x_{i+1}, ..., x_k \subseteq X} w(X) + \Sigma_{j=1}^i d(x_j, \bar{l}) \\
+            &= \mathrm{min}_{x_{i+1}, ..., x_k \subseteq X} w(X) + i\Delta - \Sigma_{j=1}^i d(x_j, l)
         \end{split}
     \end{equation*}
 
@@ -77,11 +77,11 @@ The following definitions and lemmas are drawn directly from~\cite{unifyingPoten
 
     \begin{equation*}
         \begin{split}
-            &min_{x_{i+1}, ..., x_k \subseteq X} w(X) + i\Delta - \Sigma_{j=1}^i d(x_j, \bar{l}) \\
-            &= min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i \cdot d(c, l) - \Sigma_{j=1} ^ i d(c, x_j)\}\\
-            &= min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i \cdot d(c, l) - \Sigma_{j=1} ^ i d(c, x_j) + \Sigma_{j=i+1}^k d(c, x_j) - \Sigma_{j=i+1}^k d(c, x_j)\} \\
-            &= min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) - \Sigma_{j=1} ^ k d(c, x_j) + i \Delta  - i \cdot d(c, l)+\Sigma_{j=i+1}^k d(c, x_j)\} \\
-            &= min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ m_w(X) + i(\Delta - d(c, l)) + \Sigma_{j=i+1} ^ k d(c, x_j)\}
+            &\mathrm{min}_{x_{i+1}, ..., x_k \subseteq X} w(X) + i\Delta - \Sigma_{j=1}^i d(x_j, \bar{l}) \\
+            &= \mathrm{min}_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i \cdot d(c, l) - \Sigma_{j=1} ^ i d(c, x_j)\}\\
+            &= \mathrm{min}_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i \cdot d(c, l) - \Sigma_{j=1} ^ i d(c, x_j) + \Sigma_{j=i+1}^k d(c, x_j) - \Sigma_{j=i+1}^k d(c, x_j)\} \\
+            &= \mathrm{min}_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) - \Sigma_{j=1} ^ k d(c, x_j) + i \Delta  - i \cdot d(c, l)+\Sigma_{j=i+1}^k d(c, x_j)\} \\
+            &= \mathrm{min}_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ m_w(X) + i(\Delta - d(c, l)) + \Sigma_{j=i+1} ^ k d(c, x_j)\}
         \end{split}
     \end{equation*}
 \end{proof}
@@ -91,10 +91,10 @@ We can now rewrite our potential function operating on exclusively leaf nodes as
 \begin{equation*}
     \begin{split}
         \Phi_{l_1, ..., l_k} (w) &= \Sigma_{i=0}^k w(\bar{l_i}^i, l_{i+1}, ..., l_k) \\
-        &= \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) + i(\Delta - d(c, l_i)) + \Sigma_{j=i+1}^k d(c, l_j)\} \\
-        &= \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) \} + \Sigma_{i=0}^k \{i(\Delta - d(c, l_i)) + \Sigma_{j=i+1}^k d(c, l_j)\} \\
-        &= \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) \} + \frac{k(k+1)}{2}\Delta + \Sigma_{i=0}^k [- i d(c, l_i) + \Sigma_{j=i+1}^k \{d(c, l_j)\}] \\
-        &= \frac{k(k+1)}{2}\Delta + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\}
+        &= \Sigma_{i=0}^k \mathrm{min}_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) + i(\Delta - d(c, l_i)) + \Sigma_{j=i+1}^k d(c, l_j)\} \\
+        &= \Sigma_{i=0}^k \mathrm{min}_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) \} + \Sigma_{i=0}^k \{i(\Delta - d(c, l_i)) + \Sigma_{j=i+1}^k d(c, l_j)\} \\
+        &= \Sigma_{i=0}^k \mathrm{min}_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i) \} + \frac{k(k+1)}{2}\Delta + \Sigma_{i=0}^k [- i d(c, l_i) + \Sigma_{j=i+1}^k \{d(c, l_j)\}] \\
+        &= \frac{k(k+1)}{2}\Delta + \Sigma_{i=0}^k \mathrm{min}_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\}
     \end{split}
 \end{equation*}
 
@@ -108,11 +108,11 @@ The potential is therefore written compactly in the following equation:
 
 \begin{equation}
         \label{eq:repotential}
-        \Phi_{l_1, ..., l_k} (w) = \frac{k(k+1)}{2}\Delta + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\}
+        \Phi_{l_1, ..., l_k} (w) = \frac{k(k+1)}{2}\Delta + \Sigma_{i=0}^k \mathrm{min}_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\}
 \end{equation}
 
 \begin{lemma}
-    Suppose we have some $w$ and $l_1, ..., l_k$ such that $m_w(l_1, ..., l_k) = min_X m_w(X)$. Then $\Phi_{l_1, l_2, ..., l_k}(w)$ is constant under permutations of $l_1, l_2, ..., l_k$.
+    Suppose we have some $w$ and $l_1, ..., l_k$ such that $m_w(l_1, ..., l_k) = \mathrm{min}_X m_w(X)$. Then $\Phi_{l_1, l_2, ..., l_k}(w)$ is constant under permutations of $l_1, l_2, ..., l_k$.
 \end{lemma}
 
 \begin{proof}
@@ -120,15 +120,15 @@ The potential is therefore written compactly in the following equation:
 
     \begin{equation*}
         \begin{split}
-            \Phi_{l_1, l_2, ..., l_{k-1}, l_k}(w) &= \frac{k(k+1)}{2} \Delta + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_{k-1}, l_k \subseteq X_i : X_i - l_{i+1}, ..., l_{k-1}, l_k \subseteq L - l_i} m_w(X_i) \\ \\
-            \Phi_{l_1, l_2, ..., l_k, l_{k-1}}(w) &= \frac{k(k+1)}{2} \Delta + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k, l_{k-1} \subseteq X_i : X_i - l_{i+1}, ..., l_k, l_{k-1} \subseteq L - l_i} m_w(X_i)
+            \Phi_{l_1, l_2, ..., l_{k-1}, l_k}(w) &= \frac{k(k+1)}{2} \Delta + \Sigma_{i=0}^k \mathrm{min}_{l_{i+1}, ..., l_{k-1}, l_k \subseteq X_i : X_i - l_{i+1}, ..., l_{k-1}, l_k \subseteq L - l_i} m_w(X_i) \\ \\
+            \Phi_{l_1, l_2, ..., l_k, l_{k-1}}(w) &= \frac{k(k+1)}{2} \Delta + \Sigma_{i=0}^k \mathrm{min}_{l_{i+1}, ..., l_k, l_{k-1} \subseteq X_i : X_i - l_{i+1}, ..., l_k, l_{k-1} \subseteq L - l_i} m_w(X_i)
         \end{split}
     \end{equation*}
 
     We note that the \textit{only} two terms that differ between these two equations are the last two, relating to the $X_{k-1}$ and $X_k$ configurations. We can therefore rewrite our two potentials by defining the following term:
     
     \begin{equation*}
-            \Gamma_{x_1, ..., x_{k-2}}(w) := \frac{k(k+1)}{2} \Delta + \Sigma_{i=0}^{k-2} min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} m_w(X_i)
+            \Gamma_{x_1, ..., x_{k-2}}(w) := \frac{k(k+1)}{2} \Delta + \Sigma_{i=0}^{k-2} \mathrm{min}_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} m_w(X_i)
     \end{equation*}
 
     And we rewrite the potentials as: 
@@ -136,16 +136,16 @@ The potential is therefore written compactly in the following equation:
     \begin{equation*}
         \begin{split}
             \Phi_{l_1, l_2, ..., l_{k-1}, l_k}(w) &= \Gamma_{l_1, ..., l_{k-2}}(w) \\
-            &+ min_{l_{k-1}, l_k \subseteq X_{k-1} : X_{k-1} - l_{k-1} - l_k \subseteq L - l_i} m_w(X_{k-1}) +  min_{l_k \subseteq X_k : X_k - l_k \subseteq L - l_i} m_w(X_{k}) \\ \\
+            &+ \mathrm{min}_{l_{k-1}, l_k \subseteq X_{k-1} : X_{k-1} - l_{k-1} - l_k \subseteq L - l_i} m_w(X_{k-1}) +  \mathrm{min}_{l_k \subseteq X_k : X_k - l_k \subseteq L - l_i} m_w(X_{k}) \\ \\
             \Phi_{l_1, l_2, ..., l_{k}, l_{k-1}}(w) &= \Gamma_{l_1, ..., l_{k-2}}(w) \\
-            &+ min_{l_{k-1}, l_k \subseteq X_{k} : X_{k} - l_{k-1} - l_k \subseteq L - l_i} m_w(X_{k}) +  min_{l_{k-1} \subseteq X_{k-1} : X_{k-1} - l_{k-1} \subseteq L - l_i} m_w(X_{k-1})
+            &+ \mathrm{min}_{l_{k-1}, l_k \subseteq X_{k} : X_{k} - l_{k-1} - l_k \subseteq L - l_i} m_w(X_{k}) +  \mathrm{min}_{l_{k-1} \subseteq X_{k-1} : X_{k-1} - l_{k-1} \subseteq L - l_i} m_w(X_{k-1})
         \end{split}
     \end{equation*}
     
     We now define the following for any two leaves $y$ and $z$: 
 
     \begin{equation*}
-        f(y, z) := min_{z \in Y : Y - z \subseteq L-y} \{ m_w(Y)\} + min_{Z \subseteq L-z} \{ m_w(Z)\}
+        f(y, z) := \mathrm{min}_{z \in Y : Y - z \subseteq L-y} \{ m_w(Y)\} + \mathrm{min}_{Z \subseteq L-z} \{ m_w(Z)\}
     \end{equation*}
 
     By showing that $f(l_{k-1}, l_k) = f(l_k, l_{k-1})$ we complete the proof.
@@ -154,16 +154,16 @@ The potential is therefore written compactly in the following equation:
     \begin{equation*}
         \begin{split}
         f(l_{k-1}, l_k) - f(l_k, l_{k-1})\\
-        &= min_{l_k \in Y_1 : Y_1 - l_k \subseteq L - l_{k-1}} \{ m_w(Y_1)\} + min_{Z_1 \subseteq L - l_k} \{ m_w(Z_1)\} \\
-        &- min_{l_{k-1} \in Y_2 : Y_2 - l_{k-1} \subseteq L - l_k} \{ m_w(Y_2)\} - min_{Z_2 \subseteq L - l_{k-1}} \{ m_w(Z_2)\} \\
-        &= \{ min_{l_k \in Y_1 : Y_1 - l_k \subseteq L - l_{k-1}} \{ m_w(Y_1)\} - min_{Z_2 \subseteq L - l_{k-1}} \{ m_w(Z_2)\}\}\\
-        &+ \{min_{Z_1 \subseteq L - l_k} \{ m_w(Z_1)\} - min_{l_{k-1} \in Y_2 : Y_2 - l_{k-1} \subseteq L - l_k} \{ m_w(Y_2)\}\} \\ 
+        &= \mathrm{min}_{l_k \in Y_1 : Y_1 - l_k \subseteq L - l_{k-1}} \{ m_w(Y_1)\} + \mathrm{min}_{Z_1 \subseteq L - l_k} \{ m_w(Z_1)\} \\
+        &- \mathrm{min}_{l_{k-1} \in Y_2 : Y_2 - l_{k-1} \subseteq L - l_k} \{ m_w(Y_2)\} - \mathrm{min}_{Z_2 \subseteq L - l_{k-1}} \{ m_w(Z_2)\} \\
+        &= \{ \mathrm{min}_{l_k \in Y_1 : Y_1 - l_k \subseteq L - l_{k-1}} \{ m_w(Y_1)\} - \mathrm{min}_{Z_2 \subseteq L - l_{k-1}} \{ m_w(Z_2)\}\}\\
+        &+ \{\mathrm{min}_{Z_1 \subseteq L - l_k} \{ m_w(Z_1)\} - \mathrm{min}_{l_{k-1} \in Y_2 : Y_2 - l_{k-1} \subseteq L - l_k} \{ m_w(Y_2)\}\} \\ 
         &= 0
         \end{split}
     \end{equation*}
 \end{proof}
 
-The above lemmas show that the potential function for the Multiray space is symmetric under permutations of the leaf nodes. This is a powerful property, that helps lead to a proof of $k$ competitiveness of the $WFA$ on the Multiray space.
+The above lemmas show that the potential function for the Multiray space is symmetric under permutations of the leaf nodes. This is a powerful property, that helps lead to a proof of $k$ competitiveness of the $\mathrm{WFA}$ on the Multiray space.
 
 \subsubsection*{Notes on the Symmetry property of the potential function for the Reduced Caterpillar Graph}
 
@@ -190,7 +190,7 @@ When considering the case where we define the center as all points on the body o
 \begin{definition}
     We define $m'_w(X)$ for a configuration $X$ as:
     \begin{equation*}
-        m'_w(X) := w(X) - \Sigma_{i=1} ^ k min_{a \in C} d(c, x_i)
+        m'_w(X) := w(X) - \Sigma_{i=1} ^ k \mathrm{min}_{a \in C} d(c, x_i)
     \end{equation*}
 \end{definition}
 
@@ -213,8 +213,8 @@ We can now attempt to rewrite the potential function using these two interpretat
 
 \begin{equation*}
     \begin{split}
-    w(\bar{l^i}, x_{i+1}, ..., x_k) &= min_{x_{i+1}, ..., x_k \subseteq X_i} w(X) + \Sigma_{j=1}^i d(x_j, \bar{l})\\
-    &= min_{x_{i+1}, ..., x_k \subseteq X_i} w(X) + i\Delta - \Sigma_{j=1}^i d(x_j, l)
+    w(\bar{l^i}, x_{i+1}, ..., x_k) &= \mathrm{min}_{x_{i+1}, ..., x_k \subseteq X_i} w(X) + \Sigma_{j=1}^i d(x_j, \bar{l})\\
+    &= \mathrm{min}_{x_{i+1}, ..., x_k \subseteq X_i} w(X) + i\Delta - \Sigma_{j=1}^i d(x_j, l)
     \end{split}
 \end{equation*}
 
@@ -232,9 +232,9 @@ Reverting to the case where the entire body is considered as the center, we can 
 
 \begin{equation*}
     \begin{split}
-        &k^2 + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\} \\
+        &k^2 + \Sigma_{i=0}^k \mathrm{min}_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\} \\
         &\leq \Phi_{l_1, ..., l_k} (w)  \\
-        &\leq \frac{k(3k+1)}{2} + \Sigma_{i=0}^k min_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\}
+        &\leq \frac{k(3k+1)}{2} + \Sigma_{i=0}^k \mathrm{min}_{l_{i+1}, ..., l_k \subseteq X_i : X_i - l_{i+1}, ..., l_k \subseteq L - l_i} \{ m_w(X_i)\}
     \end{split}
 \end{equation*}
 

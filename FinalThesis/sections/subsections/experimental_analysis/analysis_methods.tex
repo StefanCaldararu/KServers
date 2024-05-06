@@ -2,24 +2,24 @@ In this section, we present a few additional methods for analysis on algorithms 
 
 \subsubsection*{Direct Analysis}
 \label{sec:Direct}
-Direct analysis is a similar techinque to competitive analysis, in that we directly compare the performance of $ALG$ to the performance of $OPT$ on a request. Rather than looking across all request sequences of any finite length, we determine a specified length for our request sequence. Then, we look directly at the ratio of $ALG$'s to $OPT$'s performance for each input, and take the largest such ratio. It is important to note that as the length of our input approaches infinity, our direct analysis ratio will aproach the competitive ratio of our algorithm.
+Direct analysis is a similar techinque to competitive analysis, in that we directly compare the performance of $\mathrm{ALG}$ to the performance of $\mathrm{OPT}$ on a request. Rather than looking across all request sequences of any finite length, we determine a specified length for our request sequence. Then, we look directly at the ratio of $\mathrm{ALG}$'s to $\mathrm{OPT}$'s performance for each input, and take the largest such ratio. It is important to note that as the length of our input approaches infinity, our direct analysis ratio will aproach the competitive ratio of our algorithm.
 
 \begin{definition}
     \label{def:direct}
-    Algorithm $ALG$ has a direct analysis ratio of $c$ on inputs of length $n$ if for every input $\sigma$ of length $n$, $ALG(\sigma) \leq c\cdot OPT(\sigma)$.
+    Algorithm $\mathrm{ALG}$ has a direct analysis ratio of $c$ on inputs of length $n$ if for every input $\sigma$ of length $n$, $\mathrm{ALG}(\sigma) \leq c\cdot \mathrm{OPT}(\sigma)$.
 \end{definition}
 
 \subsubsection*{Max/Max Ratio}
 \label{sec:MaxMax}
-For the Max/Max ratio, we are comparing the worst case of each algorithm to each other. In practice, this makes sense to do on finite sets of input sequences. Here, we will take the highest cost of $ALG$ and the highest cost of $OPT$, and this ratio will be our performance metric~\cite{MAXMAX2005}. 
+For the Max/Max ratio, we are comparing the worst case of each algorithm to each other. In practice, this makes sense to do on finite sets of input sequences. Here, we will take the highest cost of $\mathrm{ALG}$ and the highest cost of $\mathrm{OPT}$, and this ratio will be our performance metric~\cite{MAXMAX2005}. 
 
 \begin{definition}
-    Algorithm $ALG$ is said to have a Max/Max ratio of $c$ with respect to algorithm $ALG2$ for inputs of length $n$ if for every input $\sigma$ of length $n$, $max_{\sigma}(ALG(\sigma)) \leq c\cdot max_{\sigma}(OPT(\sigma))$.
+    Algorithm $\mathrm{ALG}$ is said to have a Max/Max ratio of $c$ with respect to algorithm $\mathrm{ALG}2$ for inputs of length $n$ if for every input $\sigma$ of length $n$, $\mathrm{max}_{\sigma}(\mathrm{ALG}(\sigma)) \leq c\cdot \mathrm{max}_{\sigma}(\mathrm{OPT}(\sigma))$.
 \end{definition}
 
 \subsubsection*{Bijective Analysis}
 \label{sec:Bij}
-The bijective ratio is similar to using direct analysis, except we allow for a bijection between the two data sets. So, we look at the input space of all inputs of length $n$, denoted $I_n$. If there exists a bijetion $\pi:I_n \rightarrow I_n$ such that $ALG(\sigma) \leq c\cdot OPT(\pi(\sigma))$, then  we say that the bijective ratio between $ALG$ and $OPT$ is $c$~\cite{bij2016}. Therefore, we obtain def.~\ref{def:bij}. 
+The bijective ratio is similar to using direct analysis, except we allow for a bijection between the two data sets. So, we look at the input space of all inputs of length $n$, denoted $I_n$. If there exists a bijetion $\pi:I_n \rightarrow I_n$ such that $\mathrm{ALG}(\sigma) \leq c\cdot \mathrm{OPT}(\pi(\sigma))$, then  we say that the bijective ratio between $\mathrm{ALG}$ and $\mathrm{OPT}$ is $c$~\cite{bij2016}. Therefore, we obtain def.~\ref{def:bij}. 
 
 \begin{definition}
     \label{def:bij}
@@ -34,8 +34,8 @@ The average case analysis compares the average cost of two algorithms across a s
 
 \begin{definition}
     \label{def:avg}
-    For a given input space $I_n$, perform the following calculation to get the average case analysis for an algorithm $ALG$: 
+    For a given input space $I_n$, perform the following calculation to get the average case analysis for an algorithm $\mathrm{ALG}$: 
     \begin{equation*}
-        Avg_{ALG} = \frac{1}{|I_n|}\sum_{\sigma \in I_n} \{ALG(\sigma) - OPT(\sigma)\}
+        Avg_{\mathrm{ALG}} = \frac{1}{|I_n|}\sum_{\sigma \in I_n} \{\mathrm{ALG}(\sigma) - \mathrm{OPT}(\sigma)\}
     \end{equation*}
 \end{definition}

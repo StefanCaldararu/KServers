@@ -1,4 +1,4 @@
-In this section, we follow the proof showing that the $WFA$ is $2k-1$-competitive from~\cite{OnlineComp1998}, and add some in-depth explanatory details. The general outline of this proof directly follows~\cite{OnlineComp1998}, and the definitions and lemmas follow essentially the exact same structure. There are a few details and computations that are not provided in the proof, but are explained in-detail in this section.
+In this section, we follow the proof showing that the $\mathrm{WFA}$ is $2k-1$-competitive from~\cite{OnlineComp1998}, and add some in-depth explanatory details. The general outline of this proof directly follows~\cite{OnlineComp1998}, and the definitions and lemmas follow essentially the exact same structure. There are a few details and computations that are not provided in the proof, but are explained in-detail in this section.
 
 It is worth noting a few basic property of the work function:
 
@@ -9,10 +9,10 @@ It is worth noting a few basic property of the work function:
 
 \begin{equation}
     \label{eq:work}
-    w'(C) = min_{x \in C} [w'(C - x + r) + d(r, x)] = min_{x \in C} [w(C - x + r) + d(r, x)]
+    w'(C) = \mathrm{min}_{x \in C} [w'(C - x + r) + d(r, x)] = \mathrm{min}_{x \in C} [w(C - x + r) + d(r, x)]
 \end{equation}
 
-The first part of property~\eqref{eq:nextwork} follows because $r \in C'$. The second part assumes that $s$ is the point from which the server that moved to service $r$, and follows from the definition of the WFA.
+The first part of property~\eqref{eq:nextwork} follows because $r \in C'$. The second part assumes that $s$ is the point from which the server that moved to service $r$, and follows from the definition of the $\mathrm{WFA}$.
 
 The first part of~\eqref{eq:work} says that the work done to service a request sequence \textit{including} the next request $r$ for some configuration $C$ is equal to the minimum work done to service the same request sequence, except on the configuration $C$ without the point $x$ and with the point $r$, plus the distance between $r$ and $x$. The set $C-x+r$ is defined as in~\cite{OnlineComp1998}, where there is only one copy of $r$ in this set, whether or not $r$ was originally in $C$. 
 
@@ -22,10 +22,10 @@ The nice part about this is that we now \textit{know} that $r \in C - x + r$, wh
     The \textbf{offline pseudocost} $w'(C') - w(C)$ is the work done to service a request sequence $\sigma_{i+1}$ and end in configuration $C'$, minus the work done to service a request sequence $\sigma_i$ and end in configuration $C$.
 \end{definition}
 
-The offline pseudocost is a measure of how much work is done to service the next request in the sequence, given that the current configuration is $C$. If we sum this across all requests on sets $C_0$, $C_1$ ... $C_n$ for the configuration of \textit{OPT}, we will see that this will telescope to $w_{\sigma}(C_n) - w_{\emptyset}(C_0)$, where $\sigma_0 = \emptyset$. This is equal to the cost $OPT(\sigma)$, as we are subtracting the cost to get into the initial configuration $C_0$ from the final work function $w_\sigma(C_n)$.
+The offline pseudocost is a measure of how much work is done to service the next request in the sequence, given that the current configuration is $C$. If we sum this across all requests on sets $C_0$, $C_1$ ... $C_n$ for the configuration of $\mathrm{OPT}$, we will see that this will telescope to $w_{\sigma}(C_n) - w_{\emptyset}(C_0)$, where $\sigma_0 = \emptyset$. This is equal to the cost $\mathrm{OPT}(\sigma)$, as we are subtracting the cost to get into the initial configuration $C_0$ from the final work function $w_\sigma(C_n)$.
 
 \begin{definition}
-    The \textbf{extended cost} is defined as $max_X \{ w'(X) - w(X)\}$.
+    The \textbf{extended cost} is defined as $\mathrm{max}_X \{ w'(X) - w(X)\}$.
 \end{definition}
 
 The extended cost represents the worst case configuration we could be in given the next request. That is, the configuration that will maximize the cost incurred to satisfy the next request. The extended cost represents the maximum cost we could incurr by servicing the next request online.
@@ -33,7 +33,7 @@ The extended cost represents the worst case configuration we could be in given t
 \begin{definition}
     A work function is \textbf{Quasi-Convex} (QC) if for all configurations $X$, $Y$, and for all $x \in X$, the following property holds:
     \begin{equation*}
-        min_{y \in Y} \{ w(X - x + y) + w(Y - y + x)\} \leq w(X) + w(Y)
+        \mathrm{min}_{y \in Y} \{ w(X - x + y) + w(Y - y + x)\} \leq w(X) + w(Y)
     \end{equation*}
 \end{definition}
 
@@ -113,7 +113,7 @@ All work functions are GQC, and so are therefore also QC.
 \begin{definition}
     Let $w$ be the current work function and let $r$ be any point in our metric space. A configuration $A$ is called a \textbf{minimizer of $r$ with respect to $w$} if:
     \begin{equation*}
-        A = argmin_{(X)} \{ w(X) - \Sigma_{x \in X} d(x,r)\}
+        A = \mathrm{argmin}_{(X)} \{ w(X) - \Sigma_{x \in X} d(x,r)\}
     \end{equation*}
 \end{definition}
 
@@ -127,7 +127,7 @@ All work functions are GQC, and so are therefore also QC.
     
     \begin{equation*}
         \begin{split}
-            min_{a' \in A} \{ w(A - a' + r) + d(a', r) - \Sigma_{a \in A} d(a,r)\} \leq min_{b' \in B} \{ w(B - b' + r) + d(b', r) - \Sigma_{b \in B} d(b,r)\}
+            \mathrm{min}_{a' \in A} \{ w(A - a' + r) + d(a', r) - \Sigma_{a \in A} d(a,r)\} \leq \mathrm{min}_{b' \in B} \{ w(B - b' + r) + d(b', r) - \Sigma_{b \in B} d(b,r)\}
         \end{split}
     \end{equation*}
 
@@ -141,11 +141,11 @@ All work functions are GQC, and so are therefore also QC.
         \end{split}
     \end{equation*}
 
-    Now, we apply the QC Lemma, with $X = B -b' + r$, $Y = A$, $x = r$, and $y = a'$. This means that $min_{a' \in A} \{ w(B - b' + a') + w(A -a' + r)\} \leq w(B - b' + r) + w(A)$. We now sum the two sides of this with the previous inequality to get the following equation:
+    Now, we apply the QC Lemma, with $X = B -b' + r$, $Y = A$, $x = r$, and $y = a'$. This means that $\mathrm{min}_{a' \in A} \{ w(B - b' + a') + w(A -a' + r)\} \leq w(B - b' + r) + w(A)$. We now sum the two sides of this with the previous inequality to get the following equation:
 
     \begin{equation*}
         \begin{split}
-            &min_{a' \in A} \{ w(B - b' + a') + w(A -a' + r) - w(B - b' + a') + w(A) + d(a', r) - \Sigma_{a \in A} d(a, r)\} \\
+            &\mathrm{min}_{a' \in A} \{ w(B - b' + a') + w(A -a' + r) - w(B - b' + a') + w(A) + d(a', r) - \Sigma_{a \in A} d(a, r)\} \\
             &\leq w(B - b' + r) + w(A) + d(b' ,r) - \Sigma_{b \in B} d(b, r)
         \end{split}
     \end{equation*}
@@ -153,7 +153,7 @@ All work functions are GQC, and so are therefore also QC.
     And after cancelations, we get that for all $b' \in B$:
 
     \begin{equation*}
-        min_{a' \in A} \{ w(A - a' + r) + d(a', r) - \Sigma_{a \in A} d(a,r)\} \leq w(B - b' + r) + d(b', r) - \Sigma_{b \in B} d(b,r)
+        \mathrm{min}_{a' \in A} \{ w(A - a' + r) + d(a', r) - \Sigma_{a \in A} d(a,r)\} \leq w(B - b' + r) + d(b', r) - \Sigma_{b \in B} d(b,r)
     \end{equation*}
 
     Since this is true for all $b' \in B$, our property holds for the $b'$ that minimizes the right hand side, completing our proof.
@@ -162,14 +162,14 @@ All work functions are GQC, and so are therefore also QC.
 \begin{definition}
     We define the \textbf{extended cost} as the cost of the value achieved by the configuration which is able to maximize the difference between the next work function value and the current work function value:
     \begin{equation*}
-        max_X \{ w'(X) - w(X)\}
+        \mathrm{max}_X \{ w'(X) - w(X)\}
     \end{equation*}
 \end{definition}
 
 \begin{definition}
     Additionally, we define a \textbf{maximizer with respect to $w$} as the configuration $A$ which achieves this extended cost value:
     \begin{equation*}
-        A = argmax_X \{ w'(X) - w(X) \}
+        A = \mathrm{argmax}_X \{ w'(X) - w(X) \}
     \end{equation*}
 \end{definition}
 
@@ -193,13 +193,13 @@ All work functions are GQC, and so are therefore also QC.
     By expanding the above desired equation using eq.~\eqref{eq:work}, we get that we want to show:
 
     \begin{equation*}
-        min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq min_{a' \in A} \{ w(A - a' + r) + d(a', r) + w(B)\}
+        \mathrm{min}_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq \mathrm{min}_{a' \in A} \{ w(A - a' + r) + d(a', r) + w(B)\}
     \end{equation*}
 
     This is equivalent to saying that for all $B$, and all $a' \in A$: 
 
     \begin{equation*}
-        min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq w(A - a' + r) + d(a', r) + w(B)
+        \mathrm{min}_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq w(A - a' + r) + d(a', r) + w(B)
     \end{equation*}
 
     To show this, we begin with the statement that $A$ is a minimizer. In particular, this means that:
@@ -216,9 +216,9 @@ All work functions are GQC, and so are therefore also QC.
 
     \begin{equation*}
         \begin{split}
-            &min_{b' \in B} \{ w(A - a' + b') + w(B - b' + r)\} \leq w(A - a' + r) + w(B) \\
-            \text{iff: }&min_{b' \in B} \{ w(A) + d(b', r) - d(a', r) + w(B - b' + r)\}\leq w(A - a' + r) + w(B) \\
-            \text{iff: }&min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq w(A - a' + r) + d(a', r) + w(B)
+            &\mathrm{min}_{b' \in B} \{ w(A - a' + b') + w(B - b' + r)\} \leq w(A - a' + r) + w(B) \\
+            \text{iff: }&\mathrm{min}_{b' \in B} \{ w(A) + d(b', r) - d(a', r) + w(B - b' + r)\}\leq w(A - a' + r) + w(B) \\
+            \text{iff: }&\mathrm{min}_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq w(A - a' + r) + d(a', r) + w(B)
         \end{split}
     \end{equation*}
 \end{proof}
@@ -227,11 +227,11 @@ All work functions are GQC, and so are therefore also QC.
     \label{eq:MIN}
     We now define the \textbf{value of a minimizer configuration}, for minimizer $A$ of $r$ with respect to $w$ as: 
     \begin{equation*}
-        MIN_w(r) = w(A) - \Sigma_{a \in A} d(a, r)
+        \mathrm{MIN}_w(r) = w(A) - \Sigma_{a \in A} d(a, r)
     \end{equation*}
 \end{definition}
 
-We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ as the current configuration of $OPT$. We will now have the potential function: $\Phi ( U, w) = \Sigma_{u \in U} MIN_w(u)$. Additionally, suppose that for the next request $r$, $OPT$ services the request with server $u_j$. Then, the next configuration of $OPT$ is $U' = U - u_j + r$.
+We now fix any optimal algorithm $\mathrm{OPT}$, and have $U = \{u_1, u_2, ... , u_k \}$ as the current configuration of $\mathrm{OPT}$. We will now have the potential function: $\Phi ( U, w) = \Sigma_{u \in U} \mathrm{MIN}_w(u)$. Additionally, suppose that for the next request $r$, $\mathrm{OPT}$ services the request with server $u_j$. Then, the next configuration of $\mathrm{OPT}$ is $U' = U - u_j + r$.
 
 \begin{lemma}
     \label{lem:ep1}
@@ -243,33 +243,33 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
 
     \begin{equation*}
         \begin{split}
-            MIN_w(r) &= min_A \{ w(A) - \Sigma_{a \in A} d(a, r)\} \\
-            &\geq min_A \{ w(A) - \Sigma_{a \in A} [d(a, u_j) + d(u_j, r)]\} = MIN_w(u_j) - k\cdot d(u_j, r) \\
-            \text{iff: }\Phi ( U', w) - \Phi (U, w) &= \Sigma_{u \in U'} MIN_w(u) - \Sigma_{u \in U} MIN_w(u) \\ 
-            &= MIN_w(r) - MIN_w(u_j) \geq MIN_w(u_j) - k \cdot  d(u_j, r) - MIN_w(u_j) = -k\cdot d(u_j, r)
+            \mathrm{MIN}_w(r) &= \mathrm{min}_A \{ w(A) - \Sigma_{a \in A} d(a, r)\} \\
+            &\geq \mathrm{min}_A \{ w(A) - \Sigma_{a \in A} [d(a, u_j) + d(u_j, r)]\} = \mathrm{MIN}_w(u_j) - k\cdot d(u_j, r) \\
+            \text{iff: }\Phi ( U', w) - \Phi (U, w) &= \Sigma_{u \in U'} \mathrm{MIN}_w(u) - \Sigma_{u \in U} \mathrm{MIN}_w(u) \\ 
+            &= \mathrm{MIN}_w(r) - \mathrm{MIN}_w(u_j) \geq \mathrm{MIN}_w(u_j) - k \cdot  d(u_j, r) - \mathrm{MIN}_w(u_j) = -k\cdot d(u_j, r)
         \end{split}
     \end{equation*}
 \end{proof}
 
 \begin{lemma}
     \label{lem:ep2}
-    $\Phi(U', w') - \Phi(U', w) \geq max_X \{ w'(X) - w(X)\}$
+    $\Phi(U', w') - \Phi(U', w) \geq \mathrm{max}_X \{ w'(X) - w(X)\}$
 \end{lemma}
 
 \begin{proof}
     Let $A$ be a minimizer of $r$ with respect to $w$. Again, we know that $w'(X) \geq w(X)$ for all $X$, as any sequence of moves that would service $\sigma_i r$ and end in configuration $X$ would also service requests $\sigma_i$ and be able to end in $X$ with the same or lesser distance traveled. Therefore, for any point $p$, we have: 
 
     \begin{equation*}
-        MIN_{w'}(p) = min_{X} \{w'(X) - \Sigma_{x \in X} d(p,X) \} \geq min_{X} \{w(X) - \Sigma_{x \in X} d(p,X)  \} = MIN_w(p)
+        \mathrm{MIN}_{w'}(p) = \mathrm{min}_{X} \{w'(X) - \Sigma_{x \in X} d(p,X) \} \geq \mathrm{min}_{X} \{w(X) - \Sigma_{x \in X} d(p,X)  \} = \mathrm{MIN}_w(p)
     \end{equation*}
 
-    This means that $MIN$ is also monotone incresing with respect to the request sequence. We have:
+    This means that $\mathrm{MIN}$ is also monotone incresing with respect to the request sequence. We have:
 
     \begin{equation*}
         \begin{split}
-            \Phi(U', w') - \Phi(U', w) &= \Sigma_{u \in U'} (MIN_{w'}(u) - MIN_w(u)) \\
-            &= MIN_{w'} (r) - MIN_w(r) + \Sigma_{u \in U' - r} (MIN_{w'} (u) - MIN_w(u))\\
-            &\geq MIN_{w'} (r) - MIN_w(r)
+            \Phi(U', w') - \Phi(U', w) &= \Sigma_{u \in U'} (\mathrm{MIN}_{w'}(u) - \mathrm{MIN}_w(u)) \\
+            &= \mathrm{MIN}_{w'} (r) - \mathrm{MIN}_w(r) + \Sigma_{u \in U' - r} (\mathrm{MIN}_{w'} (u) - \mathrm{MIN}_w(u))\\
+            &\geq \mathrm{MIN}_{w'} (r) - \mathrm{MIN}_w(r)
         \end{split}
     \end{equation*}
 
@@ -277,37 +277,37 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
 
     \begin{equation*}
         \begin{split}
-            \Phi(U', w') - \Phi(U', w) &\geq MIN_{w'} (r) - MIN_w(r) \\
+            \Phi(U', w') - \Phi(U', w) &\geq \mathrm{MIN}_{w'} (r) - \mathrm{MIN}_w(r) \\
             &= w'(A) - \Sigma_{a \in A} d(a,r) - [w(A) - \Sigma_{a \in A} d(a,r)] \\
-            &= w'(A) - w(A) = max_X \{ w'(X) - w(X)\}
+            &= w'(A) - w(A) = \mathrm{max}_X \{ w'(X) - w(X)\}
         \end{split}
     \end{equation*}
 \end{proof}
 
 \begin{lemma}
     \label{lem:er1}
-    $\Phi(U_\sigma, w_\sigma) \leq K \cdot  OPT(\sigma)$
+    $\Phi(U_\sigma, w_\sigma) \leq K \cdot  \mathrm{OPT}(\sigma)$
 \end{lemma}
 
 \begin{proof}
-     By the definition of $MIN$, the following holds for all $u \in U_\sigma$:
+     By the definition of $\mathrm{MIN}$, the following holds for all $u \in U_\sigma$:
      \begin{equation*}
-        MIN_{w_\sigma}(u) \leq min_{y \not \in U_\sigma} \{ w_\sigma(U_\sigma - u + y) - \Sigma_{x \in U_\sigma - u + y} d(x, u)\}
+        \mathrm{MIN}_{w_\sigma}(u) \leq \mathrm{min}_{y \not \in U_\sigma} \{ w_\sigma(U_\sigma - u + y) - \Sigma_{x \in U_\sigma - u + y} d(x, u)\}
      \end{equation*}
 
      As the configuration $U$ with $u \in U_\sigma$ minimizes the terms inside of the minimization on the right hand side. Suppose $y^*$ is a valid $y$ that minimizes the right hand side of the above equation. We have:
      
      \begin{equation*}
         \begin{split}
-            MIN_{w_\sigma}(u) &\leq w_\sigma(U_\sigma - u + y^*) - \Sigma_{x \in U_\sigma - u + y^*} d(x, u) \\
-            &\leq w_\sigma(U_\sigma - u + y^*) - d(y^*, u) \leq w_\sigma(U_\sigma) = OPT(\sigma)
+            \mathrm{MIN}_{w_\sigma}(u) &\leq w_\sigma(U_\sigma - u + y^*) - \Sigma_{x \in U_\sigma - u + y^*} d(x, u) \\
+            &\leq w_\sigma(U_\sigma - u + y^*) - d(y^*, u) \leq w_\sigma(U_\sigma) = \mathrm{OPT}(\sigma)
         \end{split}
      \end{equation*}
 
      When we sum over all $u \in U_\sigma$, we complete the lemma by the definition of $\Phi$
      
      \begin{equation*}
-        \Phi(U_\sigma, w_\sigma) = \Sigma_{i=1}^k MIN_{w_\sigma}(u_i) \leq K \cdot  OPT(\sigma)
+        \Phi(U_\sigma, w_\sigma) = \Sigma_{i=1}^k \mathrm{MIN}_{w_\sigma}(u_i) \leq K \cdot  \mathrm{OPT}(\sigma)
      \end{equation*}
 \end{proof}
 
@@ -320,21 +320,21 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
 \end{lemma}
 
 \begin{proof}
-    The sum in the middle of the above equation is clearly a constant that only depends on the initial configuration, and so therefore depends on the metric space, not directly on the number of servers. By definitions of $\Phi$ and $MIN$, we have:
+    The sum in the middle of the above equation is clearly a constant that only depends on the initial configuration, and so therefore depends on the metric space, not directly on the number of servers. By definitions of $\Phi$ and $\mathrm{MIN}$, we have:
 
     \begin{equation*}
-        \Phi(U_\emptyset, w_\emptyset) = \Sigma_{u \in U_\emptyset} MIN_{w_\emptyset}(u) = \Sigma_{u \in U_\emptyset} min_X \{ w_\emptyset(X) - \Sigma_{x \in X} d(x, u)\}
+        \Phi(U_\emptyset, w_\emptyset) = \Sigma_{u \in U_\emptyset} \mathrm{MIN}_{w_\emptyset}(u) = \Sigma_{u \in U_\emptyset} \mathrm{min}_X \{ w_\emptyset(X) - \Sigma_{x \in X} d(x, u)\}
     \end{equation*}
 
-    Suppose $X^*$ is the configuration of servers which minimizes the right hand side for some $MIN_{w_\emptyset}(u) = min_X \{ w_\emptyset(X) - \Sigma_{x \in X} d(x, u)\}$. Without loss of generality, assume that $u_i$ matches to $x_i$ in the minimum weight matching between the two sets. Then, $w_\emptyset(X^*) = D(U_\emptyset, X^*)$. By using the triangle inequality, we get:
+    Suppose $X^*$ is the configuration of servers which minimizes the right hand side for some $\mathrm{MIN}_{w_\emptyset}(u) = \mathrm{min}_X \{ w_\emptyset(X) - \Sigma_{x \in X} d(x, u)\}$. Without loss of generality, assume that $u_i$ matches to $x_i$ in the minimum weight matching between the two sets. Then, $w_\emptyset(X^*) = D(U_\emptyset, X^*)$. By using the triangle inequality, we get:
 
     \begin{equation*}
         \begin{split}
-            MIN_{w_\emptyset}(u) &= \Sigma_{i=1}^k d(u_i, x_i) - \Sigma_{i=1}^k d(x_i , u) \\
+            \mathrm{MIN}_{w_\emptyset}(u) &= \Sigma_{i=1}^k d(u_i, x_i) - \Sigma_{i=1}^k d(x_i , u) \\
             &= \Sigma_{i=1}^k [d(u_i, x_i) - d(x_i, u)] \\
             &\geq \Sigma_{i=1}^k [d(u_i, x_i) - (d(u_i, x_i) + d(u_i, u))] \\
             &= - \Sigma_{i=1}^k d(u_i, u) \\
-            \text{iff: }\Sigma_{u \in U_\emptyset} MIN_{w_\emptyset(u)} &\geq -\Sigma_{u \in U_\emptyset} \Sigma_{i=1}^k d(u_i, u) \\
+            \text{iff: }\Sigma_{u \in U_\emptyset} \mathrm{MIN}_{w_\emptyset(u)} &\geq -\Sigma_{u \in U_\emptyset} \Sigma_{i=1}^k d(u_i, u) \\
             &= - \Sigma_{a, b \in C_0} d(a, b)
         \end{split}
     \end{equation*}
@@ -343,43 +343,43 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
 \begin{definition}
     We define the \textbf{total extended cost} as the sum over all moves of the extended costs.
     \begin{equation*}
-        TEC = \Sigma_{i = 0}^{n-1} max_X \{ w_{i+1} (X) - w_i(X)\}
+        \mathrm{TEC} = \Sigma_{i = 0}^{n-1} \mathrm{max}_X \{ w_{i+1} (X) - w_i(X)\}
     \end{equation*}
 \end{definition}
 
 \begin{lemma}
-    If the following property holds for some constant $\alpha$ independent of $\sigma$, then WFA is $c$-competitive:
+    If the following property holds for some constant $\alpha$ independent of $\sigma$, then $\mathrm{WFA}$ is $c$-competitive:
     \begin{equation*}
-        TEC \leq (c+1) \cdot  OPT(\sigma) + \alpha
+        \mathrm{TEC} \leq (c+1) \cdot  \mathrm{OPT}(\sigma) + \alpha
     \end{equation*}
 \end{lemma}
 
 The above lemma follows directly by the provided definitions, because the total extended cost bounds the cost incurred by the work function algorithm. This lemma means that we are now only required to show the following:
 
 \begin{lemma}
-    $TEC \leq 2k \cdot  OPT(\sigma) + \alpha$, and therefore the $WFA$ is $2k-1$-competitive.
+    $\mathrm{TEC} \leq 2k \cdot  \mathrm{OPT}(\sigma) + \alpha$, and therefore the $\mathrm{WFA}$ is $2k-1$-competitive.
 \end{lemma}
 
 \begin{proof}
     By putting together lemmas~\ref{lem:ep1} and~\ref{lem:ep2}, we get:
 
     \begin{equation*}
-        \Phi(U', w') - \Phi(U, w) \geq max_X\{ w'(X) - w(X)\} -k \cdot  d(u_j, r)
+        \Phi(U', w') - \Phi(U, w) \geq \mathrm{max}_X\{ w'(X) - w(X)\} -k \cdot  d(u_j, r)
     \end{equation*}
 
     When we sum across all requests in the request sequence, we get the telescoping sum:
 
     \begin{equation*}
-        \Phi(U_\sigma, w_\sigma) - \Phi(U_\emptyset, w_\emptyset) \geq TEC - k\cdot OPT(\sigma)
+        \Phi(U_\sigma, w_\sigma) - \Phi(U_\emptyset, w_\emptyset) \geq \mathrm{TEC} - k\cdot \mathrm{OPT}(\sigma)
     \end{equation*}
 
     By using lemmas~\ref{lem:er1} and~\ref{lem:er2}, we get:
 
     \begin{equation*}
         \begin{split}
-            k \cdot  OPT(\sigma)+ \Sigma_{a, b \in C_0} d(a, b) &\geq \Phi(U_\sigma, w_\sigma) + \Sigma_{a, b \in C_0} d(a, b) \\
-            &\geq \Phi(U_\sigma, w_\sigma) - \Phi(U_\emptyset, w_\emptyset) \geq TEC - k\cdot OPT(\sigma)\\
-            \text{iff: }TEC &\leq 2k \cdot  OPT(\sigma) + \Sigma_{a, b \in C_0} d(a, b) = 2k \cdot OPT(\sigma) + \alpha
+            k \cdot  \mathrm{OPT}(\sigma)+ \Sigma_{a, b \in C_0} d(a, b) &\geq \Phi(U_\sigma, w_\sigma) + \Sigma_{a, b \in C_0} d(a, b) \\
+            &\geq \Phi(U_\sigma, w_\sigma) - \Phi(U_\emptyset, w_\emptyset) \geq \mathrm{TEC} - k\cdot \mathrm{OPT}(\sigma)\\
+            \text{iff: }\mathrm{TEC} &\leq 2k \cdot  \mathrm{OPT}(\sigma) + \Sigma_{a, b \in C_0} d(a, b) = 2k \cdot \mathrm{OPT}(\sigma) + \alpha
         \end{split}
     \end{equation*}
 \end{proof}
@@ -387,6 +387,4 @@ The above lemma follows directly by the provided definitions, because the total 
 
 
 
-%hiphan for k-competitive
-% $k$-server
-% WHen using ALG, OPT, MIN... mathsc (math small caps), or \text. Want it to render all as one workd, not as individaul variables. TEC as well.
+% WHen using \mathrm{ALG}, \mathrm{OPT}, MIN... mathsc (math small caps), or \text. Want it to render all as one workd, not as individaul variables. TEC as well.
