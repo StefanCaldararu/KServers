@@ -6,12 +6,16 @@ Direct analysis is a similar techinque to competitive analysis, in that we direc
 
 \begin{definition}
     \label{def:direct}
-    Algorithm $ALG$ has a direct analysis ratio of $c$ if for every input $\sigma$ of length $n$, $ALG(\sigma) \leq c\cdot OPT(\sigma)$.
+    Algorithm $ALG$ has a direct analysis ratio of $c$ on inputs of length $n$ if for every input $\sigma$ of length $n$, $ALG(\sigma) \leq c\cdot OPT(\sigma)$.
 \end{definition}
 
 \subsubsection*{Max/Max Ratio}
 \label{sec:MaxMax}
 For the Max/Max ratio, we are comparing the worst case of each algorithm to each other. In practice, this makes sense to do on finite sets of input sequences. Here, we will take the highest cost of $ALG$ and the highest cost of $OPT$, and this ratio will be our performance metric~\cite{MAXMAX2005}. 
+
+\begin{definition}
+    Algorithm $ALG$ is said to have a Max/Max ratio of $c$ with respect to algorithm $ALG2$ for inputs of length $n$ if for every input $\sigma$ of length $n$, $max_{\sigma}(ALG(\sigma)) \leq c\cdot max_{\sigma}(OPT(\sigma))$.
+\end{definition}
 
 \subsubsection*{Bijective Analysis}
 \label{sec:Bij}
@@ -26,12 +30,12 @@ It is important to note that this definition doesn't only compare the ratio of a
 
 \subsubsection*{Average Case Analysis}
 \label{sec:Avg}
-The average case analysis compares the average cost of two algorithms across a set of request sequences to each other. This is useful for comparing algorithms in practice, and additionally allows us to compare two algorithsm without storing their output for every input, which helps with both memory usage and storage usage.
+The average case analysis compares the average cost of two algorithms across a set of request sequences to each other. This is useful for comparing algorithms in practice, and additionally allows us to compare two algorithms without storing their output for every input, which helps with both memory usage and storage usage.
 
 \begin{definition}
     \label{def:avg}
-    For a given input space $I_n$, perform the following calculation to get the average case analysis for an algorithm $A$: 
+    For a given input space $I_n$, perform the following calculation to get the average case analysis for an algorithm $ALG$: 
     \begin{equation*}
-        Avg_A = \frac{1}{|I_n|}\sum_{\sigma \in I_n} \{A(\sigma) - OPT(\sigma)\}
+        Avg_{ALG} = \frac{1}{|I_n|}\sum_{\sigma \in I_n} \{ALG(\sigma) - OPT(\sigma)\}
     \end{equation*}
 \end{definition}

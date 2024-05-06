@@ -6,7 +6,7 @@ In this section, we provide a couple of useful insights that have been noted whi
     \label{lem:lip}
     Work functions are 1-Lipschitz, i.e. for any work function and any two configurations $X$, $Y$ on any metric space, the following property holds: 
     \begin{equation*}
-        w(X) - w(Y) \leq d(X, Y)
+        w(X) - w(Y) \leq D(X, Y)
     \end{equation*} 
 \end{lemma}
 
@@ -14,7 +14,7 @@ In this section, we provide a couple of useful insights that have been noted whi
     This follows directly from the triangle inequality, and is more self explanatory in the following form: 
     
     \begin{equation*}
-        w(X) \leq w(Y) + d(X, Y)
+        w(X) \leq w(Y) + D(X, Y)
     \end{equation*}
 
     This says that the \textit{worst} value for the work done to get into configuration $X$ would be the work done to get into configuraiton $Y$, plus the cost to transfer between the two configurations.
@@ -23,7 +23,7 @@ In this section, we provide a couple of useful insights that have been noted whi
 \begin{definition}
     It is said that configuration $Y$ \textbf{supports} $X$ if the following property holds:
     \begin{equation*}
-        w(X) - w(Y) = d(X,Y)
+        w(X) - w(Y) = D(X,Y)
     \end{equation*}
 \end{definition}
 
@@ -59,16 +59,5 @@ Since at each step, we know that $OPT$ can only be in a limited set of configura
         \end{gathered}
     \end{equation*}
 
-    Where the final inequality holds by eq.~\ref{lem:lip}.
+    Where the final inequality holds by eq.~\ref{lem:lip}. This means that $A-x+y$ is a minimizer of $r$ with respect to $w$. We can continue this proccess of moving the server starting at $x$ until it reaches a leaf node, and do this for every server not currently at a leaf node. This will yield a minimizer of $r$ with respect to $w$ where every server is at a leaf node.
 \end{proof}
-% \subsubsection*{$k=2$ is $k$ competitive}
-
-% Here, we follow the proof provided in the apendix of~\cite{unifyingPotential2021}.
-
-% \begin{lemma}
-%     For any work function $w$ with $k = 2$ and on any metric space, $\Phi(w) = \Phi_{x_1, r} (w)$, and therefore the WFA is 2 competitive.
-% \end{lemma}
-
-% \begin{proof}
-%     We will show that for any $x_1, x_2 \in M$, $\Phi_{x_1, x_2} (w) \geq min\{ \Phi_{x_1, r}, \Phi_{x_2, r}\}$, proving the lemma.
-% \end{proof}

@@ -66,6 +66,8 @@ The following definitions and lemmas are drawn directly from~\cite{unifyingPoten
 \end{lemma}
 
 \begin{proof}
+    The first this to note is that because there will never be any requests to the antipodal points the configuration $\bar{l^i}, x_{i+1} ..., x_k$ is supported by the configuration $X$.
+
     \begin{equation*}
         \begin{gathered}
             w(\bar{l^i}, x_{i+1}, ..., x_k) = min_{x_{i+1}, ..., x_k \subseteq X} w(X) + \Sigma_{j=1}^i d(x_j, \bar{l}) \\
@@ -73,13 +75,13 @@ The following definitions and lemmas are drawn directly from~\cite{unifyingPoten
         \end{gathered}
     \end{equation*}
 
-    The first part of the above equation follows directly because there will never be any requests to the antipodal points, so the configuration $\bar{l^i}, x_{i+1} ..., x_k$ is supported by the configuration $X$. the second part of this equation follows from the definition of the antipodal points. Next, we claim that the minimum for this quantity is achieved by some $X$ such that $X - x_{i+1} ..., x_k \subseteq L - l$. Suppose some $x \in X - x_{i+1} ..., x_k$ but $x \not \in L - l$. If we slide $x$ away from $l$ towards some other leaf node, then $\Sigma_{j=1}^i d(x_j, \bar{l})$ will increase by the distance moved, and w(X) increases by at most the distance moved. this is similar to the proof of lemma~\ref{lem:leaf}. Additionally, we know that every distance $\Sigma_{j = 1}^i d(x_j, l)$ must pass through the center node, as the distance from any leaf node to any other leaf node goes through the center. Therefore, for each $x_j\in X - x_{i+1} ..., x_k$, $d(x_j, l)  = d(c, x_j) + d(c, l)$. This allows us to rewrite the above equation as:
+    The second part of this equation follows from the definition of the antipodal points. Next, we claim that the minimum for this quantity is achieved by some $X$ such that $X - x_{i+1} ..., x_k \subseteq L - l$. Suppose some $x \in X - x_{i+1} ..., x_k$ but $x \not \in L - l$. If we slide $x$ away from $l$ towards some other leaf node, then $\Sigma_{j=1}^i d(x_j, \bar{l})$ will increase by the distance moved, and w(X) increases by at most the distance moved. this is similar to the proof of lemma~\ref{lem:leaf}. Additionally, we know that every distance $\Sigma_{j = 1}^i d(x_j, l)$ must pass through the center node, as the distance from any leaf node to any other leaf node goes through the center. Therefore, for each $x_j\in X - x_{i+1} ..., x_k$, we know that $d(x_j, l)  = d(c, x_j) + d(c, l)$. This allows us to rewrite the above equation as:
 
     \begin{equation*}
         \begin{gathered}
-            min_{x_{i+1}, ..., x_k \subseteq X} w(X) + i\Delta - \Sigma_{j=1}^i d(x_j, \bar{l^i}) \\
+            min_{x_{i+1}, ..., x_k \subseteq X} w(X) + i\Delta - \Sigma_{j=1}^i d(x_j, \bar{l}) \\
             = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i \cdot d(c, l) - \Sigma_{j=1} ^ i d(c, x_j)\}\\
-             = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i \cdot d(c, l) - \Sigma_{j=1} ^ i d(c, x_j) + \Sigma_{j=i+1}^k d(c, x_j) - \Sigma_{j=1}^k d(c, x_j)\} \\
+             = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) + i \Delta  - i \cdot d(c, l) - \Sigma_{j=1} ^ i d(c, x_j) + \Sigma_{j=i+1}^k d(c, x_j) - \Sigma_{j=i+1}^k d(c, x_j)\} \\
              = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ w(X) - \Sigma_{j=1} ^ k d(c, x_j) + i \Delta  - i \cdot d(c, l)+\Sigma_{j=i+1}^k d(c, x_j)\} \\
              = min_{x_{i+1}, ..., x_k \subseteq X : X - x_{i+1}, ... , x_k \subseteq L - l}\{ m_w(X) + i(\Delta - d(c, l)) + \Sigma_{j=i+1} ^ k d(c, x_j)\}
         \end{gathered}
@@ -201,7 +203,7 @@ When considering the case where we define the center as all points on the body o
 If we add a central node to the caterpillar graph, we arrive at the following definitions:
 
 \begin{definition}
-    We define the \textbf{center node} of a reduced caterpillar graph as an additional node that receives no requests, and is labeled $c'$. Additionally, it is connected only to nodes on in the center body of the graph, with weights of $0.5$.
+    We define the \textbf{center node} of a reduced caterpillar graph as an additional node that receives no requests, and is labeled $c'$. Additionally, it is connected only to the two nodes closest to the middle in the center body of the graph (if there are an even number of body nodes), with weights of $0.5$. If the body is of odd length, then the node in the middle of the body is designated the center node.
 \end{definition}
 
 \begin{definition}
