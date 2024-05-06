@@ -52,11 +52,12 @@ Since at each step, we know that $OPT$ can only be in a limited set of configura
     Because $x$ is not a leaf node, it must be connected to at least two other nodes. This means that there exists some node $y$ that is connected to $x$ by an edge, where $d(x,r) + d(x,y) = d(y,r)$. Therefore, we have the following:
 
     \begin{equation*}
-        \begin{gathered}
-            w(A-x+y) - \Sigma_{a \in A-x+y} d(a,r) = w(A-x+y) - \Sigma_{a \in A} d(a,r) + d(x,r) - d(y,r) \\
-            = w(A-x+y) - \Sigma_{a \in A} d(a,r) + d(x,r) - d(x,r) - d(x,y)\\
-            = w(A-x+y) - \Sigma_{a \in A} d(a,r) - d(x,y) \leq w(A) - \Sigma_{a \in A} d(a,r)
-        \end{gathered}
+        \begin{split}
+            w(A-x+y) - \Sigma_{a \in A-x+y} d(a,r) &= w(A-x+y) - \Sigma_{a \in A} d(a,r) + d(x,r) - d(y,r) \\
+            &= w(A-x+y) - \Sigma_{a \in A} d(a,r) + d(x,r) - d(x,r) - d(x,y)\\
+            &= w(A-x+y) - \Sigma_{a \in A} d(a,r) - d(x,y) \\
+            &\leq w(A) - \Sigma_{a \in A} d(a,r)
+        \end{split}
     \end{equation*}
 
     Where the final inequality holds by eq.~\ref{lem:lip}. This means that $A-x+y$ is a minimizer of $r$ with respect to $w$. We can continue this proccess of moving the server starting at $x$ until it reaches a leaf node, and do this for every server not currently at a leaf node. This will yield a minimizer of $r$ with respect to $w$ where every server is at a leaf node.

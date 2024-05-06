@@ -72,11 +72,11 @@ It is worth noting that if a work function is GQC, then it is also QC. This is b
     By the definition of GQC. Then, since $a\not \in X_2-a$ and $g^{-1}(a) \not \in X_2-a$, we know that $g(X_2-a) = \tilde{g}(X_2-a)$, by the definition of $\tilde{g}$. Additionally, $g(X_1+a) = \tilde{g}(X_1+a)$, since $a \in X_1 + a$, and $g^{-1}(a) \in X_1+a$. Therefore, we have: 
     
     \begin{equation*}
-        \begin{gathered}
-            w((X_1+a) \cup g(X_2-a)) + w(g(X_1+a) \cup (X_2-a)) \\
-            = w((X_1+a) \cup \tilde{g}(X_2-a)) + w(\tilde{g}(X_1+a) \cup (X_2-a)) \\ 
-            = w(X_1 \cup \tilde{g}(X_2)) + w(\tilde{g}(X_1) \cup X_2)
-        \end{gathered}
+        \begin{split}
+            & w((X_1+a) \cup g(X_2-a)) + w(g(X_1+a) \cup (X_2-a)) \\
+            & = w((X_1+a) \cup \tilde{g}(X_2-a)) + w(\tilde{g}(X_1+a) \cup (X_2-a)) \\ 
+            & = w(X_1 \cup \tilde{g}(X_2)) + w(\tilde{g}(X_1) \cup X_2)
+        \end{split}
     \end{equation*}
 
     We achieve the last equality by the definition of $\tilde{g}$. Because $\tilde{g}(a) = a$, we can swap $a$ with $\tilde{g}(a)$ between the two sets within the two work functions. This would mean that $\tilde{g}$ satisfies the GQC property, which is again a contradiction. Therefore, there exists a bijection $\tilde{g}$ that satisfies the GQC property such that $\tilde{g}(x) = x$ for all $x \in X \cap Y$.
@@ -101,12 +101,12 @@ All work functions are GQC, and so are therefore also QC.
     From here, we will have $X_{xr} = X - x + r$ and $Y_{yr} = Y - y + r$ for easier notation. Without loss of generality, assume that $x \in X_1$ for some partition $X_1, X_2$ of $X$. We have:
 
     \begin{equation*}
-        \begin{gathered}
-            w'(X) + w'(Y) = w(X_{xr}) + w(Y_{yr}) + d(r, x) + d(r, y) \\
-            \geq w((X_1-x+r) \cup g(X_2)) + w(g(X_1-x+r) \cup (X_2)) + d(x, r) + d(r, y) \\
-            = w(X_{xr} \cup \tilde{g}(X_2)) + w((\tilde{g}(X_1) -y + r) \cup X_2) + d(x, r) + d(r, y) \\
-            \geq w'(X_1 \cup g'(X_2)) + w'(g'(X_1) \cup X_2) 
-        \end{gathered}
+        \begin{split}
+            w'(X) + w'(Y) &= w(X_{xr}) + w(Y_{yr}) + d(r, x) + d(r, y) \\
+            &\geq w((X_1-x+r) \cup g(X_2)) + w(g(X_1-x+r) \cup (X_2)) + d(x, r) + d(r, y) \\
+            &= w(X_{xr} \cup \tilde{g}(X_2)) + w((\tilde{g}(X_1) -y + r) \cup X_2) + d(x, r) + d(r, y) \\
+            &\geq w'(X_1 \cup g'(X_2)) + w'(g'(X_1) \cup X_2) 
+        \end{split}
     \end{equation*}
 \end{proof}
 
@@ -126,36 +126,34 @@ All work functions are GQC, and so are therefore also QC.
     We want to show that for every $B$, $w'(A) - \Sigma_{a \in A} d(a,r) \leq w'(B) - \Sigma_{b \in B} d(b,r)$. This is equivalent to showing the following, as per property~\ref{eq:work}:
     
     \begin{equation*}
-        \begin{gathered}
+        \begin{split}
             min_{a' \in A} \{ w(A - a' + r) + d(a', r) - \Sigma_{a \in A} d(a,r)\} \leq min_{b' \in B} \{ w(B - b' + r) + d(b', r) - \Sigma_{b \in B} d(b,r)\}
-        \end{gathered}
+        \end{split}
     \end{equation*}
 
     Since $A$ is a minimizer of $r$ with respect to $w$:
 
     \begin{equation*}
-        \begin{gathered}
-            w(A) - \Sigma_{a \in A} d(a,r) \leq w(B-b' + a') - \Sigma_{b \in B - b' + a'} d(b, r) \\ \\
-            w(A) - w(B-b' + a') - \Sigma_{a \in A} d(a,r) \leq -\Sigma_{b \in B} d(b, r) + d(b', r) - d(a', r) \\ \\
-            -w(B - b' + a') + w(A) + d(a', r) - \Sigma_{a \in A} d(a,r) \leq -\Sigma_{b \in B} d(b,r) + d(b', r)
-        \end{gathered}
+        \begin{split}
+            &w(A) - \Sigma_{a \in A} d(a,r) \leq w(B-b' + a') - \Sigma_{b \in B - b' + a'} d(b, r) \\
+            \text{iff: } &w(A) - w(B-b' + a') - \Sigma_{a \in A} d(a,r) \leq -\Sigma_{b \in B} d(b, r) + d(b', r) - d(a', r) \\
+            \text{iff: } &-w(B - b' + a') + w(A) + d(a', r) - \Sigma_{a \in A} d(a,r) \leq -\Sigma_{b \in B} d(b,r) + d(b', r)
+        \end{split}
     \end{equation*}
 
     Now, we apply the QC Lemma, with $X = B -b' + r$, $Y = A$, $x = r$, and $y = a'$. This means that $min_{a' \in A} \{ w(B - b' + a') + w(A -a' + r)\} \leq w(B - b' + r) + w(A)$. We now sum the two sides of this with the previous inequality to get the following equation:
 
     \begin{equation*}
-        \begin{gathered}
-            min_{a' \in A} \{ w(B - b' + a') + w(A -a' + r) - w(B - b' + a') + w(A) + d(a', r) - \Sigma_{a \in A} d(a, r)\} \\
-            \leq w(B - b' + r) + w(A) + d(b' ,r) - \Sigma_{b \in B} d(b, r)
-        \end{gathered}
+        \begin{split}
+            &min_{a' \in A} \{ w(B - b' + a') + w(A -a' + r) - w(B - b' + a') + w(A) + d(a', r) - \Sigma_{a \in A} d(a, r)\} \\
+            &\leq w(B - b' + r) + w(A) + d(b' ,r) - \Sigma_{b \in B} d(b, r)
+        \end{split}
     \end{equation*}
 
     And after cancelations, we get that for all $b' \in B$:
 
     \begin{equation*}
-        \begin{gathered}
-            min_{a' \in A} \{ w(A - a' + r) + d(a', r) - \Sigma_{a \in A} d(a,r)\} \leq w(B - b' + r) + d(b', r) - \Sigma_{b \in B} d(b,r)
-        \end{gathered}
+        min_{a' \in A} \{ w(A - a' + r) + d(a', r) - \Sigma_{a \in A} d(a,r)\} \leq w(B - b' + r) + d(b', r) - \Sigma_{b \in B} d(b,r)
     \end{equation*}
 
     Since this is true for all $b' \in B$, our property holds for the $b'$ that minimizes the right hand side, completing our proof.
@@ -184,10 +182,10 @@ All work functions are GQC, and so are therefore also QC.
     Suppose $A$ is a minimizer with respect to $r$. We want to show that for every $B$,
 
     \begin{equation*}
-        \begin{gathered}
-            w'(B) - w(B) \leq w'(A) - w(A) \\ \\
-            w'(B) + w(A) \leq w'(A) + w(B)
-        \end{gathered}
+        \begin{split}
+            &w'(B) - w(B) \leq w'(A) - w(A) \\
+            \text{iff: }&w'(B) + w(A) \leq w'(A) + w(B)
+        \end{split}
     \end{equation*}
 
     If $r \in B$, then this statement is true, as $w'(B) = w(B)$, and $w(A) \leq w'(A)$ by definition.
@@ -195,37 +193,33 @@ All work functions are GQC, and so are therefore also QC.
     By expanding the above desired equation using eq.~\ref{eq:work}, we get that we want to show:
 
     \begin{equation*}
-        \begin{gathered}
-            min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq min_{a' \in A} \{ w(A - a' + r) + d(a', r) + w(B)\}
-        \end{gathered}
+        min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq min_{a' \in A} \{ w(A - a' + r) + d(a', r) + w(B)\}
     \end{equation*}
 
     This is equivalent to saying that for all $B$, and all $a' \in A$: 
 
     \begin{equation*}
-        \begin{gathered}
-            min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq w(A - a' + r) + d(a', r) + w(B)
-        \end{gathered}
+        min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq w(A - a' + r) + d(a', r) + w(B)
     \end{equation*}
 
     To show this, we begin with the statement that $A$ is a minimizer. In particular, this means that:
 
     \begin{equation*}
-        \begin{gathered}
-            w(A) - \Sigma_{a \in A} d(a,r) \leq w(A -a' + b') - \Sigma_{a \in A - a' + b'} d(a,r) \\ \\
-            w(A) - \Sigma_{a \in A} d(a,r) \leq w(A -a' + b') - \Sigma_{a \in A} d(a,r) + d(a', r) - d(b', r) \\ \\
-            w(A) + d(b', r) - d(a', r) \leq w(A - a' + b')
-        \end{gathered}
+        \begin{split}
+            &w(A) - \Sigma_{a \in A} d(a,r) \leq w(A -a' + b') - \Sigma_{a \in A - a' + b'} d(a,r) \\
+            \text{iff: }&w(A) - \Sigma_{a \in A} d(a,r) \leq w(A -a' + b') - \Sigma_{a \in A} d(a,r) + d(a', r) - d(b', r) \\
+            \text{iff: }&w(A) + d(b', r) - d(a', r) \leq w(A - a' + b')
+        \end{split}
     \end{equation*}
 
     When we apply the QC property with $X = A - a' + r$, $Y = B$, $x = r$, and $y = b'$, and then substitute in for $w(A - a' + b')$, we get:
 
     \begin{equation*}
-        \begin{gathered}
-            min_{b' \in B} \{ w(A - a' + b') + w(B - b' + r)\} \leq w(A - a' + r) + w(B) \\ \\
-            min_{b' \in B} \{ w(A) + d(b', r) - d(a', r) + w(B - b' + r)\}\leq w(A - a' + r) + w(B) \\ \\
-            min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq w(A - a' + r) + d(a', r) + w(B)
-        \end{gathered}
+        \begin{split}
+            &min_{b' \in B} \{ w(A - a' + b') + w(B - b' + r)\} \leq w(A - a' + r) + w(B) \\
+            \text{iff: }&min_{b' \in B} \{ w(A) + d(b', r) - d(a', r) + w(B - b' + r)\}\leq w(A - a' + r) + w(B) \\
+            \text{iff: }&min_{b' \in B} \{ w(B - b' + r) + d(b', r) + w(A)\} \leq w(A - a' + r) + d(a', r) + w(B)
+        \end{split}
     \end{equation*}
 \end{proof}
 
@@ -248,11 +242,12 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
     Using the triangle inequality, we know that for all $a$: $d(a, r) \leq d(a, u_j) + d(u_j, r)$. Putting the value of a minimizer together with this, we get:
 
     \begin{equation*}
-        \begin{gathered}
-            MIN_w(r) = min_A \{ w(A) - \Sigma_{a \in A} d(a, r)\} \\
-            \geq min_A \{ w(A) - \Sigma_{a \in A} [d(a, u_j) + d(u_j, r)]\} = MIN_w(u_j) - k\cdot d(u_j, r) \\ \\
-            \Phi ( U', w) - \Phi (U, w) = \Sigma_{u \in U'} MIN_w(u) - \Sigma_{u \in U} MIN_w(u) \\ = MIN_w(r) - MIN_w(u_j) \geq MIN_w(u_j) - k \cdot  d(u_j, r) - MIN_w(u_j) = -k\cdot d(u_j, r)
-        \end{gathered}
+        \begin{split}
+            MIN_w(r) &= min_A \{ w(A) - \Sigma_{a \in A} d(a, r)\} \\
+            &\geq min_A \{ w(A) - \Sigma_{a \in A} [d(a, u_j) + d(u_j, r)]\} = MIN_w(u_j) - k\cdot d(u_j, r) \\
+            \text{iff: }\Phi ( U', w) - \Phi (U, w) &= \Sigma_{u \in U'} MIN_w(u) - \Sigma_{u \in U} MIN_w(u) \\ 
+            &= MIN_w(r) - MIN_w(u_j) \geq MIN_w(u_j) - k \cdot  d(u_j, r) - MIN_w(u_j) = -k\cdot d(u_j, r)
+        \end{split}
     \end{equation*}
 \end{proof}
 
@@ -271,21 +266,21 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
     This means that $MIN$ is also monotone incresing with respect to the request sequence. We have:
 
     \begin{equation*}
-        \begin{gathered}
-            \Phi(U', w') - \Phi(U', w) = \Sigma_{u \in U'} (MIN_{w'}(u) - MIN_w(u)) \\
-            = MIN_{w'} (r) - MIN_w(r) + \Sigma_{u \in U' - r} (MIN_{w'} (u) - MIN_w(u))\\
-            \geq MIN_{w'} (r) - MIN_w(r)
-        \end{gathered}
+        \begin{split}
+            \Phi(U', w') - \Phi(U', w) &= \Sigma_{u \in U'} (MIN_{w'}(u) - MIN_w(u)) \\
+            &= MIN_{w'} (r) - MIN_w(r) + \Sigma_{u \in U' - r} (MIN_{w'} (u) - MIN_w(u))\\
+            &\geq MIN_{w'} (r) - MIN_w(r)
+        \end{split}
     \end{equation*}
 
     Because $A$ is a minimizer of $r$ with respect to $w$, we know by Lemma~\ref{lem:min} $A$ is also a minimizer of $r$ with respect to $w'$. So by using the duality lemma~\ref{lem:dual}, we have:
 
     \begin{equation*}
-        \begin{gathered}
-            \Phi(U', w') - \Phi(U', w) \geq MIN_{w'} (r) - MIN_w(r) \\
-            = w'(A) - \Sigma_{a \in A} d(a,r) - [w(A) - \Sigma_{a \in A} d(a,r)]
-            = w'(A) - w(A) = max_X \{ w'(X) - w(X)\}
-        \end{gathered}
+        \begin{split}
+            \Phi(U', w') - \Phi(U', w) &\geq MIN_{w'} (r) - MIN_w(r) \\
+            &= w'(A) - \Sigma_{a \in A} d(a,r) - [w(A) - \Sigma_{a \in A} d(a,r)] \\
+            &= w'(A) - w(A) = max_X \{ w'(X) - w(X)\}
+        \end{split}
     \end{equation*}
 \end{proof}
 
@@ -303,10 +298,10 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
      As the configuration $U$ with $u \in U_\sigma$ minimizes the terms inside of the minimization on the right hand side. Suppose $y^*$ is a valid $y$ that minimizes the right hand side of the above equation. We have:
      
      \begin{equation*}
-        \begin{gathered}
-            MIN_{w_\sigma}(u) \leq w_\sigma(U_\sigma - u + y^*) - \Sigma_{x \in U_\sigma - u + y^*} d(x, u) \\
-        \leq w_\sigma(U_\sigma - u + y^*) - d(y^*, u) \leq w_\sigma(U_\sigma) = OPT(\sigma)
-        \end{gathered}
+        \begin{split}
+            MIN_{w_\sigma}(u) &\leq w_\sigma(U_\sigma - u + y^*) - \Sigma_{x \in U_\sigma - u + y^*} d(x, u) \\
+            &\leq w_\sigma(U_\sigma - u + y^*) - d(y^*, u) \leq w_\sigma(U_\sigma) = OPT(\sigma)
+        \end{split}
      \end{equation*}
 
      When we sum over all $u \in U_\sigma$, we complete the lemma by the definition of $\Phi$
@@ -334,12 +329,14 @@ We now fix any optimal algorithm $OPT$, and have $U = \{u_1, u_2, ... , u_k \}$ 
     Suppose $X^*$ is the configuration of servers which minimizes the right hand side for some $MIN_{w_\emptyset}(u) = min_X \{ w_\emptyset(X) - \Sigma_{x \in X} d(x, u)\}$. Without loss of generality, assume that $u_i$ matches to $x_i$ in the minimum weight matching between the two sets. Then, $w_\emptyset(X^*) = D(U_\emptyset, X^*)$. By using the triangle inequality, we get:
 
     \begin{equation*}
-        \begin{gathered}
-            MIN_{w_\emptyset}(u) = \Sigma_{i=1}^k d(u_i, x_i) - \Sigma_{i=1}^k d(x_i , u) \\
-            = \Sigma_{i=1}^k [d(u_i, x_i) - d(x_i, u)] \geq \Sigma_{i=1}^k [d(u_i, x_i) - (d(u_i, x_i) + d(u_i, u))] = - \Sigma_{i=1}^k d(u_i, u) \\ \\
-            \Sigma_{u \in U_\emptyset} MIN_{w_\emptyset(u)} \geq -\Sigma_{u \in U_\emptyset} \Sigma_{i=1}^k d(u_i, u) \\
-            = - \Sigma_{a, b \in C_0} d(a, b)
-        \end{gathered}
+        \begin{split}
+            MIN_{w_\emptyset}(u) &= \Sigma_{i=1}^k d(u_i, x_i) - \Sigma_{i=1}^k d(x_i , u) \\
+            &= \Sigma_{i=1}^k [d(u_i, x_i) - d(x_i, u)] \\
+            &\geq \Sigma_{i=1}^k [d(u_i, x_i) - (d(u_i, x_i) + d(u_i, u))] \\
+            &= - \Sigma_{i=1}^k d(u_i, u) \\
+            \text{iff: }\Sigma_{u \in U_\emptyset} MIN_{w_\emptyset(u)} &\geq -\Sigma_{u \in U_\emptyset} \Sigma_{i=1}^k d(u_i, u) \\
+            &= - \Sigma_{a, b \in C_0} d(a, b)
+        \end{split}
     \end{equation*}
 \end{proof}
 
@@ -379,11 +376,11 @@ The above lemma follows directly by the provided definitions, because the total 
     By using lemmas~\ref{lem:er1} and~\ref{lem:er2}, we get:
 
     \begin{equation*}
-        \begin{gathered}
-            k \cdot  OPT(\sigma)+ \Sigma_{a, b \in C_0} d(a, b) \geq \Phi(U_\sigma, w_\sigma) + \Sigma_{a, b \in C_0} d(a, b) \\
-            \geq \Phi(U_\sigma, w_\sigma) - \Phi(U_\emptyset, w_\emptyset) \geq TEC - k\cdot OPT(\sigma)\\ \\
-            TEC \leq 2k \cdot  OPT(\sigma) + \Sigma_{a, b \in C_0} d(a, b) = 2k \cdot OPT(\sigma) + \alpha
-        \end{gathered}
+        \begin{split}
+            k \cdot  OPT(\sigma)+ \Sigma_{a, b \in C_0} d(a, b) &\geq \Phi(U_\sigma, w_\sigma) + \Sigma_{a, b \in C_0} d(a, b) \\
+            &\geq \Phi(U_\sigma, w_\sigma) - \Phi(U_\emptyset, w_\emptyset) \geq TEC - k\cdot OPT(\sigma)\\
+            \text{iff: }TEC &\leq 2k \cdot  OPT(\sigma) + \Sigma_{a, b \in C_0} d(a, b) = 2k \cdot OPT(\sigma) + \alpha
+        \end{split}
     \end{equation*}
 \end{proof}
 

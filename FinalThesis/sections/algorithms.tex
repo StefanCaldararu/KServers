@@ -33,10 +33,10 @@ The Work-Function Algorithm $WFA$ is considered to be one of the most promising 
 \begin{definition}
     The \textbf{work function}, denoted $w_\sigma(C)$ computes the minimum value required to begin in configuration $C_0$, service all requests in $\sigma$, and end with servers in configuration $C$. The work function has similar notation to configurations($w_{\sigma_i}$, $w$, and $w'$), except the work function value on an empty request sequence is denoted $w_\emptyset$, and the work done on the $i$th request sequence is denoted with the abreviated request sequence in the subscript. Additionally, the work function can be computed as follows:
     \begin{equation*}
-        \begin{gathered}
-            w_\emptyset(C) = D(C_0, C) \\
-            w'(C) = min_{x \in C} \{ w(C - x + r) + d(x, r)\}
-        \end{gathered}
+        \begin{split}
+            &w_\emptyset(C) = D(C_0, C) \\
+            &w'(C) = min_{x \in C} \{ w(C - x + r) + d(x, r)\}
+        \end{split}
     \end{equation*}
 \end{definition}
 
